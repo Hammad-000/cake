@@ -30,7 +30,6 @@ function Menu() {
   const [isSortOpen, setIsSortOpen] = useState(false);
 
 
-  // console.log(supabase)
 
   const filterProducts = useMemo(() => {
     let visibleProducts = getVisibleProducts(

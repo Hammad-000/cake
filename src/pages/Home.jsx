@@ -172,7 +172,7 @@ function Home() {
 
         {/* Premium Image Slider */}
         <div className="relative w-full max-w-7xl mx-auto mb-20">
-          <div className="relative w-full h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden rounded-3xl shadow-2xl group">
+          <div className="relative w-full h-[500px] md:h-[500px] lg:h-[700px] overflow-hidden rounded shadow-2xl group">
             {/* Animated Gradient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent z-10"></div>
             <div className="absolute inset-0 bg-gradient-to-r from-black/10 via-transparent to-black/10 z-10"></div>
@@ -315,22 +315,13 @@ function Home() {
 
         {/* Featured Dishes with 3D Effect */}
         <section className="max-w-6xl mx-auto mb-20">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-3 mb-4">
-              <div className="w-12 h-1 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full"></div>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-800">Signature Dishes</h2>
-              <div className="w-12 h-1 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full"></div>
-            </div>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              Masterpieces crafted by our award-winning chefs
-            </p>
-          </div>
+     
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
                 img: "/images/cake2.jpg",
-                title: "Quarter Sweet Cake",
+                name: "Quarter Sweet Cake",
                 description: "Crispy, spicy, and perfectly seasoned - our house specialty",
                 price: "2800",
                 time: "15-20 min",
@@ -338,7 +329,7 @@ function Home() {
               },
               {
                 img: "/images/cake8.jpg",
-                title: "Chocolate Cake",
+                 name: "Chocolate Cake",
                 description: "Slow-baked to perfection with secret sweets and chocolate",
                 price: "3500",
                 time: "25-30 min",
@@ -346,7 +337,7 @@ function Home() {
               },
               {
                 img: "/images/cake20.jpg",
-                title: "Hazelnut Cake",
+                name: "Hazelnut Cake",
                 description: "Rich hazelnut cake with creamy frosting and chopped hazelnuts",
                 price: "4000",
                 time: "20-25 min",
@@ -421,8 +412,6 @@ function Home() {
         {/* Specialties Gallery with Category Filter */}
         <div className="relative py-16 px-4 bg-gradient-to-br from-gray-50 via-white to-gray-50 rounded-3xl mb-20 overflow-hidden">
           {/* Animated Background Elements */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-amber-100/50 to-transparent rounded-full -translate-y-48 translate-x-48"></div>
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-orange-100/50 to-transparent rounded-full translate-y-48 -translate-x-48"></div>
           
           <div className="relative z-10 max-w-7xl mx-auto">
             {/* <div className="text-center mb-12">

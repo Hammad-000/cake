@@ -1,19 +1,15 @@
 import React from "react";
-import { MdOutlineShoppingCart } from "react-icons/md";
 import { useCart } from "../components/CartContext"; 
 import { useNavigate } from "react-router-dom"; 
-import { Link } from "react-router-dom";
 import { GiHamburger } from "react-icons/gi";
 import { GiMeal } from "react-icons/gi";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 
-// Star Rating Component
 const StarRating = ({ rating, size = 16 }) => {
   // If rating is an object (like from fake store API)
   const rate = typeof rating === 'object' ? rating?.rate || 0 : rating || 0;
   const count = typeof rating === 'object' ? rating?.count || 0 : null;
 
-  // Create array for stars
   const stars = [];
   const fullStars = Math.floor(rate);
   const hasHalfStar = rate % 1 >= 0.5;
@@ -77,7 +73,7 @@ function ProductsCard({ product }) {
           <img
             className="w-full h-full object-cover hover:scale-110 transition-transform duration-500 ease-in-out"
             src={product.image}
-            alt={product.title}
+            alt={product.title }
             onError={(e) => {
               console.log(`Image failed to load: ${product.image}`);
               e.target.src = "https://via.placeholder.com/300x200/FF0000/FFFFFF?text=Image+Not+Found";
@@ -89,12 +85,14 @@ function ProductsCard({ product }) {
 
         <div className="p-4 sm:p-6 flex-1 flex flex-col">
           <h3 className="text-lg font-semibold text-gray-800 line-clamp-2 mb-2 hover:text-blue-600 transition-colors duration-200">
+            {product.name}
             {product.title}
           </h3>
 
           <div className="flex-1 mb-3">
             <p className="text-gray-600 text-sm line-clamp-3">
               {product.description}
+              {product.price}
             </p>
           </div>
 
@@ -116,7 +114,7 @@ function ProductsCard({ product }) {
             </div>
             <button
               onClick={handleAddToCart}  
-              className="p-3 gap-2 border flex rounded-full bg-amber-50  hover:bg-gradient-to-br   from-red-400 to-orange-400  hover:text-white transition-all duration-300 transform hover:scale-110 ease-in-out "
+              className="p-3 gap-2 border flex rounded-full bg-amber-50  hover:bg-gradient-to-br   from-pink-500 to-orange-500  cursor-pointer hover:text-white transition-all duration-300 transform hover:scale-110 ease-in-out "
             >
               <p>Order Now</p>
               <GiMeal className="text-2xl" /> 

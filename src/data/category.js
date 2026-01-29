@@ -2,7 +2,7 @@
 export const categories = [
   {
     id: 1,
-    title: "Vanilla Cake",
+    name: "Vanilla Cake",
     image: "",
   },
   {
@@ -23,6 +23,11 @@ export const categories = [
   {
     id: 5,
     title: "Choclate Cake",
+    image: "",
+  },
+  {
+    id: 6,
+    title: "Birthday Cake",
     image: "",
   },
  
