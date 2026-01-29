@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { AiOutlineArrowRight, AiOutlineStar, AiOutlineFire, AiOutlineHeart, AiOutlineClockCircle } from "react-icons/ai";
 import { FiClock, FiPackage, FiHeadphones, FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import { GiChickenLeg, GiPizzaSlice, GiHamburger } from "react-icons/gi";
 import { motion } from "framer-motion";
 import FooterContent from "../components/FooterContent";
 
@@ -12,6 +11,10 @@ function Home() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [favorites, setFavorites] = useState([]);
   const sliderRef = useRef(null);
+
+
+
+
 
   const images = [
     {
@@ -453,7 +456,7 @@ function Home() {
               ))}
             </div>
 
-            {/* <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            { <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
               {filteredSpecialties.map((item, index) => (
                 <motion.div
                   key={index}
@@ -495,7 +498,7 @@ function Home() {
                   </div>
                 </motion.div>
               ))}
-            </div> */}
+            </div> }
 
             {/* Enhanced CTA Section */}
             <motion.div
@@ -564,22 +567,7 @@ function Home() {
               </button>
             </div>
             
-            {/* Countdown Timer */}
-            <div className="mt-10 flex justify-center gap-4">
-              {[
-                { label: "Days", value: "03" },
-                { label: "Hours", value: "18" },
-                { label: "Minutes", value: "45" },
-                { label: "Seconds", value: "22" }
-              ].map((time, index) => (
-                <div key={index} className="text-center">
-                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
-                    <span className="text-white text-2xl font-bold">{time.value}</span>
-                  </div>
-                  <span className="text-amber-200 text-sm mt-2 block">{time.label}</span>
-                </div>
-              ))}
-            </div>
+    
           </div>
         </motion.div>
       </main>

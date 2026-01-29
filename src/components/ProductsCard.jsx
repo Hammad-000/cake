@@ -85,7 +85,6 @@ function ProductsCard({ product }) {
 
         <div className="p-4 sm:p-6 flex-1 flex flex-col">
           <h3 className="text-lg font-semibold text-gray-800 line-clamp-2 mb-2 hover:text-blue-600 transition-colors duration-200">
-            {product.name}
             {product.title}
           </h3>
 

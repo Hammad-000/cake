@@ -2,7 +2,7 @@
 export const categories = [
   {
     id: 1,
-    name: "Vanilla Cake",
+    title: "Vanilla Cake",
     image: "",
   },
   {
@@ -22,21 +22,11 @@ export const categories = [
   },
   {
     id: 5,
-    title: "Choclate Cake",
+    title: "Chocolate Cake",
     image: "",
   },
-  {
-    id: 6,
-    title: "Birthday Cake",
-    image: "",
-  },
- 
-  
-
-
 
 
 ];
-
 
 export const categoryTitle = categories.map((category) => category.title);
