@@ -44,7 +44,7 @@ function About() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-rose-50 to-orange-50  ">
+    <div className="min-h-screen bg-gradient-to-b from-rose-50    pt-10 to-orange-50  ">
       {/* Hero Section */}
       <div className="container mx-auto">
         <motion.div

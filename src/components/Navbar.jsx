@@ -32,7 +32,7 @@ function Navbar() {
 
   return (
     <>
-      <nav className="navbar sticky top-0 z-50 bg-gradient-to-r from-pink-600 to-orange-600 p-4 shadow-lg">
+      <nav className="navbar sticky top-0 z-50 bg-gradient-to-r from-pink-600 to-purple-500 p-4 shadow-lg">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             {/* Logo/Brand */}
@@ -66,8 +66,8 @@ className="text-amber-700 text-2xl" />
                       flex items-center space-x-2 px-4 py-3 rounded-lg font-semibold 
                       transition-all duration-300 transform hover:scale-105
                       ${isActive 
-                        ? 'bg-white text-amber-700 shadow-md' 
-                        : 'text-amber-100 hover:bg-amber-800 hover:text-white'
+                        ? 'bg-white text-pink-700 shadow-md' 
+                        : 'text-amber-100 hover:bg-purple-800 hover:text-white'
                       }
                     `}
                   >
@@ -85,8 +85,8 @@ className="text-amber-700 text-2xl" />
                     flex items-center space-x-2 px-4 py-3 rounded-lg font-semibold
                     transition-all duration-300 transform hover:scale-105
                     ${activePath === "/cart"
-                      ? 'bg-white text-amber-700 shadow-md' 
-                      : 'text-amber-100 hover:bg-amber-800 hover:text-white'
+                      ? 'bg-white text-pink-700 shadow-md' 
+                      : 'text-amber-100 hover:bg-purple-800 hover:text-white'
                     }
                   `}
                 >
