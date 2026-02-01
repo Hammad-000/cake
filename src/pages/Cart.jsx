@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useCart } from "../components/CartContext";
-import Footer from "../components/FooterContent";
 import FooterContent from "../components/FooterContent";
+import { Link } from 'react-router-dom';
 
 function Cart() {
   const { cart, removeFromCart, incrementQuantity, decrementQuantity, calculateTotalPrice } = useCart();
@@ -25,7 +25,6 @@ function Cart() {
 
   const handleConfirmOrder = (e) => {
     e.preventDefault();
-    // Add your order confirmation logic here
     console.log("Order confirmed:", { customerInfo, cart, total: calculateTotalPrice() });
     alert("Order confirmed successfully!");
   };
@@ -39,15 +38,17 @@ function Cart() {
 
         {cart.length === 0 ? (
           <div className="text-center py-12">
-            <div className="text-6xl mb-4">🛒</div>
+            <div className="text-6xl mb-4 ">🛒</div>
             <p className="text-xl text-gray-600 mb-4">Your cart is empty</p>
             <p className="text-gray-500">Add some products to get started! </p>
-             <a
-            href="/menu"
-            className=" px-5 mt-3 py-3 bg-yellow-400 rounded-lg  font-semibold transition-colors inline-block"
-          >
-            Wanna Order 
-          </a>
+            <button>
+              <Link
+                to="/menu"
+                className="px-5 mt-3 py-3 text-white bg-pink-400 rounded-lg font-semibold transition-colors inline-block"
+              >
+                Wanna Order
+              </Link>
+            </button>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -57,7 +58,7 @@ function Cart() {
                 <div className="p-6 border-b">
                   <h3 className="text-xl font-semibold text-gray-800">Cart Items ({cart.length})</h3>
                 </div>
-                
+
                 <div className="divide-y">
                   {cart.map((product) => (
                     <div key={product.id} className="p-6 flex flex-col sm:flex-row items-center gap-4 hover:bg-gray-50 transition-colors">
@@ -124,7 +125,7 @@ function Cart() {
               {/* Order Summary */}
               <div className="bg-white rounded-lg shadow-md p-6">
                 <h3 className="text-xl font-semibold text-gray-800 mb-4">Order Summary</h3>
-                
+
                 <div className="space-y-3 mb-6">
                   <div className="flex justify-between text-gray-600">
                     <span>Subtotal</span>
@@ -148,7 +149,7 @@ function Cart() {
               {/* Customer Information Form */}
               <div className="bg-white rounded-lg shadow-md p-6">
                 <h3 className="text-xl font-semibold text-gray-800 mb-4">Customer Information</h3>
-                
+
                 <form onSubmit={handleConfirmOrder} className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -245,11 +246,10 @@ function Cart() {
                   <button
                     type="submit"
                     disabled={!isFormValid}
-                    className={`w-full py-3 px-4 rounded-lg font-semibold text-white transition-colors ${
-                      isFormValid
+                    className={`w-full py-3 px-4 rounded-lg font-semibold text-white transition-colors ${isFormValid
                         ? 'bg-green-500 hover:bg-green-600 cursor-pointer'
                         : 'bg-gray-400 cursor-not-allowed'
-                    }`}
+                      }`}
                   >
                     Confirm Order - ${(calculateTotalPrice() * 1.1).toFixed(2)}
                   </button>

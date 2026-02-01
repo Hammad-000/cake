@@ -93,7 +93,7 @@ className="text-amber-700 text-2xl" />
                   <FaShoppingCart className="text-lg" />
                   <span>Cart</span>
                   {totalItems > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold 
+                    <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs font-bold 
                            rounded-full h-6 w-6 flex items-center justify-center 
                            animate-pulse shadow-lg">
                       {totalItems > 99 ? '99+' : totalItems}
@@ -145,8 +145,8 @@ className="text-amber-700 text-2xl" />
                 w-full flex items-center justify-between px-4 py-3 rounded-lg font-semibold
                 transition-all duration-300
                 ${activePath === "/cart"
-                  ? 'bg-white text-amber-700 shadow-md' 
-                  : 'text-amber-100 hover:bg-amber-800 hover:text-white'
+                  ? 'bg-white text-pink-700 shadow-md' 
+                  : 'text-amber-100 hover:bg-pink-800 hover:text-white'
                 }
               `}
             >

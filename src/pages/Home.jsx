@@ -3,6 +3,7 @@ import { AiOutlineArrowRight, AiOutlineStar, AiOutlineFire, AiOutlineHeart, AiOu
 import { FiClock, FiPackage, FiHeadphones, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { motion } from "framer-motion";
 import FooterContent from "../components/FooterContent";
+import { Link } from 'react-router-dom'
 
 function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -398,11 +399,13 @@ function Home() {
                         ))}
                         <span className="text-gray-600 ml-2 text-sm">(4.8)</span>
                       </div>
-                      <button 
-                        onClick={goToMenu}
-                        className="px-6 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-full hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                      <button >
+                      < Link
+                      to="/menu"          
+                        className="px-6 py-2 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold rounded-full hover:shadow-lg transition-all duration-300 transform hover:scale-105"
                       >
                        Got To Menu
+                    </Link>
                       </button>
                     </div>
                   </div>
@@ -512,64 +515,29 @@ function Home() {
                 Ready to Ignite Your Taste Buds?
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto mb-8 text-lg">
-                Join thousands of satisfied customers who have experienced the Inferno Grill difference
+                Join thousands of satisfied customers who have experienced the Cakes Villas difference
               </p>
               <div className="flex flex-wrap justify-center gap-4">
-                <a
-                  href="/menu"
-                  className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white font-bold rounded-full hover:shadow-2xl transition-all duration-300 transform hover:scale-105 group"
-                >
-                  Explore Full Menu
-                  <AiOutlineArrowRight className="text-xl group-hover:translate-x-2 transition-transform" />
-                </a>
+                <button >
+                      < Link
+                      to="/menu"          
+                        className="inline-flex items-center gap-3 px-10 py-4 bg-white text-gray-800 font-bold rounded-full border-2 border-purple-400 hover:border-purple-500 hover:shadow-xl transition-all duration-300 transform hover:scale-105 "
+                      >
+                       Got To Menu
+                    </Link>
+                      </button>
                 <a
                   href="/reservation"
-                  className="inline-flex items-center gap-3 px-10 py-4 bg-white text-gray-800 font-bold rounded-full border-2 border-orange-300 hover:border-orange-400 hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                  className="inline-flex items-center gap-3 px-10 py-4 bg-white text-gray-800 font-bold rounded-full border-2 border-purple-400 hover:border-purple-500 hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                 >
                   Book a Table
-                  <span className="text-amber-500">✨</span>
+                  <span className="text-pink-500">✨</span>
                 </a>
               </div>
             </motion.div>
           </div>
         </div>
 
-        {/* Interactive Promo Banner */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="relative rounded-3xl overflow-hidden mb-20"
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 opacity-90"></div>
-          <div className="absolute inset-0 bg-[url('/images/pattern.png')] opacity-10"></div>
-          
-          <div className="relative z-10 p-12 text-center">
-            <div className="inline-block mb-6 px-6 py-2 bg-white/20 backdrop-blur-sm rounded-full">
-              <span className="text-white font-semibold">🔥 LIMITED TIME OFFER 🔥</span>
-            </div>
-            
-            <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              GET 25% OFF YOUR FIRST ORDER!
-            </h3>
-            
-            <p className="text-amber-100 text-lg mb-8 max-w-2xl mx-auto">
-              Use code <span className="font-bold text-white text-2xl">INFERNO25</span> at checkout
-            </p>
-            
-            <div className="flex flex-wrap justify-center gap-4">
-              <button onClick={goToMenu} className="px-10 py-3 bg-white text-amber-600 font-bold rounded-full hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-2xl">
-                Claim Your Discount
-              </button>
-              <button onClick={goToMenu} className="px-10 py-3 bg-transparent border-2 border-white text-white font-bold rounded-full hover:bg-white/10 transition-all duration-300 transform hover:scale-105">
-                View All Offers
-              </button>
-            </div>
-            
-    
-          </div>
-        </motion.div>
       </main>
 
       <FooterContent />
