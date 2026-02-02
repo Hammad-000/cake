@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { FaBirthdayCake, FaHeart, FaStar, FaUsers, FaAward, FaLeaf } from "react-icons/fa";
 import { GiCakeSlice } from "react-icons/gi";
 import FooterContent from "../components/FooterContent";
+import { Link } from "react-router-dom"
 
 function About() {
   const containerVariants = {
@@ -68,7 +69,7 @@ function About() {
               </motion.div>
             </motion.div>
           </div>
-          
+
           <h1 className="text-5xl md:text-6xl font-bold text-gray-800 mb-4">
             Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-orange-400">Sweet</span> Story
           </h1>
@@ -87,25 +88,30 @@ function About() {
           <motion.div variants={itemVariants} className="space-y-6">
             <h2 className="text-4xl font-bold text-gray-800">Baking Happiness Since 2010</h2>
             <p className="text-gray-600 text-lg leading-relaxed">
-              At CakeVilla, we believe that desserts are more than just sweet treats - they're 
-              moments of joy, celebrations of life, and expressions of love. Our journey began 
-              in a small home kitchen with a single dream: to spread happiness through 
+              At CakeVilla, we believe that desserts are more than just sweet treats - they're
+              moments of joy, celebrations of life, and expressions of love. Our journey began
+              in a small home kitchen with a single dream: to spread happiness through
               extraordinary desserts.
             </p>
             <p className="text-gray-600 text-lg leading-relaxed">
-              Today, we continue to honor that dream by using only the finest ingredients, 
-              traditional baking methods, and innovative recipes that delight both the eyes 
+              Today, we continue to honor that dream by using only the finest ingredients,
+              traditional baking methods, and innovative recipes that delight both the eyes
               and the taste buds.
             </p>
-            
+
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="inline-block"
+
             >
-              <button className="bg-gradient-to-r from-pink-500 to-orange-400 text-white px-8 py-3 rounded-full font-semibold text-lg hover:shadow-xl transition-all duration-300">
+
+              < Link
+                to="/contact" className=" p-3 bg-gradient-to-r from-pink-500 font-semibold to-purple-500 text-white  rounded-full hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+              >
                 Visit Our Bakery
-              </button>
+              </Link>
+
             </motion.div>
           </motion.div>
 
@@ -114,13 +120,13 @@ function About() {
               animate={floatingAnimation}
               className="w-full h-96 rounded-3xl overflow-hidden shadow-2xl"
             >
-              <img 
-                src="./images/cake20.jpg" 
-                alt="Artisan Cake" 
+              <img
+                src="./images/cake20.jpg"
+                alt="Artisan Cake"
                 className="w-full h-full object-cover"
               />
             </motion.div>
-            
+
             {/* Decorative floating elements */}
             <motion.div
               animate={rotateAnimation}
@@ -148,7 +154,7 @@ function About() {
           className="mb-20"
         >
           <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">Our Core Values</h2>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
@@ -231,8 +237,8 @@ function About() {
           viewport={{ once: true }}
           className="mb-20"
         >
-   
-  
+
+
         </motion.div>
 
         {/* CTA Section */}
@@ -249,37 +255,52 @@ function About() {
           >
             <FaBirthdayCake className="text-6xl text-pink-500 mx-auto" />
           </motion.div>
-          
+
           <h2 className="text-4xl font-bold text-gray-800 mb-6">
             Ready to Taste the Magic?
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
             Visit us today or order online to experience our sweet creations.
           </p>
-          
+
+
+
+
+
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center pb-2">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-pink-500  to-orange-400 text-white px-8 py-3 rounded-full font-semibold text-lg hover:shadow-xl transition-all duration-300"
+              className=""
             >
-              Order Online
+              < Link
+                to="/contact" className="bg-gradient-to-r from-pink-500  to-orange-400 text-white px-8 py-3 rounded-full font-semibold text-lg hover:shadow-xl transition-all duration-300"
+              >
+                Order Online
+              </Link>
+             
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="border-2 border-pink-500 text-pink-600 px-8 py-3 rounded-full font-semibold text-lg hover:bg-pink-50 transition-all duration-300"
+              className=""
             >
+               < Link
+                to="/contact" className="border-2 border-pink-500 text-pink-600 px-8 py-3 rounded-full font-semibold text-lg hover:bg-pink-50 transition-all duration-300"
+              >
               Book a Consultation
+            
+              </Link>
             </motion.button>
           </div>
         </motion.div>
       </div>
-     <FooterContent />
+      <FooterContent />
 
-    
-     
-        </div>
+
+
+    </div>
   );
 }
 
