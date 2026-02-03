@@ -391,7 +391,7 @@ function Home() {
                       <button >
                       < Link
                       to="/menu"          
-                        className="px-6 py-2 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold rounded-full hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                        className="px-5 p-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold rounded-full hover:shadow-lg transition-all duration-300 transform hover:scale-105"
                       >
                        Got To Menu
                     </Link>

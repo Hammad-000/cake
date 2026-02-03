@@ -32,7 +32,7 @@ function Navbar() {
 
   return (
     <>
-      <nav className="navbar sticky top-0 z-50 bg-gradient-to-r from-pink-600 to-purple-500 p-4 shadow-lg">
+      <nav className="navbar sticky top-0 z-50 bg-gradient-to-r from-pink-600 via-pink-500 to-purple-500 p-4 shadow-lg">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             {/* Logo/Brand */}
