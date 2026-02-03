@@ -58,7 +58,7 @@ function Home() {
   const categories = [
     { id: "all", name: "All", count: "" },
     { id: "Chocolate Cake", name: " Chocolate Cake", count: 3 },
-    { id: "Birthday Cake", name: "Birthday Cake", count: 5 },
+    { id: "Birthday Cake", name: "Birthday Cake", count: 4 },
     { id: "Vanilla Cake", name: "Vanilla Cake",  count: 5 },
     { id: "Hazelnut Cake", name: "Hazelnut Cake", count: 2 }
   ];
@@ -431,13 +431,14 @@ function Home() {
                   onClick={() => setActiveCategory(category.id)}
                   className={`px-6 py-3 rounded-full transition-all duration-300 flex items-center gap-2 ${
                     activeCategory === category.id
-                      ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg transform scale-105'
+                      ? 'bg-gradient-to-r  from-pink-500  to-purple-600 text-white shadow-lg transform scale-105'
                       : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
                   }`}
                 >
+                  
                   <span className="text-lg">{category.icon}</span>
                   <span className="font-semibold">{category.name}</span>
-                  <span className={`text-sm px-2 py-1 rounded-full ${
+                  <span className={`text-sm px-2 py-1 rounded-4xl ${
                     activeCategory === category.id
                       ? 'bg-white/20'
                       : 'bg-gray-100'
