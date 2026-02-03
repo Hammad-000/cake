@@ -85,8 +85,8 @@ export const products = [
       },
       {
         id: 10,
-        title: "Ice Cake",
-        category: "Ice Cake",
+        title: "Birthday Cake",
+        category: "Birthday Cake",
         image: "/images/cake10.webp",
         description: "Peach cobbler in cake form with cinnamon streusel",
         price: 2600,
@@ -94,8 +94,8 @@ export const products = [
       },
       {
         id: 11,
-        title: "Spice Cake",
-        category: "Ice Cake",
+        title: "Birthday Cake",
+        category: "Birthday Cake",
         image: "/images/cake11.webp",
         description: "Spiced pumpkin cake with cinnamon cream cheese frosting",
         price: 2500,
@@ -182,7 +182,7 @@ export const products = [
         category: "Hazelnut Cake",
         image: "/images/cake20.jpg",
         description: "Earthy matcha cake with sweet cream frosting",
-        price: 4400,
+        price: 4500,
       rating:5
 
     }

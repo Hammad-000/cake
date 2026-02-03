@@ -4,6 +4,7 @@ import { FiClock, FiPackage, FiHeadphones, FiChevronLeft, FiChevronRight } from 
 import { motion } from "framer-motion";
 import FooterContent from "../components/FooterContent";
 import { Link } from 'react-router-dom'
+import { products } from "../data/products";
 
 function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -51,27 +52,15 @@ function Home() {
     }
   ];
 
-  const specialties = [
-    { src: "Chocolate Cake", category: "chocolate", price: 2000, rating: 4.7 },
-  { src: "Vanilla Cake", category: "vanilla", price: 1800, rating: 4.8 },
-  { src: "Ice Cake", category: "red velvet", price: 2200, rating: 4.5 },
-  { src:  "Birthday Cake", category: "oreo", price: 2500, rating: 5.0 },
-  {src:   "Strawberry Shortcake", category: "fruit", price: 2200, rating: 5.0 },
-  { src: "Carrot Cake", category: "carrot", price: 2400, rating: 5.0 },
-  { src: "Lemon Cake", category: "lemon", price: 2100, rating: 4.5 },
-  { src: "Black Forest Cake", category: "chocolate", price: 2700, rating: 4.5 },
-  { src: "Coconut Cake", category: "coconut", price: 2300, rating: 4.2 },
-  { src: "Peach Cobbler Cake", category: "fruit", price: 2600, rating: 4.4 },
-  { src: "Hazelnut Cake", category: "hazelnut", price: 4000, rating: 4.5 },
-  {src: "Matcha Green Tea Cake", category: "matcha", price: 4400, rating: 5.0 }
-  ];
+  const specialties = products
+
 
   const categories = [
-    // { id: "all", name: "All", icon: <AiOutlineFire />, count: 12 },
-    // { id: "Vanilla Cake", name: "Vanilla Cake", icon: <GiChickenLeg />, count: 5 },
-    // { id: "Ice Cke", name: "Burgers", icon: <GiHamburger />, count: 1 },
-    // { id: "Chocolate", name: "Pizzas", icon: <GiPizzaSlice />, count: 1 },
-    // { id: "sides", name: "Sides", icon: "🍟", count: 2 }
+    { id: "all", name: "All", count: "" },
+    { id: "Chocolate Cake", name: " Chocolate Cake", count: 3 },
+    { id: "Birthday Cake", name: "Birthday Cake", count: 5 },
+    { id: "Vanilla Cake", name: "Vanilla Cake",  count: 5 },
+    { id: "Hazelnut Cake", name: "Hazelnut Cake", count: 2 }
   ];
 
   const nextImage = () => {
@@ -152,16 +141,16 @@ function Home() {
             className="relative inline-block"
           >
             <h1 className="text-5xl sm:text-4xl md:text-5xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 bg-clip-text text-transparent animate-gradient">
+              <span className="bg-gradient-to-r from-pink-500 via-orange-500 to-purple-500 bg-clip-text text-transparent animate-gradient">
                 WELCOME TO
               </span>
               <br />
-              <span className="text-6xl sm:text-6xl md:text-7xl bg-gradient-to-r from-red-600 via-orange-500 to-amber-500 bg-clip-text text-transparent">
+              <span className="text-6xl sm:text-6xl md:text-7xl bg-gradient-to-r from-pink-600 via-orange-500 to-purple-500 bg-clip-text text-transparent">
                 CAKES VILLA
               </span>
             </h1>
-            <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-48 h-2 bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 rounded-full blur-sm"></div>
-            <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-48 h-1 bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 rounded-full"></div>
+            <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-48 h-2 bg-gradient-to-r from-pink-400 via-orange-500 to-purple-500 rounded-full blur-sm"></div>
+            <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-48 h-1 bg-gradient-to-r from-purple-400 via-orange-500 to-pink-500 rounded-full"></div>
           </motion.div>
           
           <motion.p
@@ -420,10 +409,10 @@ function Home() {
           {/* Animated Background Elements */}
           
           <div className="relative z-10 max-w-7xl mx-auto">
-            {/* <div className="text-center mb-12">
+            <div className="text-center mb-12">
               <div className="inline-block relative">
                 <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 relative">
-                  <span className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r bg-gradient-to-r from-pink-400 via-orange-500 to-purple-500 bg-clip-text text-transparent">
                     OUR SPECIALTIES
                   </span>
                   <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-amber-400 to-orange-500 rounded-full"></div>
@@ -432,7 +421,7 @@ function Home() {
               <p className="text-gray-600 max-w-2xl mx-auto text-lg">
                 Discover our chef's special selection of culinary masterpieces, each with its own unique story
               </p>
-            </div> */}
+            </div>
 
             {/* Category Filter */}
             <div className="flex flex-wrap justify-center gap-3 mb-10">
@@ -459,6 +448,7 @@ function Home() {
               ))}
             </div>
 
+{/* //-------------------------------- */}
             { <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
               {filteredSpecialties.map((item, index) => (
                 <motion.div
@@ -471,7 +461,7 @@ function Home() {
                 >
                   <div className="relative aspect-square overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
                     <img
-                      src={item.src}
+                      src={item.image}
                       alt={item.name}
                       className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                     />
@@ -489,7 +479,7 @@ function Home() {
                       </div>
                       <button 
                         onClick={goToMenu}
-                        className="mt-3 w-full py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300"
+                        className="mt-3 w-full py-2 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300"
                       >
                         Got To Menu
                       </button>
