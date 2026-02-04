@@ -21,7 +21,7 @@ const FooterContent = () => {
                     
                     {/* Contact Section */}
                     <div className="text-center">
-                        <h3 className="text-xl font-bold mb-3 text-orange-400">Contact</h3>
+                        <h3 className="text-xl font-bold mb-3 text-fuchsia-600 hover:cursor-pointer">Contact</h3>
                         <div className="space-y-2">
                             <p className="hover:text-gray-300 transition-colors cursor-pointer">
                                 +923110250787

@@ -4,13 +4,13 @@ import { FaHome, FaUtensils, FaInfoCircle, FaEnvelope, FaShoppingCart } from "re
 import { useCart } from './CartContext';
 import { GiCakeSlice } from "react-icons/gi";
 
-
 function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const [activePath, setActivePath] = useState(location.pathname);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const { totalItems } = useCart();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); 
 
   // Update active path when location changes
   useEffect(() => {
@@ -23,16 +23,15 @@ function Navbar() {
     { path: "/menu", label: "Menu", icon: FaUtensils },
     { path: "/about", label: "About", icon: FaInfoCircle },
     { path: "/contact", label: "Contact", icon: FaEnvelope },
-   
   ];
 
-  
-
- 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   return (
     <>
-      <nav className="navbar sticky top-0 z-50 bg-gradient-to-r from-pink-600 via-pink-500 to-purple-500 p-4 shadow-lg">
+      <nav className="navbar sticky top-0 z-50 bg-pink-500 p-4 shadow-lg">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             {/* Logo/Brand */}
@@ -41,14 +40,12 @@ function Navbar() {
               onClick={() => navigate("/")}
             >
               <div className="bg-white p-2 rounded-full group-hover:rotate-12 transition-transform duration-300">
-                <GiCakeSlice 
-className="text-amber-700 text-2xl" />
+                <GiCakeSlice className="text-amber-700 text-2xl" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-white tracking-tight">
-                 Cakes<span className="text-amber-200">Villa</span>
+                  Cakes<span className="text-amber-200">Villa</span>
                 </h1>
-               
               </div>
             </div>
 
@@ -62,12 +59,11 @@ className="text-amber-700 text-2xl" />
                   <button
                     key={item.path}
                     onClick={() => navigate(item.path)}
-                    className={`
-                      flex items-center space-x-2 px-4 py-3 rounded-lg font-semibold 
+                    className={`flex items-center space-x-2 px-4 py-3  rounded-lg font-semibold 
                       transition-all duration-300 transform hover:scale-105
                       ${isActive 
-                        ? 'bg-white text-pink-700 shadow-md' 
-                        : 'text-amber-100 hover:bg-purple-800 hover:text-white'
+                        ? 'bg-white text-pink-700 shadow-md hover:cursor-pointer' 
+                        : 'text-amber-100 hover:bg-fuchsia-600 hover:cursor-pointer transition-colors hover:text-white'
                       }
                     `}
                   >
@@ -81,12 +77,11 @@ className="text-amber-700 text-2xl" />
               <div className="relative ml-4">
                 <button
                   onClick={() => navigate("/cart")}
-                  className={`
-                    flex items-center space-x-2 px-4 py-3 rounded-lg font-semibold
+                  className={`flex items-center space-x-2 px-4 py-3 rounded-lg font-semibold
                     transition-all duration-300 transform hover:scale-105
                     ${activePath === "/cart"
-                      ? 'bg-white text-pink-700 shadow-md' 
-                      : 'text-amber-100 hover:bg-purple-800 hover:text-white'
+                      ? 'bg-white text-pink-700 hover:cursor-pointer shadow-md' 
+                      : 'text-amber-100 hover:bg-fuchsia-600 transition-colors hover:text-white'
                     }
                   `}
                 >
@@ -101,73 +96,70 @@ className="text-amber-700 text-2xl" />
                   )}
                 </button>
               </div>
-
-            
             </div>
 
             {/* Mobile Menu Button */}
-            <button className="md:hidden text-white text-2xl hover:text-amber-200 transition-colors">
+            <button 
+              className="md:hidden text-white text-2xl  transition-transform duration-300 transform  hover:text-amber-200 transition-colors"
+              onClick={toggleMobileMenu} 
+            >
               ☰
             </button>
           </div>
 
           {/* Mobile Navigation (Fixed - no isCart error) */}
-          <div className="md:hidden mt-4 space-y-2">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activePath === item.path;
-              
-              return (
-                <button
-                  key={item.path}
-                  onClick={() => navigate(item.path)}
-                  className={`
-                    w-full flex items-center justify-between px-4 py-3 rounded-lg font-semibold
-                    transition-all duration-300
-                    ${isActive 
-                      ? 'bg-white text-amber-700 shadow-md' 
-                      : 'text-amber-100 hover:bg-amber-800 hover:text-white'
-                    }
-                  `}
-                >
-                  <div className="flex items-center space-x-3">
-                    <Icon className="text-lg" />
-                    <span>{item.label}</span>
-                  </div>
-                </button>
-              );
-            })}
-            
-            {/* Cart in Mobile Menu */}
-            <button
-              onClick={() => navigate("/cart")}
-              className={`
-                w-full flex items-center justify-between px-4 py-3 rounded-lg font-semibold
-                transition-all duration-300
-                ${activePath === "/cart"
-                  ? 'bg-white text-pink-700 shadow-md' 
-                  : 'text-amber-100 hover:bg-pink-800 hover:text-white'
-                }
-              `}
-            >
-              <div className="flex items-center space-x-3">
-                <FaShoppingCart className="text-lg" />
-                <span>Cart</span>
-              </div>
-              {totalItems > 0 && (
-                <span className="bg-red-500 text-white text-xs font-bold 
-                       rounded-full h-6 w-6 flex items-center justify-center">
-                  {totalItems > 99 ? '99+' : totalItems}
-                </span>
-              )}
-            </button>
-            
-     
-          </div>
+          {isMobileMenuOpen && (
+            <div className="md:hidden mt-4 space-y-2">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = activePath === item.path;
+                
+                return (
+                  <button
+                    key={item.path}
+                    onClick={() => navigate(item.path)}
+                    className={`w-full flex items-center justify-between px-4 py-3 rounded-lg font-semibold
+                      transition-all duration-300
+                      ${isActive 
+                        ? 'bg-white text-amber-700 shadow-md' 
+                        : 'text-amber-100 hover:bg-amber-800 hover:text-white'
+                      }
+                    `}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <Icon className="text-lg" />
+                      <span>{item.label}</span>
+                    </div>
+                  </button>
+                );
+              })}
+
+              {/* Cart in Mobile Menu */}
+              <button
+                onClick={() => navigate("/cart")}
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-lg font-semibold
+                  transition-all duration-300
+                  ${activePath === "/cart"
+                    ? 'bg-white text-pink-700 shadow-md' 
+                    : 'text-amber-100 hover:bg-pink-800 hover:text-white'
+                  }
+                `}
+              >
+                <div className="flex items-center space-x-3">
+                  <FaShoppingCart className="text-lg" />
+                  <span>Cart</span>
+                </div>
+                {totalItems > 0 && (
+                  <span className="bg-red-500 text-white text-xs font-bold 
+                         rounded-full h-6 w-6 flex items-center justify-center">
+                    {totalItems > 99 ? '99+' : totalItems}
+                  </span>
+                )}
+              </button>
+            </div>
+          )}
         </div>
       </nav>
-
-   
     </>
   );
 }

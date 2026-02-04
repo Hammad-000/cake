@@ -67,7 +67,7 @@ function ProductsCard({ product }) {
     >
       <div
         key={product.id}
-        className="border rounded-xl shadow-md hover:shadow-xl overflow-hidden transform hover:scale-[1.02] transition-all duration-300 ease-in-out bg-white h-full flex flex-col"
+        className="border rounded-xl  shadow-md hover:shadow-xl overflow-hidden transform hover:scale-[1.02] transition-all duration-300 ease-in-out bg-white h-full flex flex-col"
       >
         <div className="relative w-full h-48 overflow-hidden shrink-0">
           <img

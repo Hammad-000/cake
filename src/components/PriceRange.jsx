@@ -22,7 +22,7 @@ function PriceRange({ priceRange, initPriceRange, setPriceRange, isMobile }) {
           {priceRange.isApplied && (
             <button
               onClick={resetPrice}
-              className={`text-amber-600 hover:text-amber-700 ${
+              className={`text-pink-600 hover:text-pink-700 ${
                 isMobile ? 'text-base' : 'text-sm'
               }`}
             >
