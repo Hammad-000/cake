@@ -46,7 +46,7 @@ function Home() {
 },
 {
   src: "/images/cake1.jpg",
-  title: "Slow-Roasted Delights",
+  title: "Slow-Baked Delights",
   subtitle: "Sweetly tender, always irresistible"
 }
 
@@ -172,7 +172,7 @@ function Home() {
             
             {/* Floating Elements */}
             <div className="absolute top-8 left-8 z-20">
-              <div className="bg-gradient-to-r from-amber-500/90 to-orange-500/90 backdrop-blur-md px-6 py-3 rounded-2xl shadow-2xl">
+              <div className="bg-pink-500 backdrop-blur-md px-6 py-3 rounded-2xl shadow-2xl">
                 <span className="font-bold text-white text-lg">
                   {images[currentIndex].title}
                 </span>
