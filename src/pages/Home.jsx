@@ -19,37 +19,37 @@ function Home() {
 
 
   const images = [
-    {
-      src: "/images/logo.jpg",
-      title: "Flame-Grilled Perfection",
-      subtitle: "Experience the authentic taste of fire"
-    },
-    {
-      src: "/images/cake20.jpg",
-      title: "Premium Quality Meats",
-      subtitle: "Sourced from local farms"
-    },
-    {
-      src: "/images/cake13.webp",
-      title: "Artisanal Creations",
-      subtitle: "Crafted with passion"
-    },
-  
-    {
-      src: "/images/cake10.webp",
-      title: "Family Feast",
-      subtitle: "Perfect for gatherings"
-    },
-    {
-      src: "/images/cake4.webp",
-      title: "Signature Recipes",
-      subtitle: "Decades of tradition"
-    },
-    {
-      src: "/images/cake1.jpg",
-      title: "Slow-Roasted Delights",
-      subtitle: "Tender and flavorful"
-    }
+   {
+  src: "/images/logo.jpg",
+  title: "Contact us",
+  subtitle: "Sweet, indulgent perfection"
+},
+{
+  src: "/images/cake20.jpg",
+  title: "Premium Quality Meats",
+  subtitle: "Savor the rich, sweet flavor"
+},
+{
+  src: "/images/cake13.webp",
+  title: "Artisanal Creations",
+  subtitle: "Crafted with sweet love"
+},
+{
+  src: "/images/cake10.webp",
+  title: "Family Feast",
+  subtitle: "Sweet moments, shared with love"
+},
+{
+  src: "/images/cake4.webp",
+  title: "Signature Recipes",
+  subtitle: "Sweetened with tradition"
+},
+{
+  src: "/images/cake1.jpg",
+  title: "Slow-Roasted Delights",
+  subtitle: "Sweetly tender, always irresistible"
+}
+
   ];
 
   const specialties = products
@@ -369,7 +369,6 @@ function Home() {
                       )}
                     </div>
                     
-                    {/* Favorite Button */}
            
                   </div>
                   
@@ -512,14 +511,14 @@ function Home() {
                 <button >
                       < Link
                       to="/menu"          
-                        className="inline-flex items-center gap-3 px-10 py-4 bg-white text-gray-800 font-bold rounded-full border-2 border-purple-400 hover:border-purple-500 hover:shadow-xl transition-all duration-300 transform hover:scale-105 "
+                        className="inline-flex items-center gap-3 px-10 py-4 bg-white text-gray-800 font-bold rounded-full border-2 border-pink-400 hover:border-purple-500 hover:shadow-xl transition-all duration-300 transform hover:scale-105 "
                       >
                        Got To Menu
                     </Link>
                       </button>
                 <a
                   href="/reservation"
-                  className="inline-flex items-center gap-3 px-10 py-4 bg-white text-gray-800 font-bold rounded-full border-2 border-purple-400 hover:border-purple-500 hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                  className="inline-flex items-center gap-3 px-10 py-4 bg-white text-gray-800 font-bold rounded-full border-2 border-pink-400 hover:border-purple-500 hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                 >
                   Book a Table
                   <span className="text-pink-500">✨</span>
