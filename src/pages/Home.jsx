@@ -185,7 +185,7 @@ function Home() {
             </div>
 
             {/* Image Slides */}
-            <div className="relative w-full h-full">
+            <div className="relative w-full h-full justify-center">
               {images.map((imgObj, index) => (
                 <motion.div
                   key={index}
@@ -201,7 +201,7 @@ function Home() {
                   <img
                     src={imgObj.src}
                     alt={imgObj.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover justify-center"
                   />
                 </motion.div>
               ))}
@@ -210,14 +210,14 @@ function Home() {
             {/* Enhanced Navigation Arrows */}
             <button
               onClick={prevImage}
-              className="absolute left-6 top-1/2 transform -translate-y-1/2 text-white text-3xl bg-gradient-to-r from-black/60 to-black/40 hover:from-black/80 hover:to-black/60 w-14 h-14 flex items-center justify-center rounded-full transition-all duration-300 hover:scale-110 z-20 backdrop-blur-md border border-white/20 disabled:opacity-30 group"
+              className="absolute left-6 top-1/2 transform -translate-y-1/2 text-white text-3xl cursor-pointer  bg-gradient-to-r from-black/60 to-black/40 hover:from-black/80 hover:to-black/60 w-14 h-14 flex items-center justify-center rounded-full transition-all duration-300 hover:scale-110 z-20 backdrop-blur-md border border-white/20 disabled:opacity-30 group"
               disabled={isTransitioning}
             >
               <FiChevronLeft className="group-hover:-translate-x-0.5 transition-transform" />
             </button>
             <button
               onClick={nextImage}
-              className="absolute right-6 top-1/2 transform -translate-y-1/2 text-white text-3xl bg-gradient-to-r from-black/60 to-black/40 hover:from-black/80 hover:to-black/60 w-14 h-14 flex items-center justify-center rounded-full transition-all duration-300 hover:scale-110 z-20 backdrop-blur-md border border-white/20 disabled:opacity-30 group"
+              className="absolute right-6 top-1/2 transform -translate-y-1/2 text-white text-3xl cursor-pointer   bg-gradient-to-r from-black/60 to-black/40 hover:from-black/80 hover:to-black/60 w-14 h-14 flex items-center justify-center rounded-full transition-all duration-300 hover:scale-110 z-20 backdrop-blur-md border border-white/20 disabled:opacity-30 group"
               disabled={isTransitioning}
             >
               <FiChevronRight className="group-hover:translate-x-0.5 transition-transform" />
@@ -237,13 +237,13 @@ function Home() {
                     }`}
                     disabled={isTransitioning}
                   >
-                    <div className={`absolute inset-0 rounded-full ${
+                    <div className={`absolute inset-0 rounded-full cursor-pointer ${
                       index === currentIndex
-                        ? "bg-gradient-to-r from-amber-500 to-orange-500"
+                        ? "bg-gradient-to-r from-pink-500 to-orange-500"
                         : "bg-white/50 hover:bg-white"
                     }`}></div>
                     {index === currentIndex && (
-                      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 blur-sm"></div>
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-pink-500 to-orange-500 blur-sm"></div>
                     )}
                   </button>
                 ))}
