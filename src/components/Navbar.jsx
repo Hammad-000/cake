@@ -12,7 +12,6 @@ function Navbar() {
   const { totalItems } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); 
 
-  // Update active path when location changes
   useEffect(() => {
     setActivePath(location.pathname);
   }, [location]);
@@ -40,11 +39,11 @@ function Navbar() {
               onClick={() => navigate("/")}
             >
               <div className="bg-white p-2 rounded-full group-hover:rotate-12 transition-transform duration-300">
-                <GiCakeSlice className="text-amber-700 text-2xl" />
+                <GiCakeSlice className="text-pink-700 text-2xl" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-white tracking-tight">
-                  Cakes<span className="text-amber-200">Villa</span>
+                  Cakes<span className="text-white">Villa</span>
                 </h1>
               </div>
             </div>
