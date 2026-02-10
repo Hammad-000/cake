@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useCart } from "../components/CartContext";
 import FooterContent from "../components/FooterContent";
 import { Link } from 'react-router-dom';
+import { FaRegTrashCan } from "react-icons/fa6";
+
 
 function Cart() {
   const { cart, removeFromCart, incrementQuantity, decrementQuantity, calculateTotalPrice } = useCart();
@@ -56,7 +58,6 @@ function Cart() {
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Cart Items Section */}
             <div className="lg:col-span-2">
               <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
                 <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50">
@@ -66,7 +67,6 @@ function Cart() {
                 <div className="divide-y divide-gray-100">
                   {cart.map((product) => (
                     <div key={product.id} className="p-6 flex flex-col sm:flex-row items-center gap-6 hover:bg-blue-50/50 transition-all duration-300 group">
-                      {/* Product Image */}
                       <div className="shrink-0">
                         <div className="relative">
                           <img
@@ -80,7 +80,6 @@ function Cart() {
                         </div>
                       </div>
 
-                      {/* Product Info */}
                       <div className="grow text-center sm:text-left">
                         <h4 className="font-bold text-gray-800 line-clamp-2 mb-2 text-lg">
                           {product.title}
@@ -91,28 +90,26 @@ function Cart() {
                         <p className="text-sm text-gray-500 mt-1">${(product.price * product.quantity).toFixed(2)} total</p>
                       </div>
 
-                      {/* Quantity Controls */}
                       <div className="flex items-center space-x-3 bg-gray-100 rounded-xl p-1">
                         <button
                           onClick={() => decrementQuantity(product.id)}
-                          className="w-10 h-10 flex items-center justify-center bg-white rounded-lg hover:bg-gray-200 transition-all duration-200 shadow-sm hover:shadow"
+                          className="w-10 h-10 flex items-center justify-center bg-white rounded-lg hover:bg-gray-200 transition-all duration-200 cursor-pointer hover:bg-red-600 shadow-sm hover:shadow"
                           aria-label="Decrease quantity"
                         >
-                          <span className="text-xl font-bold text-gray-600">−</span>
+                          <span className="text-xl font-bold text-gray-600 cursor-pointer ">−</span>
                         </button>
                         <span className="w-10 text-center font-bold text-gray-800 text-lg">
                           {product.quantity}
                         </span>
                         <button
                           onClick={() => incrementQuantity(product.id)}
-                          className="w-10 h-10 flex items-center justify-center bg-white rounded-lg hover:bg-gray-200 transition-all duration-200 shadow-sm hover:shadow"
+                          className="w-10 h-10 flex items-center justify-center bg-white rounded-lg hover:bg-gray-200 transition-all duration-200 shadow-sm cursor-pointer hover:bg-green-500 hover:shadow"
                           aria-label="Increase quantity"
                         >
-                          <span className="text-xl font-bold text-gray-600">+</span>
+                          <span className="text-xl font-bold text-gray-600 ">+</span>
                         </button>
                       </div>
 
-                      {/* Total Price & Remove */}
                       <div className="flex flex-col items-center gap-4">
                         <div className="text-center">
                           <p className="text-sm text-gray-500">Total</p>
@@ -122,9 +119,8 @@ function Cart() {
                         </div>
                         <button
                           onClick={() => removeFromCart(product.id)}
-                          className="text-red-500 hover:text-red-700 text-sm font-semibold transition-colors flex items-center gap-1 hover:gap-2"
-                        >
-                          <span>🗑️</span>
+                          className="text-red-500 hover:text-red-600 text-m cursor-pointer font-semibold transition-colors flex items-center gap-1 hover:gap-0.5"                      >
+                          <span><FaRegTrashCan /></span>
                           <span>Remove</span>
                         </button>
                       </div>
@@ -134,9 +130,7 @@ function Cart() {
               </div>
             </div>
 
-            {/* Order Summary & Customer Info */}
             <div className="space-y-6">
-              {/* Order Summary */}
               <div className="bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-lg p-6 border border-blue-100">
                 <h3 className="text-2xl font-bold text-gray-800 mb-6 pb-4 border-b border-blue-100">Order Summary</h3>
 
@@ -160,7 +154,6 @@ function Cart() {
                 </div>
               </div>
 
-              {/* Customer Information Form */}
               <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
@@ -275,7 +268,7 @@ function Cart() {
                   >
                     <div className="flex justify-between items-center">
                       <span>Confirm Order</span>
-                      <span className="text-lg font-bold">${(calculateTotalPrice() * 1.1).toFixed(2)}</span>
+                      <span className="text-lg font-bold">${(calculateTotalPrice()).toFixed(2)}</span>
                     </div>
                   </button>
                 </form>
