@@ -37,7 +37,7 @@ const FooterContent = () => {
 
                     {/* Social Media Section */}
                     <div className="text-center">
-                        <h3 className="text-xl font-bold mb-3 text-orange-400">Follow Us</h3>
+                        <h3 className="text-xl font-bold mb-3 text-pink-400">Contact Us</h3>
                         <div className="flex flex-wrap justify-center gap-6">
                             <div className="flex flex-col items-center space-y-1 hover:text-gray-300 transition-colors cursor-pointer">
                                 <FaFacebook className="w-8 h-8 text-blue-500" />
