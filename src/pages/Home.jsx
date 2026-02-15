@@ -392,7 +392,7 @@ function Home() {
                       to="/menu"          
                         className="px-5 p-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold rounded-full hover:shadow-lg transition-all duration-300 transform hover:scale-105"
                       >
-                       Got To Menu
+                       Go To Menu
                     </Link>
                       </button>
                     </div>
@@ -481,7 +481,7 @@ function Home() {
                         onClick={goToMenu}
                         className="mt-3 w-full py-2 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300"
                       >
-                        Got To Menu
+                        Go To Menu
                       </button>
                     </div>
                     
@@ -513,7 +513,7 @@ function Home() {
                       to="/menu"          
                         className="inline-flex items-center gap-3 px-10 py-4 bg-white text-gray-800 font-bold rounded-full border-2 border-pink-400 hover:border-purple-500 hover:shadow-xl transition-all duration-300 transform hover:scale-105 "
                       >
-                       Got To Menu
+                       Go To Menu
                     </Link>
                       </button>
                 <a
