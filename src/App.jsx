@@ -14,9 +14,8 @@ import Navbar from "./components/Navbar";
 
 function App() {
   return (
-    <CartProvider>
+    <CartProvider    >
       <Router>
-        {/* Navbar should be outside the Routes to be present on all pages */}
         <Navbar />
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
           <Routes>

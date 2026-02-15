@@ -4,7 +4,6 @@ import FooterContent from "../components/FooterContent";
 import { Link } from 'react-router-dom';
 import { FaRegTrashCan } from "react-icons/fa6";
 
-
 function Cart() {
   const { cart, removeFromCart, incrementQuantity, decrementQuantity, calculateTotalPrice } = useCart();
   const [customerInfo, setCustomerInfo] = useState({
@@ -25,20 +24,54 @@ function Cart() {
     }));
   };
 
-  const handleConfirmOrder = (e) => {
-    e.preventDefault();
-    console.log("Order confirmed:", { customerInfo, cart, total: calculateTotalPrice() });
-    alert("Order confirmed successfully!");
-  };
+ const handleConfirmOrder = (e) => {
+  e.preventDefault();
+
+  // Basic validation for phone number format (assuming it should be digits only)
+  const phoneRegex = /^\d{10,15}$/;  // Adjust to your country's phone format
+  if (!phoneRegex.test(customerInfo.phone)) {
+    alert("Please enter a valid phone number.");
+    return;
+  }
+
+  // Format the message for WhatsApp
+  const message = `
+    *New Order from Cakes Villa*\n
+    _Customer Details:_\n
+    Full Name: ${customerInfo.fullName}\n
+    Phone: ${customerInfo.phone}\n
+    Address: ${customerInfo.address}\n
+    _Cart Details:_\n
+    ${cart.map(product => `${product.title} x${product.quantity} - $${(product.price * product.quantity).toFixed(2)}`).join('\n')}\n\n
+    _Total Price:_ $${calculateTotalPrice().toFixed(2)}\n
+    *Thank you for your order!*
+  `;
+
+  // Encode the message for the URL
+  const encodedMessage = encodeURIComponent(message);
+
+  // Your phone number
+  const phoneNumber = "923110250787";  
+
+  // Format the WhatsApp link
+  const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+  // Open the WhatsApp link in a new window/tab
+  window.open(whatsappLink, "_blank");
+
+  // Optionally, log the data or alert for confirmation
+  console.log("Order confirmed:", { customerInfo, cart, total: calculateTotalPrice() });
+  alert("Order confirmed successfully! You will be redirected to WhatsApp.");
+};
 
   const isFormValid = customerInfo.fullName && customerInfo.email && customerInfo.address && customerInfo.phone;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br   from-gray-50 to-blue-50 flex flex-col">
       <div className="grow container mx-auto px-4 py-8">
         <div className="mb-8">
           <h2 className="text-4xl font-bold text-gray-800 mb-2">Your Shopping Cart</h2>
-          <p className="text-gray-600">Review your items and complete your purchase</p>
+          <p className="text-gray-600 font-bold">Review your items and complete your purchase</p>
         </div>
 
         {cart.length === 0 ? (
@@ -119,7 +152,8 @@ function Cart() {
                         </div>
                         <button
                           onClick={() => removeFromCart(product.id)}
-                          className="text-red-500 hover:text-red-600 text-m cursor-pointer font-semibold transition-colors flex items-center gap-1 hover:gap-0.5"                      >
+                          className="text-red-500 hover:text-red-600 text-m cursor-pointer font-semibold transition-colors flex items-center gap-1 hover:gap-0.5"
+                        >
                           <span><FaRegTrashCan /></span>
                           <span>Remove</span>
                         </button>

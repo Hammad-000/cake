@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import FooterContent from "../components/FooterContent";
 import { Link } from 'react-router-dom'
 import { products } from "../data/products";
-import { a } from "motion/react-client";
+
 
 function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -138,7 +138,7 @@ function Home() {
             className="relative inline-block"
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-pink-500 via-orange-500 to-purple-500 bg-clip-text text-transparent animate-gradient">
+              <span className="  bg-gradient-to-r from-pink-500 via-orange-500 to-purple-500 bg-clip-text text-transparent animate-gradient">
                 WELCOME TO
               </span>
               <br />
