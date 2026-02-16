@@ -62,7 +62,7 @@ function Navbar() {
                       transition-all duration-300 transform hover:scale-105
                       ${isActive 
                         ? 'bg-white text-pink-700 shadow-md hover:cursor-pointer' 
-                        : 'text-amber-100 hover:bg-fuchsia-600 hover:cursor-pointer transition-colors hover:text-white'
+                        : 'text-amber-100 hover:bg-pink-400 hover:cursor-pointer transition-colors hover:text-white'
                       }
                     `}
                   >
@@ -80,7 +80,7 @@ function Navbar() {
                     transition-all duration-300 transform hover:scale-105
                     ${activePath === "/cart"
                       ? 'bg-white text-pink-700 hover:cursor-pointer shadow-md' 
-                      : 'text-amber-100 hover:bg-fuchsia-600 transition-colors hover:text-white'
+                      : 'text-amber-100 hover:bg-pink-400 cursor-pointer transition-colors hover:text-white'
                     }
                   `}
                 >

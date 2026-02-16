@@ -56,9 +56,8 @@ function Home() {
   const categories = [
     { id: "all", name: "All", count: "" },
     { id: "Chocolate Cake", name: " Chocolate Cake", count: 3 },
-    { id: "Birthday Cake", name: "Birthday Cake", count: 4 },
-    { id: "Vanilla Cake", name: "Vanilla Cake",  count: 5 },
-    { id: "Hazelnut Cake", name: "Hazelnut Cake", count: 2 }
+    { id: "Birthday Cake", name: "Birthday Cake", count: 3 },
+    { id: "Vanilla Cake", name: "Vanilla Cake",  count: 1 },
   ];
 
   const nextImage = () => {
@@ -406,18 +405,18 @@ function Home() {
             </div>
 
             {/* Category Filter */}
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10">
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10 cursor-pointer">
               {categories.map((category) => (
                 <button
                   key={category.id}
                   onClick={() => setActiveCategory(category.id)}
-                  className={`px-4 sm:px-6 py-2 sm:py-3 rounded-full transition-all duration-300 flex items-center gap-2 whitespace-nowrap ${
+                  className={`px-4 sm:px-6 py-2 sm:py-3 rounded-full transition-all cursor-pointer duration-300 flex items-center gap-2 whitespace-nowrap ${
                     activeCategory === category.id
                       ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg transform scale-105'
                       : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
                   }`}
                 >
-                  <span className="text-base sm:text-lg">{category.icon}</span>
+                  <span className="text-base sm:text-lg cursor-pointer  ">{category.icon}</span>
                   <span className="font-semibold text-sm sm:text-base">{category.name}</span>
                   {category.count && (
                     <span className={`text-xs sm:text-sm px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full ${
