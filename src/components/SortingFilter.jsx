@@ -54,7 +54,7 @@ function SortingFilter({ handleSorting, currentSort }) {
               <button
                 key={option.value}
                 onClick={() => handleSortChange(option.value)}
-                className={`w-full flex items-center gap-3 px-5 py-3 cursor-pointer hover:bg-pink-50 transition-colors ${
+                className={`w-full flex items-center gap-3 px-5 py-3 cursor-pointer hover:border rounded border-pink-500 transition-colors ${
                   currentSort === option.value
                     ? "bg-pink-50 text-pink-600 font-medium"
                     : "text-gray-700"

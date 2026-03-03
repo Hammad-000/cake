@@ -7,7 +7,7 @@ const Rating = ({ className, stars, ratingClassName }) => {
         <svg
           key={i}
           aria-hidden="true"
-          className={`w-5 h-5 ${item <= i ? 'text-gray-300 dark:text-gray-500' : 'text-yellow-400'} ${ratingClassName}`}
+          className={`w-5 h-5 ${item <= i ? 'text-gray-300 dark:text-gray-500' : 'text-pink-400'} ${ratingClassName}`}
           fill="currentColor"
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg">

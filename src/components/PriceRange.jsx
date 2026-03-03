@@ -15,7 +15,7 @@ function PriceRange({ priceRange, initPriceRange, setPriceRange, isMobile }) {
   return (
     <div className={isMobile ? 'p-2' : ''}>
       <div className="mb-6">
-        <div className="flex justify-between items-center mb-3">
+        <div className="flex justify-between items-center mb-3 ">
           <span className={`font-medium ${isMobile ? 'text-lg' : 'text-sm'}`}>
             Price Range: Rs.{priceRange.min} - Rs.{priceRange.max}
           </span>
@@ -39,7 +39,7 @@ function PriceRange({ priceRange, initPriceRange, setPriceRange, isMobile }) {
               max={initPriceRange.max}
               value={priceRange.min}
               onChange={(e) => handleChange('min', e.target.value)}
-              className={`w-full ${isMobile ? 'h-3' : 'h-2'} bg-gray-200 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-amber-500 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-lg`}
+              className={`w-full ${isMobile ? 'h-3' : 'h-2'} bg-gray-200 rounded-lg  appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-pink-500 [&::-webkit-slider-thumb]:shadow-lg`}
             />
           </div>
           <div className="flex-1">
@@ -49,7 +49,7 @@ function PriceRange({ priceRange, initPriceRange, setPriceRange, isMobile }) {
               max={initPriceRange.max}
               value={priceRange.max}
               onChange={(e) => handleChange('max', e.target.value)}
-              className={`w-full ${isMobile ? 'h-3' : 'h-2'} bg-gray-200 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-amber-500 [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-lg`}
+              className={`w-full ${isMobile ? 'h-3' : 'h-2'} bg-gray-200 rounded-lg appearance-none  cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-pink-500 [&::-webkit-slider-thumb]:shadow-lg`}
             />
           </div>
         </div>
