@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom'; // Import Link
+import { useParams, Link } from 'react-router-dom'; 
 import { products } from '../data/products';
-import { useCart } from '../components/CartContext'; // Import useCart
+import { useCart } from '../components/CartContext'; 
 
 function ProductDetailpg() {
   const { id } = useParams(); 
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const { addToCart } = useCart(); // Get addToCart function from CartContext
+  const { addToCart } = useCart(); 
 
   useEffect(() => {
     const fetchProduct = () => {
@@ -27,15 +27,12 @@ function ProductDetailpg() {
   const handleAddToCart = () => {
     if (!product) return;
     
-    // Create an array of products based on quantity
     for (let i = 0; i < quantity; i++) {
       addToCart(product);
     }
     
-    // Optional: Show success message or notification
     console.log(`Added ${quantity} ${product.title}(s) to cart`);
     
-    // Optional: Reset quantity to 1 after adding
     setQuantity(1);
   };
 
@@ -75,7 +72,7 @@ function ProductDetailpg() {
           {/* Product Details */}
           <div className="lg:w-1/2">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">{product.title}</h1>
-            <p className="text-2xl font-bold text-amber-600 mb-6">${product.price}</p>
+            <p className="text-2xl font-bold  mb-6">${product.price}</p>
             
             <div className="mb-6">
               <h3 className="text-lg font-semibold mb-2">Description</h3>
@@ -98,14 +95,14 @@ function ProductDetailpg() {
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100"
+                  className="w-10 h-10 rounded-full border border-gray-300 cursor-pointer hover:bg-red-500 flex items-center justify-center "
                 >
                   -
                 </button>
                 <span className="text-lg font-semibold w-8 text-center">{quantity}</span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
-                  className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100"
+                  className="w-10 h-10 rounded-full border border-gray-300 cursor-pointer hover:bg-green-500 flex items-center justify-center "
                 >
                   +
                 </button>
@@ -114,8 +111,8 @@ function ProductDetailpg() {
 
             {/* Add to Cart Button */}
             <button 
-              onClick={handleAddToCart}
-              className="w-full py-4 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-105 shadow-lg mb-4"
+              onClick={handleAddToCart} 
+              className="w-full py-4 bg-pink-500 hover:bg-pink-600 cursor-pointer text-white rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-105 shadow-lg mb-4"
             >
               Add to Cart - ${(product.price * quantity).toFixed(2)}
             </button>

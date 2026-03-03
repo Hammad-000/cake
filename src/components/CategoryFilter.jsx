@@ -13,6 +13,7 @@ function CategoryFilter({ selectedCategories, onChangeCategory }) {
           text={category}
           checked={selectedCategories.includes(category)}
           onChange={(e) => onChangeCategory(category, e.target.checked)}
+          
         />
       ))}
     </div>

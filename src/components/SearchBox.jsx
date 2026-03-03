@@ -48,9 +48,9 @@ function SearchBox({ onSearchChange }) {
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           className={`w-full pl-12 pr-12 py-3 bg-white border 
-            ${isFocused ? 'border-amber-400 ring-2 ring-amber-200 shadow-lg' : 'border-gray-300'} 
+            ${isFocused ? 'border-pink-400 ring-2 ring-pink-200 shadow-lg' : 'border-gray-300'} 
             rounded-2xl focus:outline-none transition-all duration-300 placeholder:text-gray-400 text-gray-800 shadow-sm 
-            hover:shadow-md hover:border-amber-300 lg:py-4 lg:pl-12 lg:pr-14 lg:text-lg lg:placeholder:text-base lg:hover:shadow-xl`}
+            hover:shadow-md hover:border-pink-300 lg:py-4 lg:pl-12 lg:pr-14 lg:text-lg lg:placeholder:text-base lg:hover:shadow-xl`}
           style={{ maxWidth: '100%' }}
         />
         
@@ -75,7 +75,7 @@ function SearchBox({ onSearchChange }) {
             </button>
           ) : (
             <div className="flex items-center gap-1 text-xs font-medium text-gray-500 border border-gray-300 rounded-lg px-2 py-1 bg-white/90">
-              <span className="font-mono bg-gray-100 px-1 py-0.5 rounded">Ctrl</span>
+              <span className="font-mono bg-pink-100 px-1 py-0.5 rounded">Ctrl</span>
               <span>+</span>
               <span className="font-mono bg-gray-100 px-1 py-0.5 rounded">K</span>
             </div>
@@ -96,7 +96,7 @@ function SearchBox({ onSearchChange }) {
                     setSearchTerm(term);
                     onSearchChange(term);
                   }}
-                  className="px-4 py-2 bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 text-amber-700 rounded-xl transition-all duration-300 hover:scale-105 border border-amber-200"
+                  className="px-4 py-2 bg-pink-500 text-white cursor-pointer  hover:from-pink-500 text-pink-700 rounded-xl transition-all duration-300 hover:scale-105 border border-amber-200"
                 >
                   {term}
                 </button>
