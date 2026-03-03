@@ -87,7 +87,7 @@ function Navbar() {
                   <FaShoppingCart className="text-lg" />
                   <span>Cart</span>
                   {totalItems > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs font-bold 
+                    <span className="absolute -top-2 -right-2 bg-white text-pink-600 text-s font-bold 
                            rounded-full h-6 w-6 flex items-center justify-center 
                            animate-pulse shadow-lg">
                       {totalItems > 99 ? '99+' : totalItems}
@@ -149,7 +149,7 @@ function Navbar() {
                   <span>Cart</span>
                 </div>
                 {totalItems > 0 && (
-                  <span className="bg-red-500 text-white text-xs font-bold 
+                  <span className="bg-white text-pink-500 text-xs font-bold 
                          rounded-full h-6 w-6 flex items-center justify-center">
                     {totalItems > 99 ? '99+' : totalItems}
                   </span>
