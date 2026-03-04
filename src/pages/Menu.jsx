@@ -11,7 +11,6 @@ import { FaSortAmountDown } from "react-icons/fa";
 import { products } from "../../src/data/products";
 import FooterContent from "../components/FooterContent";
 import SortingFilter from "../components/SortingFilter";
-// import { supabase } from "../SupabaseClient";
 
 const initPriceFilter = {
   min: Math.min(...products.map(product => product.price)),
@@ -234,11 +233,11 @@ function Menu() {
 
                   {/* Active Filters Summary */}
                   {(selectedCategories.length > 0 || selectedRating || priceRange.isApplied) && (
-                    <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border border-amber-200 p-5">
+                    <div className="bg-gradient-to-r from-pink-500 to-pink-500 rounded-xl border border-pink-500 p-5">
                       <h3 className="font-semibold text-gray-800 mb-3">Active Filters</h3>
                       <div className="flex flex-wrap gap-2">
                         {selectedCategories.map((cat) => (
-                          <span key={cat} className="px-3 py-1 bg-amber-500 text-white rounded-full text-sm">
+                          <span key={cat} className="px-3 py-1 bg-pink-500 text-white rounded-full text-sm">
                             {cat}
                           </span>
                         ))}
@@ -288,7 +287,7 @@ function Menu() {
                   <h2 className="text-lg font-bold text-gray-800">Filters</h2>
                   <button
                     onClick={clearAllFilters}
-                    className="text-sm text-amber-600 hover:text-amber-700 font-medium"
+                    className="text-sm text-pink-700 font-medium cursor-pointer" 
                   >
                     Clear all
                   </button>
@@ -315,7 +314,7 @@ function Menu() {
 
               {/* Active Filters Summary */}
               {(selectedCategories.length > 0 || selectedRating || priceRange.isApplied) && (
-                <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl border border-amber-200 p-5">
+                <div className=" rounded-2xl border border-pink-500 p-5">
                   <h3 className="font-semibold text-gray-800 mb-3">Active Filters</h3>
                   <div className="space-y-2">
                     {selectedCategories.length > 0 && (
@@ -362,7 +361,7 @@ function Menu() {
                 {(selectedCategories.length > 0 || selectedRating || priceRange.isApplied) && (
                   <button
                     onClick={clearAllFilters}
-                    className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200"
+                    className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer"
                   >
                     Clear all
                   </button>
@@ -410,7 +409,7 @@ function Menu() {
                 <p className="text-gray-600 mb-6">Try adjusting your filters or search term</p>
                 <button
                   onClick={clearAllFilters}
-                  className="px-6 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-medium rounded-lg hover:shadow-lg transition-all"
+                  className="px-6 py-2 bg-pink-500  text-white font-medium rounded-lg hover:shadow-lg transition-all"
                 >
                   Clear All Filters
                 </button>
