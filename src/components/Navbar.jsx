@@ -22,6 +22,7 @@ function Navbar() {
     { path: "/menu", label: "Menu", icon: FaUtensils },
     { path: "/about", label: "About", icon: FaInfoCircle },
     { path: "/contact", label: "Contact", icon: FaEnvelope },
+    { path: "/login", label: "Login", icon: FaEnvelope },
   ];
 
   const toggleMobileMenu = () => {

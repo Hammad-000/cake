@@ -9,6 +9,7 @@ import Cart from "./pages/Cart";
 import { CartProvider } from "./components/CartContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import Login from "./pages/Login";
 // import { AuthProvider, useAuth } from "./context/AuthContext";
 // import Dashboard from "./Dashobard-Elements/Dashboard"
 
@@ -23,6 +24,7 @@ function App() {
             <Route path="/menu" element={<Menu />} />
             <Route path="/about" element={<About />} />
             <Route path="/product/:id" element={<ProductDetailpg />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/profile" element={<div>Profile Page</div>} />

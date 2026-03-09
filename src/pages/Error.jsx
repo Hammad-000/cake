@@ -16,7 +16,6 @@ function Error() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
-      {/* Main Content */}
       <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-8">
           <div className="inline-block relative mb-6">
@@ -54,10 +53,8 @@ function Error() {
           </div>
         </div>
 
-        {/* Help Section */}
         <div className="max-w-4xl mx-auto">
           <div className="grid md:grid-cols-2 gap-8">
-            {/* What might have happened */}
             <div className="bg-white rounded-3xl shadow-2xl p-8 transform transition-all duration-300 hover:shadow-3xl">
               <h2 className="text-3xl font-bold text-gray-800 mb-6 pb-3 border-b-2 border-purple-100">
                 What might have happened?
@@ -95,7 +92,6 @@ function Error() {
               </div>
             </div>
 
-            {/* What you can do */}
             <div className="bg-gradient-to-br from-purple-600 to-pink-500 rounded-3xl shadow-2xl p-8 text-white">
               <h2 className="text-3xl font-bold mb-6 pb-3 border-b-2 border-white/20">
                 What you can do
@@ -125,7 +121,7 @@ function Error() {
                   <div className="bg-white/20 p-3 rounded-xl">
                     <span className="text-xl font-bold">?</span>
                   </div>
-                  <div className='p-3' >
+                  <div >
                     <h3 className="text-lg font-semibold ">Contact Support</h3>
                     <p className="text-white/80">If the problem persists, feel free to contact our support team</p>
                   </div>
@@ -140,7 +136,6 @@ function Error() {
             </div>
           </div>
 
-          {/* Funny Message Section */}
           <div className="mt-8 text-center">
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg">
               <h3 className="text-2xl font-bold text-gray-800 mb-4">

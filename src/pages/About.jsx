@@ -44,7 +44,7 @@ function About() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-rose-50 to-orange-50 px-4 sm:px-5 md:px-6 py-4">
+    <div className="min-h-screen bg-gradient-to-b from-rose-50 to-orange-50 px-4 sm:px-5 md:px-6 py-6">
       <div className="container mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: -30 }}
@@ -141,7 +141,6 @@ function About() {
           </motion.div>
         </motion.div>
 
-        {/* Values Section */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -198,7 +197,6 @@ function About() {
           </div>
         </motion.div>
 
-        {/* Stats Section */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -229,7 +227,6 @@ function About() {
           </div>
         </motion.div>
 
-        {/* CTA Section */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
