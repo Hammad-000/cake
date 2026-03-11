@@ -249,10 +249,10 @@ function Signup() {
                       setErrors({ ...errors, terms: "" });
                     }
                   }}
-                  className="mt-1 w-4 h-4 text-purple-600 rounded border-gray-300 focus:ring-purple-500"
+                  className="mt-1 w-4 h-4 text-purple-600  cursor-pointer rounded border-gray-300 focus:ring-purple-500"
                   disabled={loading}
                 />
-                <label htmlFor="terms" className="text-sm text-gray-600">
+                <label htmlFor="terms" className="text-sm text-gray-600 ">
                   I agree to the{" "}
                   <a href="#" className="text-purple-600 hover:underline">Terms of Service</a>{" "}
                   and{" "}
@@ -279,7 +279,7 @@ function Signup() {
                   </>
                 ) : (
                   <>
-                    <span>Sign Up</span>
+                    <span className="cursor-pointer" >Sign Up</span>
                   </>
                 )}
               </button>

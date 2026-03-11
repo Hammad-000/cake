@@ -179,7 +179,7 @@ function Login() {
                     type="checkbox" 
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
-                    className="w-4 h-4 text-purple-600 rounded border-gray-300 focus:ring-purple-500"
+                    className="w-4 h-4 text-purple-600 rounded border-gray-300 focus:ring-purple-500 cursor-pointer "
                     disabled={loading}
                   />
                   <span>Remember me</span>
@@ -209,7 +209,7 @@ function Login() {
                 ) : (
                   <>
                     <FaSignInAlt />
-                    <span>Login</span>
+                    <span className="cursor-pointer" >Login</span>
                   </>
                 )}
               </button>
