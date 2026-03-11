@@ -81,7 +81,7 @@ function Login() {
             {/* Decorative image / illustration */}
             <div className="flex justify-center my-8">
               <img 
-                // src="https://illustrations.popsy.co/amber/online-shopping.svg" 
+                 src="./images/Login-bro.png" 
                 alt="Shopping illustration"
                 className="w-72 h-72 object-contain"
               />
@@ -109,10 +109,10 @@ function Login() {
             </div>
           </div>
 
-          {/* Right side - Login Form */}
+          {/* Login Form */}
           <div className="bg-white rounded-3xl shadow-xl p-8 md:p-10 border border-gray-100">
             <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
-              Sign In
+              Login   
             </h2>
             <p className="text-center text-gray-500 mb-8">
               Welcome back! Please enter your details.

@@ -94,9 +94,9 @@ function Signup() {
             {/* Decorative image / illustration */}
             <div className="flex justify-center my-8">
               <img 
-                src="https://storyset.com/illustration/cake-shop/bro#FF81AEFF&hide=&hide=complete" 
+                src="./images/signup.png" 
                 alt="Celebration illustration"
-                className="w-72 h-72 object-contain"
+                className="w-72 h-90 object-contain "
               />
             </div>
 
