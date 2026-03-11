@@ -3,6 +3,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FaHome, FaUtensils, FaInfoCircle, FaEnvelope, FaShoppingCart } from "react-icons/fa";
 import { useCart } from './CartContext';
 import { GiCakeSlice } from "react-icons/gi";
+import { IoLogInOutline } from "react-icons/io5"; 
+import { FaUserPlus } from "react-icons/fa";
+
+
 
 function Navbar() {
   const location = useLocation();
@@ -22,7 +26,8 @@ function Navbar() {
     { path: "/menu", label: "Menu", icon: FaUtensils },
     { path: "/about", label: "About", icon: FaInfoCircle },
     { path: "/contact", label: "Contact", icon: FaEnvelope },
-    { path: "/login", label: "Login", icon: FaEnvelope },
+    { path: "/login", label: "Login", icon: IoLogInOutline  },
+    { path: "/signup", label: "Sign up", icon: FaUserPlus },
   ];
 
   const toggleMobileMenu = () => {
