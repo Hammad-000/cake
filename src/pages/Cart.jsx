@@ -146,7 +146,7 @@ function Cart() {
                       <div className="flex flex-col items-center gap-4">
                         <div className="text-center">
                           <p className="text-sm text-gray-500">Total</p>
-                          <span className="text-2xl font-bold text-blue-600">
+                          <span className="text-2xl font-bold ">
                             ${(product.price * product.quantity).toFixed(2)}
                           </span>
                         </div>
@@ -181,7 +181,7 @@ function Cart() {
                   <div className="border-t border-blue-100 pt-4 flex justify-between items-center">
                     <span className="text-lg font-bold text-gray-800 ">Total Amount</span>
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-blue-600">${(calculateTotalPrice() ).toFixed(2)}</p>
+                      <p className="text-2xl font-bold ">${(calculateTotalPrice() ).toFixed(2)}</p>
                       <p className="text-xs text-gray-500">Inclusive of all taxes</p>
                     </div>
                   </div>
@@ -262,9 +262,9 @@ function Cart() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <div className="grid grid-cols-2 gap-4 ">
+                    <div className="w-fit" >
+                      <label className="block text-sm  font-semibold text-gray-700 mb-2">
                         City
                       </label>
                       <input
@@ -272,24 +272,12 @@ function Cart() {
                         name="city"
                         value={customerInfo.city}
                         onChange={handleInputChange}
-                        className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50"
-                        placeholder="New York"
+                        className="p-3 border w-90 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50"
+                        placeholder="Karachi"
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        ZIP Code
-                      </label>
-                      <input
-                        type="text"
-                        name="zipCode"
-                        value={customerInfo.zipCode}
-                        onChange={handleInputChange}
-                        className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50"
-                        placeholder="10001"
-                      />
-                    </div>
+                  
                   </div>
 
                   <button

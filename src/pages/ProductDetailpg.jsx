@@ -72,7 +72,7 @@ function ProductDetailpg() {
           {/* Product Details */}
           <div className="lg:w-1/2">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">{product.title}</h1>
-            <p className="text-2xl font-bold  mb-6">${product.price}</p>
+            <p className="text-2xl font-bold  mb-6">Rs{product.price}</p>
             
             <div className="mb-6">
               <h3 className="text-lg font-semibold mb-2">Description</h3>
@@ -114,7 +114,7 @@ function ProductDetailpg() {
               onClick={handleAddToCart} 
               className="w-full py-4 bg-pink-500 hover:bg-pink-600 cursor-pointer text-white rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-105 shadow-lg mb-4"
             >
-              Add to Cart - ${(product.price * quantity).toFixed(2)}
+              Add to Cart - Rs {(product.price * quantity).toFixed(2)}
             </button>
 
             {/* Additional Info */}
@@ -148,7 +148,7 @@ function ProductDetailpg() {
                   />
                   <div className="p-4">
                     <h3 className="font-semibold mb-2">{relatedProduct.title}</h3>
-                    <p className="text-amber-600 font-bold">${relatedProduct.price}</p>
+                    <p className=" font-bold">Rs {relatedProduct.price}</p>
                   </div>
                 </Link>
               ))}
