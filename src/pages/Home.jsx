@@ -17,12 +17,12 @@ function Home() {
 
   const images = [
     {
-      src: "/images/logo.jpg",
+      src: "/images/slider 2.jfif",
       title: "Contact us",
       subtitle: "Sweet, indulgent perfection"
     },
     {
-      src: "/images/cake20.jpg",
+      src: "/images/slider 3.jfif",
       title: "Premium Quality Meats",
       subtitle: "Savor the rich, sweet flavor"
     },
