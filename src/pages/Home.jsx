@@ -337,8 +337,8 @@ function Home() {
         viewport={{ once: true }}
         className="group relative"
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-red-500/10 rounded-3xl transform group-hover:scale-105 transition-all duration-500"></div>
-        <div className="relative bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-3xl transition-all duration-300 transform group-hover:-translate-y-2">
+        <div className="absolute  inset-0 bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-red-500/10 rounded-3xl transform group-hover:scale-105 transition-all duration-500"></div>
+        <div className="relative bg-white cursor-pointer rounded-3xl overflow-hidden shadow-xl hover:shadow-3xl transition-all duration-300 transform group-hover:-translate-y-2">
           {/* Image Container */}
           <div className="relative h-56 sm:h-72 overflow-hidden">
             <img
@@ -405,7 +405,7 @@ function Home() {
             </div>
 
             {/* Category Filter */}
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10 cursor-pointer">
+            <div className="flex cursor-pointer flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-10 cursor-pointer">
               {categories.map((category) => (
                 <button
                   key={category.id}
@@ -418,7 +418,7 @@ function Home() {
                 >
                   <span className="text-base sm:text-lg cursor-pointer  ">{category.icon}</span>
                   <span className="font-semibold text-sm sm:text-base">{category.name}</span>
-                  {category.count && (
+                  {category.count && ( 
                     <span className={`text-xs sm:text-sm px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full ${
                       activeCategory === category.id
                         ? 'bg-white/20'
@@ -432,7 +432,7 @@ function Home() {
             </div>
 
             {/* Specialties Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
+            <div className="grid grid-cols-2  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
               {filteredSpecialties.map((item, index) => (
                 <motion.div
                   key={index}
@@ -442,7 +442,7 @@ function Home() {
                   viewport={{ once: true }}
                   className="relative group"
                 >
-                  <div className="relative aspect-square overflow-hidden rounded-xl sm:rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
+                  <div className="relative aspect-square cursor-pointer overflow-hidden rounded-xl sm:rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
                     <img
                       src={item.image}
                       alt={item.name}
@@ -497,13 +497,13 @@ function Home() {
                 >
                   Go To Menu
                 </Link>
-                <a
-                  href="/reservation"
+                <Link
+                  to="/contact"
                   className="inline-flex items-center gap-2 sm:gap-3 px-6 sm:px-8 md:px-10 py-3 sm:py-4 bg-white text-gray-800 font-bold rounded-full border-2 border-pink-400 hover:border-purple-500 hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
                 >
                   Book a Table
                   <span className="text-pink-500">✨</span>
-                </a>
+                </Link>
               </div>
             </motion.div>
           </div>
