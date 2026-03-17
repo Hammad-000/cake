@@ -1,10 +1,14 @@
 import React, { useState } from "react";
-import axios from "axios"; // Import axios for API calls
+import axios from "axios"; 
 import { FaEnvelope, FaLock } from "react-icons/fa";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FooterContent from "../components/FooterContent";
 
+
+
 function Login() {
+  
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -12,8 +16,7 @@ function Login() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const history = useHistory();  // For redirecting after login success
-
+  
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -36,27 +39,27 @@ function Login() {
     }
     return newErrors;
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     // Validate form inputs
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-
+    
     setLoading(true);
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login", // Your backend login API URL
+        "http://localhost:5000/api/auth/login", 
         formData
       );
       setMessage("Login successful!");
-      localStorage.setItem("token", response.data.token);  // Store token in localStorage
-      history.push("/dashboard");  // Redirect to dashboard or home page
+      localStorage.setItem("token", response.data.token);  
+      navigate("/"); 
     } catch (error) {
       setMessage(error.response ? error.response.data.message : "Error logging in");
     } finally {
@@ -104,8 +107,8 @@ function Login() {
                 </label>
                 <div className={`flex items-center border rounded-xl px-4 transition-all duration-200 ${
                   errors.email 
-                    ? 'border-red-400 ring-2 ring-red-100' 
-                    : 'border-gray-300 focus-within:border-purple-400 focus-within:ring-2 focus-within:ring-purple-100'
+                  ? 'border-red-400 ring-2 ring-red-100' 
+                  : 'border-gray-300 focus-within:border-purple-400 focus-within:ring-2 focus-within:ring-purple-100'
                 }`}>
                   <FaEnvelope className={`text-gray-400 mr-3 ${errors.email ? 'text-red-400' : ''}`} />
                   <input
@@ -130,7 +133,7 @@ function Login() {
                   errors.password 
                     ? 'border-red-400 ring-2 ring-red-100' 
                     : 'border-gray-300 focus-within:border-purple-400 focus-within:ring-2 focus-within:ring-purple-100'
-                }`}>
+                  }`}>
                   <FaLock className={`text-gray-400 mr-3 ${errors.password ? 'text-red-400' : ''}`} />
                   <input
                     type="password"
@@ -140,7 +143,7 @@ function Login() {
                     placeholder="••••••••"
                     className="w-full py-3 outline-none bg-transparent text-gray-700 placeholder-gray-400"
                     disabled={loading}
-                  />
+                    />
                 </div>
                 {errors.password && <p className="text-red-500 text-xs mt-1.5 ml-1">{errors.password}</p>}
               </div>
@@ -150,7 +153,7 @@ function Login() {
                 type="submit"
                 disabled={loading}
                 className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-3.5 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-pink-600 transform hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 mt-6"
-              >
+                >
                 {loading ? (
                   <>
                     <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -170,7 +173,7 @@ function Login() {
                 <Link
                   to="/signup"
                   className="text-purple-600 font-semibold hover:text-purple-700 hover:underline transition-colors"
-                >
+                  >
                   Sign up
                 </Link>
               </p>
@@ -183,5 +186,6 @@ function Login() {
     </div>
   );
 }
+ 
 
 export default Login;
