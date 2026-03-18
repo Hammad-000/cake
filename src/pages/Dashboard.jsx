@@ -117,7 +117,7 @@ function ProductsPage({ products, setProducts }) {
           </div>
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-pink-600 transform hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
+            className="w-full cursor-pointer bg-gradient-to-r from-purple-600 to-pink-500 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-pink-600 transform hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
           >
             <FaPlus /> Add Product
           </button>
@@ -296,7 +296,7 @@ function Dashboard() {
           {/* Minimize button (desktop only) */}
           <button
             onClick={toggleMinimize}
-            className="hidden lg:block text-gray-600 hover:text-purple-600"
+            className="hidden lg:block text-gray-600 hover:text-purple-600 cursor-pointer "
           >
             {sidebarMinimized ? <FaChevronRight size={20} /> : <FaChevronLeft size={20} />}
           </button>
@@ -375,16 +375,16 @@ function MenuItem({ icon, label, active, minimized, onClick }) {
     <button
       onClick={onClick}
       className={`
-        w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300
+        w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 
         ${active
-          ? 'bg-gradient-to-r from-purple-600 to-pink-500 text-white shadow-lg'
-          : 'text-gray-600 hover:bg-purple-50 hover:text-purple-600'
+          ? 'bg-gradient-to-r from-purple-600 to-pink-500 text-white shadow-lg cursor-pointer'
+          : 'text-gray-600 hover:bg-purple-50 hover:text-purple-600 cursor-pointer'
         }
       `}
     >
-      <span className="text-xl ">{icon}</span>
+      <span className="text-xl  ">{icon}</span>
       {/* Label visibility based on minimized state */}
-      <span className={`font-medium transition-opacity duration-300 ${minimized ? 'lg:hidden' : ''}`}>
+      <span className={`font-medium transition-opacity duration-300 cursor-pointer ${minimized ? 'lg:hidden' : ''}`}>
         {label}
       </span>
     </button>
