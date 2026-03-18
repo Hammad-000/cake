@@ -83,7 +83,7 @@ function Login() {
             </p>
             <div className="flex justify-center my-8">
               <img 
-                src="./images/login.png" 
+                src="./images/Login-bro.png" 
                 alt="Celebration illustration"
                 className="w-72 h-90 object-contain "
               />

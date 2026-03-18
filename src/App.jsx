@@ -11,6 +11,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Dashboard from "./pages/Dashboard";
 // import { AuthProvider, useAuth } from "./context/AuthContext";
 // import Dashboard from "./Dashobard-Elements/Dashboard"
 
@@ -23,6 +24,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/menu" element={<Menu />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/about" element={<About />} />
             <Route path="/product/:id" element={<ProductDetailpg />} />
             <Route path="/login" element={<Login />} />
