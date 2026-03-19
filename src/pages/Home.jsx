@@ -282,8 +282,8 @@ function Home() {
               onMouseEnter={() => setHoveredCard(index)}
               onMouseLeave={() => setHoveredCard(null)}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-100 via-white to-gray-50 rounded-3xl transform group-hover:scale-105 transition-all duration-500 shadow-lg group-hover:shadow-2xl"></div>
-              <div className="relative p-6 sm:p-8 bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-100 overflow-hidden">
+              <div className="absolute  inset-0 bg-gradient-to-br from-gray-100 via-white to-gray-50 rounded-3xl transform group-hover:scale-105 transition-all duration-500 shadow-lg group-hover:shadow-2xl"></div>
+              <div className="relative cursor-pointer p-6 sm:p-8 bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-100 overflow-hidden">
                 {/* Animated Background */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-gray-100 to-transparent rounded-full -translate-y-16 translate-x-16"></div>
                 
