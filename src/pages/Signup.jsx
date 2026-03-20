@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios"; // Import axios for API calls
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 import FooterContent from "../components/FooterContent";
 
 function Signup() {
@@ -10,18 +10,20 @@ function Signup() {
     email: "",
     password: "",
     confirmPassword: "",
+    agreeTerms: false, // Add agreeTerms to state for checkbox
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-    if (errors[e.target.name]) {
-      setErrors({ ...errors, [e.target.name]: "" });
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
@@ -43,6 +45,9 @@ function Signup() {
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }
+    if (!formData.agreeTerms) {
+      newErrors.terms = "You must agree to the terms and conditions";
+    }
     return newErrors;
   };
 
@@ -60,7 +65,7 @@ function Signup() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/register", // your backend register API URL
+        "http://localhost:3000/api/auth/register",
         formData
       );
       setMessage("Account created successfully! Please check your email to verify.");
@@ -225,17 +230,13 @@ function Signup() {
                 <input
                   type="checkbox"
                   id="terms"
+                  name="agreeTerms"
                   checked={formData.agreeTerms}
-                  onChange={(e) => {
-                    setFormData({ ...formData, agreeTerms: e.target.checked });
-                    if (errors.terms) {
-                      setErrors({ ...errors, terms: "" });
-                    }
-                  }}
-                  className="mt-1 w-4 h-4 text-purple-600  cursor-pointer rounded border-gray-300 focus:ring-purple-500"
+                  onChange={handleChange}
+                  className="mt-1 w-4 h-4 text-purple-600 cursor-pointer rounded border-gray-300 focus:ring-purple-500"
                   disabled={loading}
                 />
-                <label htmlFor="terms" className="text-sm text-gray-600 ">
+                <label htmlFor="terms" className="text-sm text-gray-600">
                   I agree to the{" "}
                   <a href="#" className="text-purple-600 hover:underline">Terms of Service</a>{" "}
                   and{" "}
