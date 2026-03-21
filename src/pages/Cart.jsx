@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import { useCart } from "../components/CartContext";
 import FooterContent from "../components/FooterContent";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaRegTrashCan } from "react-icons/fa6";
-import { IoLogInOutline } from "react-icons/io5"; 
-
+import { IoLogInOutline } from "react-icons/io5";
 
 function Cart() {
   const { cart, removeFromCart, incrementQuantity, decrementQuantity, calculateTotalPrice } = useCart();
-  
-  // Authentication state (for simplicity)
-  const [isLoggedIn, setIsLoggedIn] = useState(false); 
-  
+  const navigate = useNavigate(); // Hook for navigation
+
   const [customerInfo, setCustomerInfo] = useState({
     fullName: "",
     email: "",
@@ -33,47 +30,38 @@ function Cart() {
   const handleConfirmOrder = (e) => {
     e.preventDefault();
 
-    const phoneRegex = /^\d{10,15}$/;  
+    const phoneRegex = /^\d{10,15}$/;
     if (!phoneRegex.test(customerInfo.phone)) {
       alert("Please enter a valid phone number.");
       return;
     }
 
-    // Format the message for WhatsApp
     const message = `
-      *New Order from Cakes Villa*\n
-      _Customer Details:_\n
-      Full Name: ${customerInfo.fullName}\n
-      Phone: ${customerInfo.phone}\n
-      Address: ${customerInfo.address}\n
-      _Cart Details:_\n
-      ${cart.map(product => `${product.title} x${product.quantity} - $${(product.price * product.quantity).toFixed(2)}`).join('\n')}\n\n
-      _Total Price:_ $${calculateTotalPrice().toFixed(2)}\n
-      *Thank you for your order!*
-    `;
+*New Order from Cakes Villa*
+_Customer Details:_
+Full Name: ${customerInfo.fullName}
+Phone: ${customerInfo.phone}
+Address: ${customerInfo.address}
+_Cart Details:_
+${cart.map(product => `${product.title} x${product.quantity} - $${(product.price * product.quantity).toFixed(2)}`).join('\n')}
 
-    // Encode the message for the URL
+_Total Price:_ $${calculateTotalPrice().toFixed(2)}
+*Thank you for your order!*
+`;
+
     const encodedMessage = encodeURIComponent(message);
-
-    // Your phone number
     const phoneNumber = "923110250787";  
-
-    // Format the WhatsApp link
     const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-
-    // Open the WhatsApp link in a new window/tab
     window.open(whatsappLink, "_blank");
 
-    // Optionally, log the data or alert for confirmation
     console.log("Order confirmed:", { customerInfo, cart, total: calculateTotalPrice() });
     alert("Order confirmed successfully! You will be redirected to WhatsApp.");
   };
 
   const isFormValid = customerInfo.fullName && customerInfo.email && customerInfo.address && customerInfo.phone;
 
-  // Handle login simulation
   const handleLogin = () => {
-    setIsLoggedIn(true);
+    navigate('/login'); // Navigate to login page
   };
 
   return (
@@ -101,7 +89,7 @@ function Cart() {
           </div>
         ) : (
           <>
-            {/* Cart items will always show at the top if cart is not empty */}
+            {/* Cart Items */}
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 mb-8">
               <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-blue-50 to-indigo-50">
                 <h3 className="text-xl font-bold text-gray-800">Cart Items ({cart.length})</h3>
@@ -164,7 +152,7 @@ function Cart() {
                         onClick={() => removeFromCart(product.id)}
                         className="text-red-500 hover:text-red-600 text-m cursor-pointer font-semibold transition-colors flex items-center gap-1 hover:gap-0.5"
                       >
-                        <span><FaRegTrashCan /></span>
+                        <FaRegTrashCan />
                         <span>Remove</span>
                       </button>
                     </div>
@@ -173,66 +161,62 @@ function Cart() {
               </div>
             </div>
 
-            {/* If not logged in, show login prompt */}
-            {!isLoggedIn ? (
-  <div className="text-center py-16 max-w-md mx-auto flex flex-col items-center justify-center">
-    <p className="text-2xl font-semibold text-gray-800 mb-3">You need to log in to confirm your order</p>
-    <button
-      onClick={handleLogin}
-      className="px-8 py-4 text-white bg-gradient-to-r flex items-center justify-center cursor-pointer from-green-500 to-emerald-600 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg shadow-green-300"
-    >
-      <span>Log in</span>
-      <IoLogInOutline className="ml-2 text-lg" />
-    </button>
-  </div>
-) : (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Order Summary and Form */}
-                <div className="space-y-6">
-                  <div className="bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-lg p-6 border border-blue-100">
-                    <h3 className="text-2xl font-bold text-gray-800 mb-6 pb-4 border-b border-blue-100">Order Summary</h3>
+            {/* Login Prompt */}
+            <div className="text-center py-16 max-w-md mx-auto flex flex-col items-center justify-center">
+              <p className="text-2xl font-semibold text-gray-800 mb-3">You need to log in to confirm your order</p>
+              <button
+                onClick={handleLogin}
+                className="px-8 py-4 text-white bg-gradient-to-r flex items-center justify-center cursor-pointer from-green-500 to-emerald-600 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg shadow-green-300"
+              >
+                <span>Log in</span>
+                <IoLogInOutline className="ml-2 text-lg" />
+              </button>
+            </div>
 
-                    <div className="space-y-4 mb-6">
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-600">Subtotal</span>
-                        <span className="font-semibold text-gray-800">${calculateTotalPrice().toFixed(2)}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-600">Shipping</span>
-                        <span className="font-semibold text-green-600 bg-green-50 px-3 py-1 rounded-full text-sm">Free</span>
-                      </div>
-                      <div className="border-t border-blue-100 pt-4 flex justify-between items-center">
-                        <span className="text-lg font-bold text-gray-800 ">Total Amount</span>
-                        <div className="text-right">
-                          <p className="text-2xl font-bold ">${(calculateTotalPrice()).toFixed(2)}</p>
-                          <p className="text-xs text-gray-500">Inclusive of all taxes</p>
-                        </div>
+            {/* Order Summary and Form */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+              <div className="space-y-6">
+                <div className="bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-lg p-6 border border-blue-100">
+                  <h3 className="text-2xl font-bold text-gray-800 mb-6 pb-4 border-b border-blue-100">Order Summary</h3>
+
+                  <div className="space-y-4 mb-6">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600">Subtotal</span>
+                      <span className="font-semibold text-gray-800">${calculateTotalPrice().toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600">Shipping</span>
+                      <span className="font-semibold text-green-600 bg-green-50 px-3 py-1 rounded-full text-sm">Free</span>
+                    </div>
+                    <div className="border-t border-blue-100 pt-4 flex justify-between items-center">
+                      <span className="text-lg font-bold text-gray-800 ">Total Amount</span>
+                      <div className="text-right">
+                        <p className="text-2xl font-bold ">${(calculateTotalPrice()).toFixed(2)}</p>
+                        <p className="text-xs text-gray-500">Inclusive of all taxes</p>
                       </div>
                     </div>
                   </div>
+                </div>
 
-                  {/* Delivery Form */}
-                  <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-                    <form onSubmit={handleConfirmOrder} className="space-y-5">
-                      {/* Customer info form fields */}
-                      <button
-                        type="submit"
-                        disabled={!isFormValid}
-                        className={`w-full py-4 px-4 rounded-xl font-bold text-white transition-all duration-300 transform ${isFormValid
-                          ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 hover:shadow-lg hover:scale-[1.02] cursor-pointer shadow-lg shadow-green-200'
-                          : 'bg-gray-300 cursor-not-allowed'
-                        }`}
-                      >
-                        <div className="flex justify-between items-center">
-                          <span>Confirm Order</span>
-                          <span className="text-lg font-bold">${(calculateTotalPrice()).toFixed(2)}</span>
-                        </div>
-                      </button>
-                    </form>
-                  </div>
+                <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                  <form onSubmit={handleConfirmOrder} className="space-y-5">
+                    <button
+                      type="submit"
+                      disabled={!isFormValid}
+                      className={`w-full py-4 px-4 rounded-xl font-bold text-white transition-all duration-300 transform ${isFormValid
+                        ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 hover:shadow-lg hover:scale-[1.02] cursor-pointer shadow-lg shadow-green-200'
+                        : 'bg-gray-300 cursor-not-allowed'
+                      }`}
+                    >
+                      <div className="flex justify-between items-center">
+                        <span>Confirm Order</span>
+                        <span className="text-lg font-bold">${(calculateTotalPrice()).toFixed(2)}</span>
+                      </div>
+                    </button>
+                  </form>
                 </div>
               </div>
-            )}
+            </div>
           </>
         )}
       </div>
