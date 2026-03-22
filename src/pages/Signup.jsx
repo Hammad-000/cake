@@ -77,10 +77,9 @@ function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex flex-col items-center justify-center px-4 py-8 relative overflow-hidden">
-      {/* Your existing UI remains unchanged */}
-
-      <div className="relative w-full max-w-6xl z-10">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 px-4 py-8 relative overflow-hidden">
+      {/* Main content container with bottom margin */}
+      <div className="relative w-full max-w-6xl mx-auto z-10 mb-8">
         <div className="grid md:grid-cols-2 gap-8 items-center bg-white/40 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-8 border border-white/50">
           {/* Left side */}
           <div className="hidden md:block space-y-6">
