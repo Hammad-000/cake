@@ -175,7 +175,7 @@ function OrdersPage({ orders }) {
                 <td className="px-4 py-3 text-gray-800">{order.id}</td>
                 <td className="px-4 py-3 text-gray-800">{order.customer}</td>
                 <td className="px-4 py-3 text-gray-600">{order.date}</td>
-                <td className="px-4 py-3 text-gray-800">${order.total.toFixed(2)}</td>
+                <td className="px-4 py-3 text-gray-800">Rs {order.total.toFixed(2)}</td>
                 <td className="px-4 py-3">
                   <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
                     order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
@@ -216,7 +216,7 @@ function CustomersPage({ customers }) {
                 <td className="px-4 py-3 text-gray-800">{customer.name}</td>
                 <td className="px-4 py-3 text-gray-600">{customer.email}</td>
                 <td className="px-4 py-3 text-gray-800">{customer.orders}</td>
-                <td className="px-4 py-3 text-gray-800">${customer.spent.toFixed(2)}</td>
+                <td className="px-4 py-3 text-gray-800">Rs {customer.spent.toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
