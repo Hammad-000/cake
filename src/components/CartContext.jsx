@@ -18,17 +18,14 @@ export const CartProvider = ({ children }) => {
     setTotalItems(count);
   }, [cart]);
 
-  // Save cart to localStorage
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
-  // Show notification
   const showCartNotification = (message) => {
     setNotificationMessage(message);
     setShowNotification(true);
     
-    // Auto-hide notification after 3 seconds
     setTimeout(() => {
       setShowNotification(false);
     }, 3000);

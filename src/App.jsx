@@ -12,19 +12,24 @@ import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
-// import { AuthProvider, useAuth } from "./context/AuthContext";
-// import Dashboard from "./Dashobard-Elements/Dashboard"
+import ProtectedRoute from './components/ProtectedRoute'; // Import ProtectedRoute
 
 function App() {
   return (
-    <CartProvider    >
+    <CartProvider>
       <Router>
         <Navbar />
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/menu" element={<Menu />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            {/* Use ProtectedRoute inside a <Route /> */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute element={<Dashboard />} />
+              }
+            />
             <Route path="/about" element={<About />} />
             <Route path="/product/:id" element={<ProductDetailpg />} />
             <Route path="/login" element={<Login />} />
