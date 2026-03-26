@@ -20,6 +20,7 @@ const ProductUploads = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validation
     if (
       !image ||
       !productName ||
@@ -31,12 +32,13 @@ const ProductUploads = () => {
       return;
     }
 
-    // First upload the image to Cloudinary (or your image hosting service)
-    const formDataImage = new FormData();
-    formDataImage.append("image", image);
+    setUploading(true); // Start uploading
 
     try {
-      // Upload image
+      // Step 1: Upload the image
+      const formDataImage = new FormData();
+      formDataImage.append("image", image);
+
       const imageUploadResponse = await axios.post("/api/upload", formDataImage, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -45,7 +47,7 @@ const ProductUploads = () => {
 
       const imageUrl = imageUploadResponse.data.file.cloudinaryUrl;
 
-      // Now create the product with all other fields
+      // Step 2: Upload product data
       const productData = {
         name: productName,
         description: productDescription,
@@ -65,11 +67,21 @@ const ProductUploads = () => {
 
       console.log(response.data);
       alert("Product uploaded successfully!");
+
+      // Reset form on success
+      setProductName("");
+      setProductDescription("");
+      setProductPrice("");
+      setProductCategory("");
+      setOriginalPrice("");
+      setRating(0);
+      setIsAvailable(true);
+      setImage(null);
     } catch (error) {
       console.error("Error uploading product:", error);
-      setError("Failed to upload product");
+      setError("Failed to upload product. Please try again.");
     } finally {
-      setUploading(false);
+      setUploading(false); // Reset uploading state
     }
   };
 
