@@ -56,7 +56,7 @@ function Login() {
       );
       setMessage("Login successful!");
       localStorage.setItem("token", response.data.token); // Store token
-      navigate("/"); // Redirect to home
+     navigate("/dashboard");; 
     } catch (error) {
       setMessage(error.response ? error.response.data.message : "Error logging in");
     } finally {

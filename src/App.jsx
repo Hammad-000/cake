@@ -24,19 +24,21 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/menu" element={<Menu />} />
             {/* Use ProtectedRoute inside a <Route /> */}
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute element={<Dashboard />} />
-              }
-            />
+           <Route
+  path="/dashboard"
+  element={
+    <ProtectedRoute>
+      <Dashboard />
+    </ProtectedRoute>
+  }
+/>
             <Route path="/about" element={<About />} />
             <Route path="/product/:id" element={<ProductDetailpg />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/profile" element={<div>Profile Page</div>} />
+            <Route path="/profile" element={<div>Profile Page</div>} />  
             <Route path="*" element={<Error />} />
           </Routes>
         </div>

@@ -22,6 +22,7 @@ function Navbar() {
     { path: "/about", label: "About", icon: FaInfoCircle },
     { path: "/contact", label: "Contact", icon: FaEnvelope },
     { path: "/login", label: "Login", icon: IoLogInOutline },
+    { path: "/dashboard", label: "Dashboard", icon: IoLogInOutline },
   ];
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
