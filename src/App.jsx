@@ -22,7 +22,6 @@ function App() {
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/menu" element={<Menu />} />
             {/* Use ProtectedRoute inside a <Route /> */}
            <Route
   path="/dashboard"
@@ -38,6 +37,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/contact" element={<Contact />} />
+  <Route path="/menu" element={<Menu />} />
             <Route path="/profile" element={<div>Profile Page</div>} />  
             <Route path="*" element={<Error />} />
           </Routes>

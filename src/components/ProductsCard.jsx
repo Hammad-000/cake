@@ -53,16 +53,16 @@ function ProductsCard({ product }) {
   };
 
   const handleCardClick = () => {
-    navigate(`/product/${product.id}`);
-  };
+navigate(`/product/${product._id}`);  };
+
+console.log(product.data);
 
   // Destructure product properties for cleaner code
-  const { id, title, image, description, rating, price, originalPrice } = product;
-
+const { _id, title, image, description, rating, price, originalPrice } = product;
   return (
     <div className="p-4 cursor-pointer h-full" onClick={handleCardClick}>
       <div
-        key={id}
+        key={_id}
         className="border rounded-xl shadow-md hover:shadow-xl overflow-hidden transform hover:scale-[1.02] transition-all duration-300 ease-in-out bg-white h-full flex flex-col"
       >
         <div className="relative w-full h-48 overflow-hidden shrink-0">

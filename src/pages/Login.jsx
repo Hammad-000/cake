@@ -55,7 +55,7 @@ function Login() {
         formData
       );
       setMessage("Login successful!");
-      localStorage.setItem("token", response.data.token); // Store token
+      localStorage.setItem("token", response.data.token); 
      navigate("/dashboard");; 
     } catch (error) {
       setMessage(error.response ? error.response.data.message : "Error logging in");

@@ -27,7 +27,7 @@ const initialCustomers = [
 
 // ---------- Page Components (unchanged) ----------
 function ProductsPage({ products, setProducts }) {
-  const [formData, setFormData] = useState({ name: '', price: '', description: '', image: null });
+  const [formData, setFormData] = useState({ name: '', price: '', description: '', image: "" });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -251,8 +251,7 @@ function SettingsPage() {
 
 // ---------- Main Dashboard Component ----------
 function Dashboard() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarMinimized, setSidebarMinimized] = useState(false); // new state for desktop minimize
+  const [sidebarState, setSidebarState] = useState({ open: false, minimized: false });
   const [currentPage, setCurrentPage] = useState('products');
   const [products, setProducts] = useState(initialProducts);
   const [orders] = useState(initialOrders);
@@ -273,91 +272,58 @@ function Dashboard() {
     }
   };
 
-  // Toggle minimize on desktop
-  const toggleMinimize = () => setSidebarMinimized(!sidebarMinimized);
+  const toggleSidebarState = (type) => {
+    setSidebarState(prevState => ({
+      ...prevState,
+      [type]: !prevState[type],
+    }));
+  };
+
+  const toggleMinimize = () => toggleSidebarState('minimized');
+  const toggleSidebar = () => toggleSidebarState('open');
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 flex">
       {/* Sidebar */}
-      <aside
-        className={`
-          fixed inset-y-0 left-0 z-50 bg-white/90 backdrop-blur-sm shadow-2xl
-          transform transition-all duration-300 ease-in-out
-          lg:static lg:translate-x-0
-          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-          ${sidebarMinimized ? 'w-20' : 'w-64'}
-        `}
-      >
+      <aside className={`fixed inset-y-0 left-0 z-50 bg-white/90 backdrop-blur-sm shadow-2xl
+        transform transition-all duration-300 ease-in-out lg:static lg:translate-x-0
+        ${sidebarState.open ? 'translate-x-0' : '-translate-x-full'} 
+        ${sidebarState.minimized ? 'w-20' : 'w-64'}`}>
+        
         <div className="flex items-center justify-between p-6 border-b border-purple-100">
-          {/* Logo / Title - hide when minimized on desktop */}
-          <h1 className={`text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent transition-opacity duration-300 ${sidebarMinimized ? 'lg:hidden' : ''}`}>
+          <h1 className={`text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent transition-opacity duration-300 ${sidebarState.minimized ? 'lg:hidden' : ''}`}>
             Admin Panel
           </h1>
-          {/* Minimize button (desktop only) */}
-          <button
-            onClick={toggleMinimize}
-            className="hidden lg:block text-gray-600 hover:text-purple-600 cursor-pointer "
-          >
-            {sidebarMinimized ? <FaChevronRight size={20} /> : <FaChevronLeft size={20} />}
+          
+          <button onClick={toggleMinimize} className="hidden lg:block text-gray-600 hover:text-purple-600 cursor-pointer ">
+            {sidebarState.minimized ? <FaChevronRight size={20} /> : <FaChevronLeft size={20} />}
           </button>
-          {/* Close button (mobile only) */}
-          <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-gray-600 hover:text-purple-600">
+          
+          <button onClick={toggleSidebar} className="lg:hidden text-gray-600 hover:text-purple-600">
             <FaTimes size={24} />
           </button>
         </div>
 
         <nav className="p-4 space-y-2">
-          <MenuItem
-            icon={<FaBoxOpen />}
-            label="Products"
-            active={currentPage === 'products'}
-            minimized={sidebarMinimized}
-            onClick={() => { setCurrentPage('products'); setSidebarOpen(false); }}
-          />
-          <MenuItem
-            icon={<FaShoppingCart />}
-            label="Orders"
-            active={currentPage === 'orders'}
-            minimized={sidebarMinimized}
-            onClick={() => { setCurrentPage('orders'); setSidebarOpen(false); }}
-          />
-          <MenuItem
-            icon={<FaUsers />}
-            label="Customers"
-            active={currentPage === 'customers'}
-            minimized={sidebarMinimized}
-            onClick={() => { setCurrentPage('customers'); setSidebarOpen(false); }}
-          />
-          <MenuItem
-            icon={<FaCog />}
-            label="Settings"
-            active={currentPage === 'settings'}
-            minimized={sidebarMinimized}
-            onClick={() => { setCurrentPage('settings'); setSidebarOpen(false); }}
-          />
+          <MenuItem icon={<FaBoxOpen />} label="Products" active={currentPage === 'products'} minimized={sidebarState.minimized} onClick={() => { setCurrentPage('products'); toggleSidebar(); }} />
+          <MenuItem icon={<FaShoppingCart />} label="Orders" active={currentPage === 'orders'} minimized={sidebarState.minimized} onClick={() => { setCurrentPage('orders'); toggleSidebar(); }} />
+          <MenuItem icon={<FaUsers />} label="Customers" active={currentPage === 'customers'} minimized={sidebarState.minimized} onClick={() => { setCurrentPage('customers'); toggleSidebar(); }} />
+          <MenuItem icon={<FaCog />} label="Settings" active={currentPage === 'settings'} minimized={sidebarState.minimized} onClick={() => { setCurrentPage('settings'); toggleSidebar(); }} />
         </nav>
 
         <div className="absolute bottom-0 left-0 right-0 p-4">
           <div className="bg-gradient-to-r from-purple-600 to-pink-500 text-white p-4 rounded-xl flex items-center justify-center space-x-2 cursor-pointer hover:opacity-80 transition-all">
-            {/* Hide text when minimized on desktop */}
-            <p className={`text-sm font-medium transition-opacity duration-300 ${sidebarMinimized ? 'lg:hidden' : ''}`}>
-              Logout
-            </p>
+            <p className={`text-sm font-medium transition-opacity duration-300 ${sidebarState.minimized ? 'lg:hidden' : ''}`}>Logout</p>
             <BiLogOut size={20} />
           </div>
         </div>
       </aside>
 
-      {/* Mobile overlay */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
-      )}
+      {sidebarState.open && <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={toggleSidebar} />}
 
-      {/* Main content */}
       <main className="flex-1 p-4 lg:p-8">
-        {/* Mobile header */}
         <div className="flex items-center justify-between lg:hidden mb-6">
-          <button onClick={() => setSidebarOpen(true)} className="text-gray-600 hover:text-purple-600">
+          <button onClick={toggleSidebar} className="text-gray-600 hover:text-purple-600">
             <FaBars size={24} />
           </button>
           <h2 className="text-xl font-bold text-gray-800 capitalize">{currentPage}</h2>
@@ -374,19 +340,17 @@ function MenuItem({ icon, label, active, minimized, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={`
-        w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 
-        ${active
-          ? 'bg-gradient-to-r from-purple-600 to-pink-500 text-white shadow-lg cursor-pointer'
-          : 'text-gray-600 hover:bg-purple-50 hover:text-purple-600 cursor-pointer'
-        }
-      `}
+      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 
+        ${active ? 'bg-gradient-to-r from-purple-600 to-pink-500 text-white shadow-lg cursor-pointer' 
+        : 'text-gray-600 hover:bg-purple-50 hover:text-purple-600 cursor-pointer'}`}
     >
-      <span className="text-xl  ">{icon}</span>
-      {/* Label visibility based on minimized state */}
-      <span className={`font-medium transition-opacity duration-300 cursor-pointer ${minimized ? 'lg:hidden' : ''}`}>
-        {label}
-      </span>
+      <span className="text-xl">{icon}</span>
+      {/* Only show label when sidebar is not minimized */}
+      {!minimized && (
+        <span className="font-medium transition-opacity duration-300">
+          {label}
+        </span>
+      )}
     </button>
   );
 }

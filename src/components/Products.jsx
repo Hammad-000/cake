@@ -12,7 +12,7 @@ const Products = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('/api/products'); // Make sure your endpoint matches
+        const response = await axios.get('http://localhost:3000/api/products') // Make sure your endpoint matches
         if (response.data && Array.isArray(response.data.products)) {
           setProducts(response.data.products); // Safe check for array
         } else {

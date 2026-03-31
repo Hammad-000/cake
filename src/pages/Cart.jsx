@@ -61,7 +61,7 @@ _Total Price:_ $${calculateTotalPrice().toFixed(2)}
   const isFormValid = customerInfo.fullName && customerInfo.email && customerInfo.address && customerInfo.phone;
 
   const handleLogin = () => {
-    navigate('/login'); // Navigate to login page
+    navigate('/login');
   };
 
   return (
@@ -116,9 +116,8 @@ _Total Price:_ $${calculateTotalPrice().toFixed(2)}
                         {product.title}
                       </h4>
                       <p className="text-xl font-bold text-green-600">
-                        ${product.price.toFixed(2)}
+                        Rs {product.price.toFixed()}
                       </p>
-                      <p className="text-sm text-gray-500 mt-1">${(product.price * product.quantity).toFixed(2)} total</p>
                     </div>
 
                     <div className="flex items-center space-x-3 bg-gray-100 rounded-xl p-1">
@@ -145,7 +144,7 @@ _Total Price:_ $${calculateTotalPrice().toFixed(2)}
                       <div className="text-center">
                         <p className="text-sm text-gray-500">Total</p>
                         <span className="text-2xl font-bold ">
-                          ${(product.price * product.quantity).toFixed(2)}
+                          Rs {(product.price * product.quantity).toFixed(2)}
                         </span>
                       </div>
                       <button
@@ -182,7 +181,7 @@ _Total Price:_ $${calculateTotalPrice().toFixed(2)}
                   <div className="space-y-4 mb-6">
                     <div className="flex justify-between items-center">
                       <span className="text-gray-600">Subtotal</span>
-                      <span className="font-semibold text-gray-800">${calculateTotalPrice().toFixed(2)}</span>
+                      <span className="font-semibold text-gray-800">Rs {calculateTotalPrice().toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-gray-600">Shipping</span>
@@ -191,7 +190,7 @@ _Total Price:_ $${calculateTotalPrice().toFixed(2)}
                     <div className="border-t border-blue-100 pt-4 flex justify-between items-center">
                       <span className="text-lg font-bold text-gray-800 ">Total Amount</span>
                       <div className="text-right">
-                        <p className="text-2xl font-bold ">${(calculateTotalPrice()).toFixed(2)}</p>
+                        <p className="text-2xl font-bold ">Rs {(calculateTotalPrice()).toFixed(2)}</p>
                         <p className="text-xs text-gray-500">Inclusive of all taxes</p>
                       </div>
                     </div>
@@ -210,7 +209,7 @@ _Total Price:_ $${calculateTotalPrice().toFixed(2)}
                     >
                       <div className="flex justify-between items-center">
                         <span>Confirm Order</span>
-                        <span className="text-lg font-bold">${(calculateTotalPrice()).toFixed(2)}</span>
+                        <span className="text-lg font-bold">Rs {(calculateTotalPrice()).toFixed(2)}</span>
                       </div>
                     </button>
                   </form>
