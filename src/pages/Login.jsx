@@ -50,18 +50,20 @@ function Login() {
     setMessage(""); // Clear previous messages
 
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/auth/login",
-        formData
-      );
-      setMessage("Login successful!");
-      localStorage.setItem("token", response.data.token); 
-     navigate("/dashboard");; 
-    } catch (error) {
-      setMessage(error.response ? error.response.data.message : "Error logging in");
-    } finally {
-      setLoading(false);
-    }
+  const response = await axios.post(
+    "http://localhost:3000/api/auth/login",
+    formData
+  );
+
+  const { token } = response.data; // assuming backend returns { token: "..." }
+  localStorage.setItem("authToken", token); // <-- store token
+
+  setMessage("Login successful!");
+  navigate("/dashboard"); 
+} catch (error) {
+  setMessage(error.response ? error.response.data.message : "Error logging in");
+}
+    
   };
 
   return (

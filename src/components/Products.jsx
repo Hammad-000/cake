@@ -6,15 +6,15 @@ import axios from 'axios'; // To make API calls
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(''); // Added for error handling
+  const [error, setError] = useState(''); 
 
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:3000/api/products') // Make sure your endpoint matches
+        const response = await axios.get('http://localhost:3000/api/products') 
         if (response.data && Array.isArray(response.data.products)) {
-          setProducts(response.data.products); // Safe check for array
+          setProducts(response.data.products); 
         } else {
           setError('Failed to fetch products. Invalid response format.');
         }
@@ -28,12 +28,11 @@ const Products = () => {
     fetchProducts();
   }, []);
 
-  // Render loading state if the products are being fetched
+
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  // Handle error if there's any issue with the fetch
   if (error) {
     return <div>{error}</div>;
   }

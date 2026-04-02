@@ -27,7 +27,7 @@ const initialCustomers = [
 
 // ---------- Page Components (unchanged) ----------
 function ProductsPage({ products, setProducts }) {
-  const [formData, setFormData] = useState({ name: '', price: '', description: '', image: "" });
+  const [formData, setFormData] = useState({ name: '', price: '', description: '', image: null });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -38,23 +38,74 @@ function ProductsPage({ products, setProducts }) {
     setFormData(prev => ({ ...prev, image: e.target.files[0] }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const newProduct = {
-      id: Date.now(),
-      name: formData.name,
-      price: parseFloat(formData.price),
-      description: formData.description,
-    };
-    setProducts([...products, newProduct]);
-    alert('Product added!');
-    setFormData({ name: '', price: '', description: '', image: null });
-    e.target.reset();
-  };
-
   const handleDelete = (id) => {
     setProducts(products.filter(p => p.id !== id));
   };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   const formPayload = new FormData();
+  //   formPayload.append("name", formData.name);
+  //   formPayload.append("price", formData.price);
+  //   formPayload.append("description", formData.description);
+  //   if (formData.image) formPayload.append("image", formData.image);
+
+  //   try {
+  //     const response = await fetch("http://localhost:3000/api/products", {
+  //       method: "POST",
+  //       body: formPayload,
+  //     });
+
+  //     if (!response.ok) throw new Error("Failed to add product");
+
+  //     const savedProduct = await response.json();
+
+  //     setProducts([...products, savedProduct]);
+  //     alert("Product added successfully!");
+  //     setFormData({ name: "", price: "", description: "", image: null });
+  //     e.target.reset();
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert("Error adding product. See console for details.");
+  //   }
+  // };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const formPayload = new FormData();
+  formPayload.append("name", formData.name);
+  formPayload.append("price", formData.price);
+  formPayload.append("description", formData.description);
+  if (formData.image) formPayload.append("image", formData.image);
+
+  try {
+    const token = localStorage.getItem("authToken");
+    if (!token) throw new Error("No auth token found. Please log in.");
+
+    const response = await fetch("http://localhost:3000/api/products", {
+      method: "POST",
+   headers: {
+  "Authorization": `Bearer ${token}`,
+},
+      body: formPayload,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || "Failed to add product");
+    }
+
+    const savedProduct = await response.json();
+    setProducts([...products, savedProduct]);
+    alert("Product added successfully!");
+    setFormData({ name: "", price: "", description: "", image: null });
+    e.target.reset();
+  } catch (error) {
+    console.error("Error adding product:", error);
+    alert(error.message);
+  }
+};
 
   return (
     <div className="space-y-8">
@@ -64,6 +115,7 @@ function ProductsPage({ products, setProducts }) {
           Add New Product
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Name & Price */}
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Product Name</label>
@@ -91,6 +143,7 @@ function ProductsPage({ products, setProducts }) {
               />
             </div>
           </div>
+          {/* Description */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
             <textarea
@@ -103,10 +156,17 @@ function ProductsPage({ products, setProducts }) {
               required
             />
           </div>
+          {/* Image Upload */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Product Image</label>
             <div className="border-2 border-dashed border-purple-200 rounded-xl p-6 text-center hover:border-purple-400 transition">
-              <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="image-upload" />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
+                id="image-upload"
+              />
               <label htmlFor="image-upload" className="cursor-pointer flex flex-col items-center gap-2">
                 <FaCloudUploadAlt className="text-4xl text-purple-400" />
                 <span className="text-gray-600 font-medium">Click to upload or drag and drop</span>
@@ -115,6 +175,7 @@ function ProductsPage({ products, setProducts }) {
               {formData.image && <p className="mt-2 text-sm text-purple-600">Selected: {formData.image.name}</p>}
             </div>
           </div>
+          {/* Submit Button */}
           <button
             type="submit"
             className="w-full cursor-pointer bg-gradient-to-r from-purple-600 to-pink-500 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-pink-600 transform hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
