@@ -47,7 +47,7 @@ function Login() {
     }
 
     setLoading(true);
-    setMessage(""); // Clear previous messages
+    setMessage(""); 
 
     try {
   const response = await axios.post(
@@ -55,8 +55,8 @@ function Login() {
     formData
   );
 
-  const { token } = response.data; // assuming backend returns { token: "..." }
-  localStorage.setItem("authToken", token); // <-- store token
+  const { token } = response.data; 
+  localStorage.setItem("authToken", token); 
 
   setMessage("Login successful!");
   navigate("/dashboard"); 
@@ -89,7 +89,7 @@ function Login() {
 
           {/* Right side - Login Form */}
           <div className="bg-white rounded-3xl shadow-xl p-8 md:p-10 border border-gray-100">
-            <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
+            <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center ">
               Log In
             </h2>
             <p className="text-center text-gray-500 mb-8">
@@ -165,7 +165,7 @@ function Login() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-3.5 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-pink-600 transform hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 mt-6"
+                className="w-full bg-gradient-to-r  cursor-pointer from-purple-600 to-pink-500 text-white py-3.5 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-pink-600 transform hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 mt-6"
               >
                 {loading ? (
                   <>

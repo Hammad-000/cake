@@ -73,11 +73,11 @@ function ProductsPage({ products, setProducts }) {
 const handleSubmit = async (e) => {
   e.preventDefault();
 
-  const formPayload = new FormData();
-  formPayload.append("name", formData.name);
-  formPayload.append("price", formData.price);
-  formPayload.append("description", formData.description);
-  if (formData.image) formPayload.append("image", formData.image);
+const formPayload = new FormData();
+formPayload.append("name", formData.name);
+formPayload.append("price", formData.price);
+formPayload.append("description", formData.description);
+if (formData.image) formPayload.append("image", formData.image);
 
   try {
     const token = localStorage.getItem("authToken");

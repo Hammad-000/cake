@@ -248,7 +248,7 @@ function Signup() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-3.5 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-pink-600 transform hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 mt-6"
+                className="w-full bg-gradient-to-r cursor-pointer from-purple-600 to-pink-500 text-white py-3.5 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-pink-600 transform hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 mt-6"
               >
                 {loading ? (
                   <>
@@ -268,7 +268,7 @@ function Signup() {
                 Already have an account?{" "}
                 <Link
                   to="/login"
-                  className="text-purple-600 font-semibold hover:text-purple-700 hover:underline transition-colors"
+                  className="text-purple-600 font-semibold  hover:text-purple-700 hover:underline transition-colors"
                 >
                   Log in
                 </Link>
