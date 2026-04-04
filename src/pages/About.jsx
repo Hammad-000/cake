@@ -373,7 +373,7 @@ function About() {
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8 md:mb-12">
             Meet Our Master Bakers
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-2">
+          <div className="grid grid-cols-1 md:grid-cols-3   gap-8 px-2">
             {bakers.map((baker, idx) => (
               <motion.div
                 key={idx}
@@ -382,7 +382,7 @@ function About() {
                 transition={{ duration: 0.5, delay: idx * 0.2 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -10 }}
-                className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
+                className="bg-white rounded-2xl  cursor-pointer overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 <div className="h-64 overflow-hidden">
                   <img
