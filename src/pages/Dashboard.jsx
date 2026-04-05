@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
-import {
-  FaBoxOpen, FaShoppingCart, FaUsers, FaCog, FaPlus,
-  FaEdit, FaTrash, FaBars, FaTimes, FaCloudUploadAlt,
-  FaChevronLeft, FaChevronRight
+import { 
+  FaBoxOpen, FaShoppingCart, FaUsers, FaCog, FaPlus, FaEdit, FaTrash, FaBars,
+  FaTimes, FaCloudUploadAlt, FaChevronLeft, FaChevronRight
 } from 'react-icons/fa';
 import { BiLogOut } from "react-icons/bi";
 
-// ---------- Mock Data (replace with real API calls) ----------
 const initialProducts = [
-  { id: 1, name: 'Red Velvet Cake', price: 29.99, description: 'Classic red velvet with cream cheese frosting' },
-  { id: 2, name: 'Chocolate Fudge', price: 34.99, description: 'Rich chocolate cake with fudge icing' },
-  { id: 3, name: 'Vanilla Bean', price: 24.99, description: 'Light vanilla sponge with buttercream' },
+  { id: 1, title: 'Red Velvet Cake', price: 29.99, description: 'Classic red velvet with cream cheese frosting', category: 'Cakes' },
+  { id: 2, title: 'Chocolate Fudge', price: 34.99, description: 'Rich chocolate cake with fudge icing', category: 'Cakes' },
+  { id: 3, title: 'Vanilla Bean', price: 24.99, description: 'Light vanilla sponge with buttercream', category: 'Cakes' },
 ];
 
 const initialOrders = [
@@ -25,9 +23,15 @@ const initialCustomers = [
   { id: 3, name: 'Bob Johnson', email: 'bob@example.com', orders: 8, spent: 399.20 },
 ];
 
-// ---------- Page Components (unchanged) ----------
 function ProductsPage({ products, setProducts }) {
-  const [formData, setFormData] = useState({ name: '', price: '', description: '', image: null });
+  const [formData, setFormData] = useState({ 
+    name: '', 
+    price: '', 
+    description: '', 
+    category: '', 
+    image: null 
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -38,75 +42,109 @@ function ProductsPage({ products, setProducts }) {
     setFormData(prev => ({ ...prev, image: e.target.files[0] }));
   };
 
-  const handleDelete = (id) => {
-    setProducts(products.filter(p => p.id !== id));
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this product?')) return;
+    
+    try {
+      const token = localStorage.getItem("authToken");
+      const response = await fetch(`https://cakes-backend-gamma.vercel.app/api/products/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      
+      if (!response.ok) throw new Error('Delete failed');
+      
+      setProducts(products.filter(p => (p._id || p.id) !== id));
+      alert('Product deleted successfully');
+    } catch (error) {
+      console.error('Delete error:', error);
+      alert('Failed to delete product');
+    }
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   const formPayload = new FormData();
-  //   formPayload.append("name", formData.name);
-  //   formPayload.append("price", formData.price);
-  //   formPayload.append("description", formData.description);
-  //   if (formData.image) formPayload.append("image", formData.image);
-
-  //   try {
-  //     const response = await fetch("http://localhost:3000/api/products", {
-  //       method: "POST",
-  //       body: formPayload,
-  //     });
-
-  //     if (!response.ok) throw new Error("Failed to add product");
-
-  //     const savedProduct = await response.json();
-
-  //     setProducts([...products, savedProduct]);
-  //     alert("Product added successfully!");
-  //     setFormData({ name: "", price: "", description: "", image: null });
-  //     e.target.reset();
-  //   } catch (error) {
-  //     console.error(error);
-  //     alert("Error adding product. See console for details.");
-  //   }
-  // };
 const handleSubmit = async (e) => {
   e.preventDefault();
-
-const formPayload = new FormData();
-formPayload.append("name", formData.name);
-formPayload.append("price", formData.price);
-formPayload.append("description", formData.description);
-if (formData.image) formPayload.append("image", formData.image);
-
+  
+  if (!formData.image) {
+    alert('Please select an image');
+    return;
+  }
+  
+  setIsSubmitting(true);
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    alert("No auth token found. Please log in.");
+    setIsSubmitting(false);
+    return;
+  }
+  
   try {
-    const token = localStorage.getItem("authToken");
-    if (!token) throw new Error("No auth token found. Please log in.");
-
-    const response = await fetch("http://localhost:3000/api/products", {
+    // 1. Upload image
+    const imageFormData = new FormData();
+    imageFormData.append("image", formData.image);
+    
+    const uploadRes = await fetch("https://cakes-backend-gamma.vercel.app/api/upload", {
       method: "POST",
-   headers: {
-  "Authorization": `Bearer ${token}`,
-},
-      body: formPayload,
+      headers: { "Authorization": `Bearer ${token}` }, // add token if your upload route requires auth
+      body: imageFormData,
     });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
+    
+    // Log the full response for debugging
+    console.log("Upload response status:", uploadRes.status);
+    const uploadText = await uploadRes.text(); // read as text first
+    console.log("Upload response body:", uploadText);
+    
+    if (!uploadRes.ok) {
+      let errorMsg;
+      try {
+        const errJson = JSON.parse(uploadText);
+        errorMsg = errJson.message || errJson.error;
+      } catch {
+        errorMsg = uploadText || "Image upload failed";
+      }
+      throw new Error(errorMsg);
+    }
+    
+    const uploadData = JSON.parse(uploadText);
+    const imageUrl = uploadData.file.cloudinaryUrl;
+    
+    // 2. Create product
+    const productData = {
+      name: formData.name,
+      price: parseFloat(formData.price),
+      description: formData.description,
+      category: formData.category,
+      imageUrl: imageUrl,
+      isAvailable: true,
+    };
+    
+    const productRes = await fetch("https://cakes-backend-gamma.vercel.app/api/products", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(productData),
+    });
+    
+    if (!productRes.ok) {
+      const errorData = await productRes.json().catch(() => ({}));
       throw new Error(errorData.message || "Failed to add product");
     }
-
-    const savedProduct = await response.json();
-    setProducts([...products, savedProduct]);
+    
+    const savedProduct = await productRes.json();
+    setProducts([...products, savedProduct.product]);
     alert("Product added successfully!");
-    setFormData({ name: "", price: "", description: "", image: null });
+    setFormData({ name: "", price: "", description: "", category: "", image: null });
     e.target.reset();
   } catch (error) {
     console.error("Error adding product:", error);
-    alert(error.message);
+    alert(`Error: ${error.message}`);
+  } finally {
+    setIsSubmitting(false);
   }
 };
-
+  
   return (
     <div className="space-y-8">
       {/* Add Product Form */}
@@ -115,7 +153,6 @@ if (formData.image) formPayload.append("image", formData.image);
           Add New Product
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Name & Price */}
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Product Name</label>
@@ -143,7 +180,7 @@ if (formData.image) formPayload.append("image", formData.image);
               />
             </div>
           </div>
-          {/* Description */}
+          
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
             <textarea
@@ -156,7 +193,20 @@ if (formData.image) formPayload.append("image", formData.image);
               required
             />
           </div>
-          {/* Image Upload */}
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+            <input
+              type="text"
+              name="category"
+              value={formData.category}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
+              placeholder="e.g., Cakes, Pastries"
+              required
+            />
+          </div>
+          
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Product Image</label>
             <div className="border-2 border-dashed border-purple-200 rounded-xl p-6 text-center hover:border-purple-400 transition">
@@ -170,43 +220,53 @@ if (formData.image) formPayload.append("image", formData.image);
               <label htmlFor="image-upload" className="cursor-pointer flex flex-col items-center gap-2">
                 <FaCloudUploadAlt className="text-4xl text-purple-400" />
                 <span className="text-gray-600 font-medium">Click to upload or drag and drop</span>
-                <span className="text-sm text-gray-500">PNG, JPG, GIF up to 10MB</span>
+                <span className="text-sm text-gray-500">PNG, JPG up to 5MB</span>
               </label>
               {formData.image && <p className="mt-2 text-sm text-purple-600">Selected: {formData.image.name}</p>}
             </div>
           </div>
-          {/* Submit Button */}
+          
           <button
             type="submit"
-            className="w-full cursor-pointer bg-gradient-to-r from-purple-600 to-pink-500 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-pink-600 transform hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
+            disabled={isSubmitting}
+            className="w-full cursor-pointer bg-gradient-to-r from-purple-600 to-pink-500 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-pink-600 transform hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 disabled:opacity-50"
           >
-            <FaPlus /> Add Product
+            <FaPlus /> {isSubmitting ? 'Adding...' : 'Add Product'}
           </button>
         </form>
       </div>
-
+      
       {/* Product List */}
       <div className="bg-white rounded-3xl shadow-2xl p-6 md:p-8">
         <h2 className="text-2xl font-bold text-gray-800 mb-6 pb-3 border-b-2 border-purple-100">
           Current Products
         </h2>
         <div className="space-y-4">
-          {products.map(product => (
-            <div key={product.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-              <div>
-                <h3 className="font-semibold text-gray-800">{product.name}</h3>
-                <p className="text-sm text-gray-600">${product.price.toFixed(2)} - {product.description}</p>
+          {products.map(product => {
+            const productId = product._id || product.id;
+            // Backend returns 'title', initialProducts use 'name' – support both
+            const displayName = product.title || product.name;
+            return (
+              <div key={productId} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                <div>
+                  <h3 className="font-semibold text-gray-800">{displayName}</h3>
+                  <p className="text-sm text-gray-600">
+                    ${typeof product.price === 'number' ? product.price.toFixed(2) : product.price} 
+                    {product.category && ` - ${product.category}`}
+                    {product.description && ` - ${product.description}`}
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition">
+                    <FaEdit />
+                  </button>
+                  <button onClick={() => handleDelete(productId)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition">
+                    <FaTrash />
+                  </button>
+                </div>
               </div>
-              <div className="flex gap-2">
-                <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition">
-                  <FaEdit />
-                </button>
-                <button onClick={() => handleDelete(product.id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition">
-                  <FaTrash />
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
@@ -356,7 +416,7 @@ function Dashboard() {
             Admin Panel
           </h1>
           
-          <button onClick={toggleMinimize} className="hidden lg:block text-gray-600 hover:text-purple-600 cursor-pointer ">
+          <button onClick={toggleMinimize} className="hidden lg:block text-gray-600 hover:text-purple-600 cursor-pointer">
             {sidebarState.minimized ? <FaChevronRight size={20} /> : <FaChevronLeft size={20} />}
           </button>
           
@@ -406,7 +466,6 @@ function MenuItem({ icon, label, active, minimized, onClick }) {
         : 'text-gray-600 hover:bg-purple-50 hover:text-purple-600 cursor-pointer'}`}
     >
       <span className="text-xl">{icon}</span>
-      {/* Only show label when sidebar is not minimized */}
       {!minimized && (
         <span className="font-medium transition-opacity duration-300">
           {label}

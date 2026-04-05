@@ -55,7 +55,7 @@ function ProductsCard({ product }) {
   const handleCardClick = () => {
 navigate(`/product/${product._id}`);  };
 
-console.log(product.data);
+console.log(product);
 
   // Destructure product properties for cleaner code
 const { _id, title, image, description, rating, price, originalPrice } = product;

@@ -12,7 +12,7 @@ const Products = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:3000/api/products') 
+       const response = await axios.get('https://cakes-backend-gamma.vercel.app/api/products')
         if (response.data && Array.isArray(response.data.products)) {
           setProducts(response.data.products); 
         } else {
