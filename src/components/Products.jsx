@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ProductsCard from './ProductsCard';
 import { Link } from 'react-router-dom';
-import axios from 'axios'; // To make API calls
+import axios from 'axios'; 
 
 const Products = () => {
   const [products, setProducts] = useState([]);

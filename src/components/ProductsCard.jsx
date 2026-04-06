@@ -72,7 +72,7 @@ const { _id, title, image, description, rating, price, originalPrice } = product
             alt={title}
             onError={(e) => {
               console.log(`Image failed to load: ${image}`);
-              e.target.src = "https://via.placeholder.com/300x200/FF0000/FFFFFF?text=Image+Not+Found";
+              e.target.src = "https://www.lalschocolates.com/cdn/shop/products/triple-layer_grande.jpg?v=1686309534";
               e.target.alt = "Image not available";
             }}
             onLoad={() => console.log(`Image loaded: ${image}`)}

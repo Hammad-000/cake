@@ -4,6 +4,9 @@ import { FaHome, FaUtensils, FaInfoCircle, FaEnvelope, FaShoppingCart } from "re
 import { useCart } from './CartContext';
 import { GiCakeSlice } from "react-icons/gi";
 import { IoLogInOutline } from "react-icons/io5";
+import { BiSolidDashboard } from "react-icons/bi";
+
+
 
 function Navbar() {
   const location = useLocation();
@@ -22,7 +25,7 @@ function Navbar() {
     { path: "/about", label: "About", icon: FaInfoCircle },
     { path: "/contact", label: "Contact", icon: FaEnvelope },
     { path: "/login", label: "Login", icon: IoLogInOutline },
-    { path: "/dashboard", label: "Dashboard", icon: IoLogInOutline },
+    { path: "/dashboard", label: "Dashboard", icon:BiSolidDashboard},
   ];
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);

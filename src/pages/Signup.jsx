@@ -10,7 +10,7 @@ function Signup() {
     email: "",
     password: "",
     confirmPassword: "",
-    agreeTerms: false, // Add agreeTerms to state for checkbox
+    agreeTerms: false, 
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);

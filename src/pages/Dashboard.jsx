@@ -1,15 +1,20 @@
-import React, { useState } from 'react';
+import { useState ,useEffect } from 'react';
 import { 
   FaBoxOpen, FaShoppingCart, FaUsers, FaCog, FaPlus, FaEdit, FaTrash, FaBars,
   FaTimes, FaCloudUploadAlt, FaChevronLeft, FaChevronRight
 } from 'react-icons/fa';
 import { BiLogOut } from "react-icons/bi";
 
+
+
 const initialProducts = [
   { id: 1, title: 'Red Velvet Cake', price: 29.99, description: 'Classic red velvet with cream cheese frosting', category: 'Cakes' },
   { id: 2, title: 'Chocolate Fudge', price: 34.99, description: 'Rich chocolate cake with fudge icing', category: 'Cakes' },
   { id: 3, title: 'Vanilla Bean', price: 24.99, description: 'Light vanilla sponge with buttercream', category: 'Cakes' },
 ];
+
+
+
 
 const initialOrders = [
   { id: '#1001', customer: 'John Doe', date: '2024-03-15', total: 59.98, status: 'Delivered' },
@@ -22,6 +27,8 @@ const initialCustomers = [
   { id: 2, name: 'Jane Smith', email: 'jane@example.com', orders: 3, spent: 124.50 },
   { id: 3, name: 'Bob Johnson', email: 'bob@example.com', orders: 8, spent: 399.20 },
 ];
+
+
 
 function ProductsPage({ products, setProducts }) {
   const [formData, setFormData] = useState({ 
@@ -89,9 +96,8 @@ const handleSubmit = async (e) => {
       body: imageFormData,
     });
     
-    // Log the full response for debugging
     console.log("Upload response status:", uploadRes.status);
-    const uploadText = await uploadRes.text(); // read as text first
+    const uploadText = await uploadRes.text(); 
     console.log("Upload response body:", uploadText);
     
     if (!uploadRes.ok) {
@@ -374,24 +380,54 @@ function SettingsPage() {
 function Dashboard() {
   const [sidebarState, setSidebarState] = useState({ open: false, minimized: false });
   const [currentPage, setCurrentPage] = useState('products');
-  const [products, setProducts] = useState(initialProducts);
+  // const [products, setProducts] = useState(initialProducts);
   const [orders] = useState(initialOrders);
   const [customers] = useState(initialCustomers);
+  const [products, setProducts] = useState([]);
+  const [loadingProducts, setLoadingProducts] = useState(false);
+const [productError, setProductError] = useState(null);
 
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'products':
-        return <ProductsPage products={products} setProducts={setProducts} />;
-      case 'orders':
-        return <OrdersPage orders={orders} />;
-      case 'customers':
-        return <CustomersPage customers={customers} />;
-      case 'settings':
-        return <SettingsPage />;
-      default:
-        return <ProductsPage products={products} setProducts={setProducts} />;
-    }
-  };
+const renderPage = () => {
+  if (currentPage === 'products') {
+    if (loadingProducts) return <div>Loading products...</div>;
+    if (productError) return <div>{productError}</div>;
+    return <ProductsPage products={products} setProducts={setProducts} />;
+  }
+  switch (currentPage) {
+    case 'orders':
+      return <OrdersPage orders={orders} />;
+    case 'customers':
+      return <CustomersPage customers={customers} />;
+    case 'settings':
+      return <SettingsPage />;
+    default:
+      return <ProductsPage products={products} setProducts={setProducts} />;
+  }
+};
+
+
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoadingProducts(true);
+      try {
+        const response = await fetch('https://cakes-backend-gamma.vercel.app/api/products');
+        const data = await response.json();
+        if (data && Array.isArray(data.products)) {
+          setProducts(data.products);
+        } else {
+          setProductError('Invalid response format.');
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        setProductError('Failed to fetch products.');
+      } finally {
+        setLoadingProducts(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const toggleSidebarState = (type) => {
     setSidebarState(prevState => ({
