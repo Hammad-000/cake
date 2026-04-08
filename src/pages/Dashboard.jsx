@@ -35,7 +35,20 @@ function ProductsPage({ products, setProducts }) {
     name: '', price: '', description: '', category: '', image: null 
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [editingProduct, setEditingProduct] = useState(null); // product being edited
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [categoryFilter, setCategoryFilter] = useState('all');
+
+  // Category options for dropdown
+  const categoryOptions = [
+    'Chocolate cake',
+    'Ice Cake',
+    'Hazelnut Cake',
+    'Vanilla Cake',
+    'Oreo Cake'
+  ];
+
+  // Derive unique categories from products for filter
+  const categories = ['all', ...new Set(products.map(p => p.category).filter(Boolean))];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -46,7 +59,6 @@ function ProductsPage({ products, setProducts }) {
     setFormData(prev => ({ ...prev, image: e.target.files[0] }));
   };
 
-  // Delete product
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this product?')) return;
     
@@ -59,7 +71,6 @@ function ProductsPage({ products, setProducts }) {
       
       if (!response.ok) throw new Error('Delete failed');
       
-      // Remove from local state immediately (optimistic update)
       setProducts(products.filter(p => (p._id || p.id) !== id));
       alert('Product deleted successfully');
     } catch (error) {
@@ -68,7 +79,6 @@ function ProductsPage({ products, setProducts }) {
     }
   };
 
-  // Open edit modal and populate form
   const handleEditClick = (product) => {
     setEditingProduct(product);
     setFormData({
@@ -76,11 +86,10 @@ function ProductsPage({ products, setProducts }) {
       price: product.price,
       description: product.description,
       category: product.category,
-      image: null, // new image optional
+      image: null,
     });
   };
 
-  // Update product (PUT request)
   const handleUpdate = async (e) => {
     e.preventDefault();
     if (!editingProduct) return;
@@ -89,9 +98,8 @@ function ProductsPage({ products, setProducts }) {
     const token = localStorage.getItem("authToken");
     
     try {
-      let imageUrl = editingProduct.image; // keep old image by default
+      let imageUrl = editingProduct.image;
       
-      // If a new image is selected, upload it first
       if (formData.image) {
         const imageFormData = new FormData();
         imageFormData.append("image", formData.image);
@@ -130,7 +138,6 @@ function ProductsPage({ products, setProducts }) {
       const updatedProductData = await updateRes.json();
       const updatedProduct = updatedProductData.product;
       
-      // Update local state
       setProducts(products.map(p => 
         (p._id || p.id) === (editingProduct._id || editingProduct.id)
           ? { ...updatedProduct, title: updatedProduct.title || updatedProduct.name }
@@ -147,10 +154,7 @@ function ProductsPage({ products, setProducts }) {
     }
   };
 
-  // Add new product (existing code, unchanged)
   const handleSubmit = async (e) => {
-    // ... your existing handleSubmit code (same as provided)
-    // Make sure it resets editingProduct if any
     e.preventDefault();
     if (!formData.image) {
       alert('Please select an image');
@@ -214,6 +218,11 @@ function ProductsPage({ products, setProducts }) {
 
   const cancelEdit = () => resetForm();
 
+  // Filter products based on selected category
+  const filteredProducts = categoryFilter === 'all'
+    ? products
+    : products.filter(p => p.category === categoryFilter);
+
   return (
     <div className="space-y-8">
       {/* Add/Edit Product Form */}
@@ -222,7 +231,6 @@ function ProductsPage({ products, setProducts }) {
           {editingProduct ? "Edit Product" : "Add New Product"}
         </h2>
         <form onSubmit={editingProduct ? handleUpdate : handleSubmit} className="space-y-6">
-          {/* ... same input fields as before ... */}
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Product Name</label>
@@ -261,14 +269,18 @@ function ProductsPage({ products, setProducts }) {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
-            <input
-              type="text"
+            <select
               name="category"
               value={formData.category}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 rounded-xl border border-gray-300"
+              className="w-full px-4 py-3 rounded-xl border cursor-pointer  border-gray-300 bg-white"
               required
-            />
+            >
+              <option  value="" disabled   >Select a category</option>
+              {categoryOptions.map(cat => (
+                <option   key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Product Image</label>
@@ -302,38 +314,59 @@ function ProductsPage({ products, setProducts }) {
         </form>
       </div>
       
-      {/* Product List */}
+      {/* Product List with Category Filter */}
       <div className="bg-white rounded-3xl shadow-2xl p-6 md:p-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 pb-3 border-b-2 border-purple-100">
-          Current Products
-        </h2>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-3 border-b-2 border-purple-100">
+          <h2 className="text-2xl font-bold text-gray-800">Current Products</h2>
+          
+          {/* Category Filter Dropdown */}
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium text-gray-700">Filter by category:</label>
+            <select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              className="px-3 py-2  rounded-lg border border-gray-300 bg-white text-gray-800 focus:ring-purple-500 focus:border-purple-500"
+            >
+              {categories.map(cat => (
+                <option key={cat} value={cat}>
+                  {cat === 'all' ? 'All Categories' : cat}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        
         <div className="space-y-4">
-          {products.map(product => {
-            const productId = product._id || product.id;
-            const displayName = product.title || product.name;
-            return (
-              <div key={productId} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl gap-4">
-                {product.image && (
-                  <img src={product.image} alt={displayName} className="w-20 h-20 object-cover rounded-xl" />
-                )}
-                <div className="flex-1">
-                  <h3 className="font-semibold text-gray-800">{displayName}</h3>
-                  <p className="text-sm text-gray-600">
-                    ${typeof product.price === 'number' ? product.price.toFixed(2) : product.price} 
-                    {product.category && ` - ${product.category}`}
-                  </p>
+          {filteredProducts.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">No products found in this category.</div>
+          ) : (
+            filteredProducts.map(product => {
+              const productId = product._id || product.id;
+              const displayName = product.title || product.name;
+              return (
+                <div key={productId} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl gap-4">
+                  {product.image && (
+                    <img src={product.image} alt={displayName} className="w-20 h-20 object-cover rounded-xl" />
+                  )}
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-800">{displayName}</h3>
+                    <p className="text-sm text-gray-600">
+                      ${typeof product.price === 'number' ? product.price.toFixed(2) : product.price} 
+                      {product.category && ` - ${product.category}`}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button onClick={() => handleEditClick(product)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg">
+                      <FaEdit />
+                    </button>
+                    <button onClick={() => handleDelete(productId)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg">
+                      <FaTrash />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex gap-2">
-                  <button onClick={() => handleEditClick(product)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg">
-                    <FaEdit />
-                  </button>
-                  <button onClick={() => handleDelete(productId)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg">
-                    <FaTrash />
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </div>
       </div>
     </div>
