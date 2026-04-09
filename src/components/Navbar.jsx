@@ -5,7 +5,6 @@ import { useCart } from './CartContext';
 import { GiCakeSlice } from "react-icons/gi";
 import { IoLogInOutline , IoLogOut } from "react-icons/io5";
 import { BiSolidDashboard } from "react-icons/bi";
-import { t } from "react-icons/io5";
 
 
 

@@ -38,7 +38,6 @@ function ProductsPage({ products, setProducts }) {
   const [editingProduct, setEditingProduct] = useState(null);
   const [categoryFilter, setCategoryFilter] = useState('all');
 
-  // Category options for dropdown
   const categoryOptions = [
     'Chocolate cake',
     'Ice Cake',
@@ -47,7 +46,6 @@ function ProductsPage({ products, setProducts }) {
     'Oreo Cake'
   ];
 
-  // Derive unique categories from products for filter
   const categories = ['all', ...new Set(products.map(p => p.category).filter(Boolean))];
 
   const handleInputChange = (e) => {
