@@ -1,23 +1,32 @@
-import Checkbox from "../components/Cheakbox";
-import { categoryTitle } from "../data/category";
+// CategoryFilter.jsx
+import { useMemo } from 'react';
+import Checkbox from "./Cheakbox";
 
-function CategoryFilter({ selectedCategories, onChangeCategory }) {
+const CategoryFilter = ({ products, selectedCategories, onChangeCategory, isMobile }) => {
+  const categories = useMemo(() => {
+    if (!products || products.length === 0) return [];
+    return [...new Set(products.map(p => p.category))];
+  }, [products]);
 
-  
+  const handleCheckboxChange = (category, isChecked) => {
+    onChangeCategory(category, isChecked);
+  };
+
   return (
-    <div className="h-65 mt-2 p-4 space-y-2 border border-gray-200 shadow-lg rounded-md">
-      <h3 className="font-semibold text-lg">Category Filter</h3>
-      {categoryTitle.map((category, index) => (
+    <div className={`space-y-3 ${isMobile ? 'px-1' : ''}`}>
+      {categories.map((category) => (
         <Checkbox
-          key={index}
+          key={category}
+          id={`category-${category}`}
           text={category}
           checked={selectedCategories.includes(category)}
-          onChange={(e) => onChangeCategory(category, e.target.checked)}
-          
+          onChange={(e) => handleCheckboxChange(category, e.target.checked)}
+          className="mb-2"
+          labelClassName="text-gray-700"
         />
       ))}
     </div>
   );
-}
+};
 
 export default CategoryFilter;

@@ -3,8 +3,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FaHome, FaUtensils, FaInfoCircle, FaEnvelope, FaShoppingCart } from "react-icons/fa";
 import { useCart } from './CartContext';
 import { GiCakeSlice } from "react-icons/gi";
-import { IoLogInOutline } from "react-icons/io5";
+import { IoLogInOutline , IoLogOut } from "react-icons/io5";
 import { BiSolidDashboard } from "react-icons/bi";
+import { t } from "react-icons/io5";
+
 
 
 
@@ -25,6 +27,7 @@ function Navbar() {
     { path: "/about", label: "About", icon: FaInfoCircle },
     { path: "/contact", label: "Contact", icon: FaEnvelope },
     { path: "/login", label: "Login", icon: IoLogInOutline },
+    { path: "/logout", label: "Logout", icon: IoLogOut },
     { path: "/dashboard", label: "Dashboard", icon:BiSolidDashboard},
   ];
 

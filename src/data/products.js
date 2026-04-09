@@ -1,198 +1,198 @@
 
-export const products = [
-  {
-        id: 1,
-        title: "Chocolate Cake", 
-        category: "Chocolate Cake",
-        image: "/images/cake1.jpg", 
-        description: "Delicious chocolate cake with rich frosting",
-        price: 2000,
-        rating:4.7
+// export const products = [
+//   {
+//         id: 1,
+//         title: "Chocolate Cake", 
+//         category: "Chocolate Cake",
+//         image: "/images/cake1.jpg", 
+//         description: "Delicious chocolate cake with rich frosting",
+//         price: 2000,
+//         rating:4.7
 
-    },  
-    {
-        id: 2,
-        title :"Vanilla Cake", 
-        category:  "Vanilla Cake",
-        description: "Classic vanilla cake with creamy icing",
-        image: "/images/cake2.jpg", 
-        price: 1800,
-       rating:4.8
+//     },  
+//     {
+//         id: 2,
+//         title :"Vanilla Cake", 
+//         category:  "Vanilla Cake",
+//         description: "Classic vanilla cake with creamy icing",
+//         image: "/images/cake2.jpg", 
+//         price: 1800,
+//        rating:4.8
        
-      },
-      {
-        id: 3,  
-        title: "Ice Cake",
-        category:  "Ice Cake",
-        image: "/images/cake3.jpg",
-        description: "Moist red velvet cake with cream cheese frosting",
-        price: 2200,
-        rating:4.5
-      },
-      {
-        id: 4,
-        title: "Birthday Cake",
-        category:"Birthday Cake",
-        description: "Moist oreo cake with cream cheese frosting",
-        image: "/images/cake4.webp",
-        price: 2500,
-        rating:5
-      },
-      {
-        id: 5,
-        title: "Strawberry Shortcake",
-        category: "Oreo Cake",
-        image: "/images/cake5.jpg",
-        description: "Fresh strawberries on a light sponge cake with whipped cream",
-        price: 2200,
-        rating:5
-      },
-      {
-      id: 6,
-        title: "Chocolate  Cake",
-        category: "Chocolate Cake",
-        image: "/images/cake6.jpg",
-        description: "Spiced carrot cake with cream cheese frosting",
-        price: 2400,
-        rating:5
-      },
-      {
-        id: 7,
-        title: "Chocolate  Cake",
-        category: "Chocolate Cake",
-        image: "/images/cake7.jpg",
-        description: "Tangy lemon cake topped with lemon glaze",
-        price: 2100,
-        rating:4.5
-      },
-      {
-        id: 8,
-        title: "Black Forest Cake",
-        category: "Black Forest Cake",
-        image: "/images/cake8.jpg",
-        description: "Layers of chocolate cake with cherries and whipped cream",
-        price: 2700,
-        rating:4.5
-      },
-      {
-        id: 9,
-        title: "Ice Cake",
-        category: "Ice Cake",
-        image: "/images/cake9.webp",
-        description: "Fluffy coconut cake with coconut cream frosting",
-        price: 2300,
-        rating:4.2
-      },
-      {
-        id: 10,
-        title: "Birthday Cake",
-        category: "Birthday Cake",
-        image: "/images/cake10.webp",
-        description: "Peach cobbler in cake form with cinnamon streusel",
-        price: 2600,
-        rating:4.4
-      },
-      {
-        id: 11,
-        title: "Birthday Cake",
-        category: "Birthday Cake",
-        image: "/images/cake11.webp",
-        description: "Spiced pumpkin cake with cinnamon cream cheese frosting",
-        price: 2500,
-        rating:4.7
-      },
-      {
-        id: 12,
-        title: "Coffee Cake",
-        category: "Ice Cake",
-        image: "/images/cake12.jpg",
-        description: "Moist coffee-flavored cake with a crumbly topping",
-        price: 2100,
-        rating:4.7
-      },
-      {
-        id: 13,
-        title: "Tiramisu Cake",
-        category: "Vanilla Cake",
-        image: "/images/cake13.webp",
-        description: "Layers of coffee-soaked sponge cake with mascarpone cream",
-        price: 2800,
-        rating:4.4
-      },
-      {
-        id: 14,
-        title: "Churro Cake",
-        category: "Vanilla Cake",
-        image: "/images/cake14.webp",
-        description: "Cinnamon-sugar churro flavor in a soft cake form",
-        price: 2400,
-        rating:4.5
-      },
-      {
-        id: 15,
-        title: "Apple Cinnamon Cake",
-        category: "Vanilla Cake",
-        image: "/images/cake15.jpg",
-        description: "Fresh apple and cinnamon cake with a drizzle of icing",
-        price: 2300,
-        rating:4.5
-      },
-      {
-        id: 16,
-        title: "Raspberry Almond Cake",
-        category: "Vanilla Cake",
-        image: "/images/cake16.jpg",
-        description: "Almond-flavored cake with fresh raspberries and cream",
-        price: 2500,
-        rating:4.5
+//       },
+//       {
+//         id: 3,  
+//         title: "Ice Cake",
+//         category:  "Ice Cake",
+//         image: "/images/cake3.jpg",
+//         description: "Moist red velvet cake with cream cheese frosting",
+//         price: 2200,
+//         rating:4.5
+//       },
+//       {
+//         id: 4,
+//         title: "Birthday Cake",
+//         category:"Birthday Cake",
+//         description: "Moist oreo cake with cream cheese frosting",
+//         image: "/images/cake4.webp",
+//         price: 2500,
+//         rating:5
+//       },
+//       {
+//         id: 5,
+//         title: "Strawberry Shortcake",
+//         category: "Oreo Cake",
+//         image: "/images/cake5.jpg",
+//         description: "Fresh strawberries on a light sponge cake with whipped cream",
+//         price: 2200,
+//         rating:5
+//       },
+//       {
+//       id: 6,
+//         title: "Chocolate  Cake",
+//         category: "Chocolate Cake",
+//         image: "/images/cake6.jpg",
+//         description: "Spiced carrot cake with cream cheese frosting",
+//         price: 2400,
+//         rating:5
+//       },
+//       {
+//         id: 7,
+//         title: "Chocolate  Cake",
+//         category: "Chocolate Cake",
+//         image: "/images/cake7.jpg",
+//         description: "Tangy lemon cake topped with lemon glaze",
+//         price: 2100,
+//         rating:4.5
+//       },
+//       {
+//         id: 8,
+//         title: "Black Forest Cake",
+//         category: "Black Forest Cake",
+//         image: "/images/cake8.jpg",
+//         description: "Layers of chocolate cake with cherries and whipped cream",
+//         price: 2700,
+//         rating:4.5
+//       },
+//       {
+//         id: 9,
+//         title: "Ice Cake",
+//         category: "Ice Cake",
+//         image: "/images/cake9.webp",
+//         description: "Fluffy coconut cake with coconut cream frosting",
+//         price: 2300,
+//         rating:4.2
+//       },
+//       {
+//         id: 10,
+//         title: "Birthday Cake",
+//         category: "Birthday Cake",
+//         image: "/images/cake10.webp",
+//         description: "Peach cobbler in cake form with cinnamon streusel",
+//         price: 2600,
+//         rating:4.4
+//       },
+//       {
+//         id: 11,
+//         title: "Birthday Cake",
+//         category: "Birthday Cake",
+//         image: "/images/cake11.webp",
+//         description: "Spiced pumpkin cake with cinnamon cream cheese frosting",
+//         price: 2500,
+//         rating:4.7
+//       },
+//       {
+//         id: 12,
+//         title: "Coffee Cake",
+//         category: "Ice Cake",
+//         image: "/images/cake12.jpg",
+//         description: "Moist coffee-flavored cake with a crumbly topping",
+//         price: 2100,
+//         rating:4.7
+//       },
+//       {
+//         id: 13,
+//         title: "Tiramisu Cake",
+//         category: "Vanilla Cake",
+//         image: "/images/cake13.webp",
+//         description: "Layers of coffee-soaked sponge cake with mascarpone cream",
+//         price: 2800,
+//         rating:4.4
+//       },
+//       {
+//         id: 14,
+//         title: "Churro Cake",
+//         category: "Vanilla Cake",
+//         image: "/images/cake14.webp",
+//         description: "Cinnamon-sugar churro flavor in a soft cake form",
+//         price: 2400,
+//         rating:4.5
+//       },
+//       {
+//         id: 15,
+//         title: "Apple Cinnamon Cake",
+//         category: "Vanilla Cake",
+//         image: "/images/cake15.jpg",
+//         description: "Fresh apple and cinnamon cake with a drizzle of icing",
+//         price: 2300,
+//         rating:4.5
+//       },
+//       {
+//         id: 16,
+//         title: "Raspberry Almond Cake",
+//         category: "Vanilla Cake",
+//         image: "/images/cake16.jpg",
+//         description: "Almond-flavored cake with fresh raspberries and cream",
+//         price: 2500,
+//         rating:4.5
         
-      },
-    {
-        id: 17,
-        title: "Birthday Cake",
-        category: "Birthday Cake",
-        image: "/images/cake17.webp",
-        description: "Banana and toffee cake with whipped cream and chocolate shavings",
-        price: 2600,
-        rating:4.7
+//       },
+//     {
+//         id: 17,
+//         title: "Birthday Cake",
+//         category: "Birthday Cake",
+//         image: "/images/cake17.webp",
+//         description: "Banana and toffee cake with whipped cream and chocolate shavings",
+//         price: 2600,
+//         rating:4.7
 
-    },
-    {
-        id: 18,
-        title: "Hazelnut Cake",
-        category: "Hazelnut Cake",
-        image: "/images/cake18.jpg",
-        description: "Rich hazelnut cake with creamy frosting and chopped hazelnuts",
-        price: 4000,
-         rating:4.5
+//     },
+//     {
+//         id: 18,
+//         title: "Hazelnut Cake",
+//         category: "Hazelnut Cake",
+//         image: "/images/cake18.jpg",
+//         description: "Rich hazelnut cake with creamy frosting and chopped hazelnuts",
+//         price: 4000,
+//          rating:4.5
 
-    },
-    {
-        id: 19,
-        title: "Red Velvet Cake",
-        category: "Velvet Cake",
-        image: "/images/cake19.jpg",
-        description: "Red velvet cake with cream cheese frosting",
-        price: 3000,
-        rating:5
-    },
-    {
-        id: 20,
-        title: "Matcha Green Tea Cake",
-        category: "Hazelnut Cake",
-        image: "/images/cake20.jpg",
-        description: "Earthy matcha cake with sweet cream frosting",
-        price: 4500,
-      rating:5
+//     },
+//     {
+//         id: 19,
+//         title: "Red Velvet Cake",
+//         category: "Velvet Cake",
+//         image: "/images/cake19.jpg",
+//         description: "Red velvet cake with cream cheese frosting",
+//         price: 3000,
+//         rating:5
+//     },
+//     {
+//         id: 20,
+//         title: "Matcha Green Tea Cake",
+//         category: "Hazelnut Cake",
+//         image: "/images/cake20.jpg",
+//         description: "Earthy matcha cake with sweet cream frosting",
+//         price: 4500,
+//       rating:5
 
-    }
-
-
+//     }
 
 
 
-]
-  // export const priceRange = {
-  //   min: 0,
-  //   max: 5000,
-  // };
+
+
+// ]
+//   // export const priceRange = {
+//   //   min: 0,
+//   //   max: 5000,
+//   // };

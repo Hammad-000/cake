@@ -29,23 +29,15 @@ const Products = () => {
   }, []);
 
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+  if (!products.length) return <div>No products available</div>;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-      {products.length > 0 ? (
-        products.map((product) => (
-          <ProductsCard key={product._id} product={product} />
-        ))
-      ) : (
-        <div>No products available</div>
-      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+      {products.map((product) => (
+        <ProductsCard key={product._id} product={product} />
+      ))}
     </div>
   );
 };

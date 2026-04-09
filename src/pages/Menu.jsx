@@ -1,63 +1,104 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import axios from "axios";
 import CategoryFilter from "../components/CategoryFilter";
 import Products from "../components/Products";
 import { getVisibleProducts } from "../../src/data/product-filter";
 import RatingFilter from "../components/RatingFilter";
 import PriceRange from "../components/PriceRange";
-import SearchBox from "../components/SearchBox"; 
-import { AiOutlineMenu, AiOutlineFilter } from "react-icons/ai";
+import SearchBox from "../components/SearchBox";
+import { AiOutlineFilter } from "react-icons/ai";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { FaSortAmountDown } from "react-icons/fa";
-import { products } from "../../src/data/products";
 import FooterContent from "../components/FooterContent";
 import SortingFilter from "../components/SortingFilter";
 
-const initPriceFilter = {
-  min: Math.min(...products.map(product => product.price)),
-  max: Math.max(...products.map(product => product.price)),
-  isApplied: false,
-};
-
-
 function Menu() {
+  const [allProducts, setAllProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedRating, setSelectedRating] = useState("");
-  const [priceRange, setPriceRange] = useState(initPriceFilter);
-  const [isFilterOpen, setIsFilterOpen] = useState(false); 
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 0, isApplied: false });
   const [searchTerm, setSearchTerm] = useState("");
   const [sorting, setSorting] = useState("");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get("https://cakes-backend-gamma.vercel.app/api/products");
+        if (response.data?.products && Array.isArray(response.data.products)) {
+          setAllProducts(response.data.products);
+        } else {
+          setError("Invalid response format");
+        }
+      } catch (err) {
+        console.error(err);
+        setError("Failed to fetch products");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
 
+  // Compute min/max price from actual products
+  const initPriceFilter = useMemo(() => {
+    if (!allProducts.length) return { min: 0, max: 0, isApplied: false };
+    const prices = allProducts.map(p => p.price);
+    return {
+      min: Math.min(...prices),
+      max: Math.max(...prices),
+      isApplied: false,
+    };
+  }, [allProducts]);
 
+  // Set initial price range when products load
+  useEffect(() => {
+    if (allProducts.length && !priceRange.max) {
+      setPriceRange(initPriceFilter);
+    }
+  }, [allProducts, initPriceFilter, priceRange.max]);
+
+  // Filter + Sort products
   const filterProducts = useMemo(() => {
+    if (!allProducts.length) return [];
+    
     let visibleProducts = getVisibleProducts(
       selectedCategories,
       selectedRating,
       priceRange,
-      searchTerm
+      searchTerm,
+      allProducts 
     );
-
-    if (sorting === "price-low") {
-      visibleProducts = [...visibleProducts].sort((a, b) => a.price - b.price);
-    } else if (sorting === "price-high") {
-      visibleProducts = [...visibleProducts].sort((a, b) => b.price - a.price);
-    } else if (sorting === "rating") {
-      visibleProducts = [...visibleProducts].sort((a, b) => b.rating - a.rating);
-    } else if (sorting === "popular") {
-      visibleProducts = [...visibleProducts].sort((a, b) => b.popular - a.popular);
+    
+    switch (sorting) {
+      case "price-low":
+        visibleProducts = [...visibleProducts].sort((a, b) => a.price - b.price);
+        break;
+      case "price-high":
+        visibleProducts = [...visibleProducts].sort((a, b) => b.price - a.price);
+        break;
+      case "rating":
+        visibleProducts = [...visibleProducts].sort((a, b) => b.rating - a.rating);
+        break;
+      case "popular":
+        visibleProducts = [...visibleProducts].sort((a, b) => b.popular - a.popular);
+        break;
+      default:
+        break;
     }
-
     return visibleProducts;
-  }, [selectedCategories, selectedRating, priceRange, searchTerm, sorting]);
+  }, [selectedCategories, selectedRating, priceRange, searchTerm, sorting, allProducts]);
 
   const onChangeCategoryHandler = (category, isChecked) => {
-    setSelectedCategories(prevState => 
-      isChecked
-        ? [...prevState, category]
-        : prevState.filter((cat) => cat !== category)
+    setSelectedCategories(prev =>
+      isChecked ? [...prev, category] : prev.filter(c => c !== category)
     );
   };
+
+  // ❌ REMOVED the erroneous block that caused "products is not defined"
 
   const onChangeRatingHandler = (rating) => {
     setSelectedRating(rating);
@@ -68,7 +109,7 @@ function Menu() {
   };
 
   const handleSearchChange = (term) => {
-    setSearchTerm(term);  
+    setSearchTerm(term);
   };
 
   const handleSorting = (sort) => {
@@ -83,6 +124,9 @@ function Menu() {
     setSearchTerm("");
     setSorting("");
   };
+
+  if (loading) return <div className="p-8 text-center">Loading products...</div>;
+  if (error) return <div className="p-8 text-center text-red-500">{error}</div>;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
@@ -113,7 +157,7 @@ function Menu() {
 
       <div className="container mx-auto px-4 py-6">
         {/* Desktop Header */}
-        <div className="hidden lg:flex justify-between items-center ">
+        <div className="hidden lg:flex justify-between items-center">
           <div className="flex items-center gap-2">
             <h1 className="text-3xl font-bold text-gray-800">Our Menu</h1>
             <span className="text-gray-500 text-lg">
@@ -134,7 +178,7 @@ function Menu() {
         {/* Mobile Sorting Dropdown */}
         {isSortOpen && (
           <div className="fixed inset-0 z-50 lg:hidden">
-            <div 
+            <div
               className="absolute inset-0 bg-black/50"
               onClick={() => setIsSortOpen(false)}
             />
@@ -168,9 +212,7 @@ function Menu() {
                     >
                       <span className="text-xl">{option.icon}</span>
                       <span className="font-medium">{option.label}</span>
-                      {sorting === option.value && (
-                        <span className="ml-auto">✓</span>
-                      )}
+                      {sorting === option.value && <span className="ml-auto">✓</span>}
                     </button>
                   ))}
                 </div>
@@ -182,13 +224,12 @@ function Menu() {
         {/* Mobile Filter Overlay */}
         {isFilterOpen && (
           <div className="fixed inset-0 z-50 lg:hidden">
-            <div 
+            <div
               className="absolute inset-0 bg-black/50"
               onClick={() => setIsFilterOpen(false)}
             />
             <div className="absolute top-0 left-0 right-0 bottom-0 bg-white overflow-y-auto">
               <div className="min-h-screen pb-20">
-                {/* Sticky Header */}
                 <div className="sticky top-0 bg-white border-b border-gray-200 z-10">
                   <div className="flex justify-between items-center p-4">
                     <h2 className="text-2xl font-bold text-gray-800">Filters</h2>
@@ -200,18 +241,16 @@ function Menu() {
                     </button>
                   </div>
                 </div>
-
-                {/* Filter Content */}
                 <div className="p-4 space-y-6">
                   <div className="bg-white rounded-xl border border-gray-200 p-5">
                     <h3 className="text-lg font-semibold text-gray-800 mb-4">Categories</h3>
                     <CategoryFilter
+                      products={allProducts}
                       selectedCategories={selectedCategories}
                       onChangeCategory={onChangeCategoryHandler}
                       isMobile={true}
                     />
                   </div>
-
                   <div className="bg-white rounded-xl border border-gray-200 p-5">
                     <h3 className="text-lg font-semibold text-gray-800 mb-4">Price Range</h3>
                     <PriceRange
@@ -221,7 +260,6 @@ function Menu() {
                       isMobile={true}
                     />
                   </div>
-
                   <div className="bg-white rounded-xl border border-gray-200 p-5">
                     <h3 className="text-lg font-semibold text-gray-800 mb-4">Rating</h3>
                     <RatingFilter
@@ -230,8 +268,6 @@ function Menu() {
                       isMobile={true}
                     />
                   </div>
-
-                  {/* Active Filters Summary */}
                   {(selectedCategories.length > 0 || selectedRating || priceRange.isApplied) && (
                     <div className="bg-gradient-to-r from-pink-500 to-pink-500 rounded-xl border border-pink-500 p-5">
                       <h3 className="font-semibold text-gray-800 mb-3">Active Filters</h3>
@@ -256,8 +292,6 @@ function Menu() {
                   )}
                 </div>
               </div>
-
-              {/* Sticky Footer */}
               <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-lg">
                 <div className="flex gap-3">
                   <button
@@ -287,34 +321,30 @@ function Menu() {
                   <h2 className="text-lg font-bold text-gray-800">Filters</h2>
                   <button
                     onClick={clearAllFilters}
-                    className="text-sm text-pink-700 font-medium cursor-pointer" 
+                    className="text-sm text-pink-700 font-medium cursor-pointer"
                   >
                     Clear all
                   </button>
                 </div>
-
                 <div className="space-y-8">
                   <CategoryFilter
+                    products={allProducts}
                     selectedCategories={selectedCategories}
                     onChangeCategory={onChangeCategoryHandler}
                   />
-
                   <PriceRange
                     priceRange={priceRange}
                     initPriceRange={initPriceFilter}
                     setPriceRange={handlePriceRangeChange}
                   />
-
                   <RatingFilter
                     onChangeRating={onChangeRatingHandler}
                     selectedRating={selectedRating}
                   />
                 </div>
               </div>
-
-              {/* Active Filters Summary */}
               {(selectedCategories.length > 0 || selectedRating || priceRange.isApplied) && (
-                <div className=" rounded-2xl border border-pink-500 p-5">
+                <div className="rounded-2xl border border-pink-500 p-5">
                   <h3 className="font-semibold text-gray-800 mb-3">Active Filters</h3>
                   <div className="space-y-2">
                     {selectedCategories.length > 0 && (
@@ -343,7 +373,7 @@ function Menu() {
             {/* Mobile Filter Summary */}
             <div className="lg:hidden mb-6">
               <div className="flex flex-wrap gap-2 mb-4">
-                {selectedCategories.length > 0 && selectedCategories.map((cat) => (
+                {selectedCategories.map((cat) => (
                   <span key={cat} className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-sm">
                     {cat}
                   </span>
@@ -367,13 +397,12 @@ function Menu() {
                   </button>
                 )}
               </div>
-              
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold text-gray-800">
-                  {filterProducts.length} {filterProducts.length === 1 ? 'Item' : 'Items'}
+                  {filterProducts.length} {filterProducts.length === 1 ? "Item" : "Items"}
                 </h2>
                 <span className="text-sm text-gray-500">
-                  {sorting ? `Sorted by: ${sorting.replace('-', ' ')}` : 'Default order'}
+                  {sorting ? `Sorted by: ${sorting.replace("-", " ")}` : "Default order"}
                 </span>
               </div>
             </div>
@@ -382,13 +411,11 @@ function Menu() {
             <div className="hidden lg:flex justify-between items-center mb-8">
               <div>
                 <h2 className="text-2xl font-bold text-gray-800">All Items</h2>
-                <p className="text-gray-600 mt-1">
-                  Showing {filterProducts.length} delicious items
-                </p>
+                <p className="text-gray-600 mt-1">Showing {filterProducts.length} delicious items</p>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-500">
                 <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full">
-                  {selectedCategories.length > 0 ? `${selectedCategories.length} categories` : 'All categories'}
+                  {selectedCategories.length > 0 ? `${selectedCategories.length} categories` : "All categories"}
                 </span>
                 {selectedRating && (
                   <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
@@ -409,7 +436,7 @@ function Menu() {
                 <p className="text-gray-600 mb-6">Try adjusting your filters or search term</p>
                 <button
                   onClick={clearAllFilters}
-                  className="px-6 py-2 bg-pink-500  text-white font-medium rounded-lg hover:shadow-lg transition-all"
+                  className="px-6 py-2 bg-pink-500 text-white font-medium rounded-lg hover:shadow-lg transition-all"
                 >
                   Clear All Filters
                 </button>

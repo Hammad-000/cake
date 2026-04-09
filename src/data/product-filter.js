@@ -1,41 +1,38 @@
-import { products as DBProducts } from "./products";
-
 export const getVisibleProducts = (
   selectedCategories,
   selectedRating,
-  initPriceRange,
-  searchTerm
+  priceRange,
+  searchTerm,
+  allProducts = []
 ) => {
+  let products = [...allProducts];
 
-  let products = DBProducts;
-
-  
   if (selectedCategories.length > 0) {
     products = products.filter((product) =>
       selectedCategories.includes(product.category)
     );
   }
 
-  
   if (selectedRating) {
-    products = products.filter((product) => product.rating >= selectedRating);
-  }
-
- 
-  if (initPriceRange.isApplied) {
+    const minRating = Number(selectedRating);
     products = products.filter(
-      (product) =>
-        product.price >= initPriceRange.min && product.price <= initPriceRange.max
+      (product) => (product.rating || 0) >= minRating
     );
   }
 
- 
-  if (searchTerm) {
-    const searchLower = searchTerm.toLowerCase();
+  if (priceRange.isApplied) {
     products = products.filter(
       (product) =>
-        product.title.toLowerCase().includes(searchLower) ||
-        product.description.toLowerCase().includes(searchLower) 
+        product.price >= priceRange.min && product.price <= priceRange.max
+    );
+  }
+
+  if (searchTerm) {
+    const lowerTerm = searchTerm.toLowerCase();
+    products = products.filter(
+      (product) =>
+        (product.name || "").toLowerCase().includes(lowerTerm) ||
+        (product.description || "").toLowerCase().includes(lowerTerm)
     );
   }
 
