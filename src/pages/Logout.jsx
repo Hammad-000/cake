@@ -27,15 +27,14 @@ function Logout() {
       setMessage("Logout successful! Redirecting...");
       setLoading(false);
 
-      // Redirect to home page after 1.5 seconds
       setTimeout(() => {
-        navigate("/"); // or navigate("/login") if you prefer
+        navigate("/"); 
       }, 1500);
     }, 500);
   };
 
   const handleCancel = () => {
-    navigate(-1); // Go back to previous page
+    navigate(-1); 
   };
 
   return (
@@ -50,13 +49,13 @@ function Logout() {
             <p className="text-gray-700 text-lg">
               You have been successfully logged out. Thank you for visiting Cake Villa. We hope to see you again soon!
             </p>
-            <div className="flex justify-center my-8">
-              <img
-                src="./images/Logout-bro.png" // You can replace with your own illustration
-                alt="Logout illustration"
-                className="w-72 h-90 object-contain"
-              />
-            </div>
+        <div className="flex justify-center my-8">
+  <img
+    src="https://blush.design/api/download?shareUri=69wYJDyZa4pTHhdv&c=Hair_0%7E4d33a2-0.4%7E150656-0.5%7E150656_Skin_0%7Efeb1cd-0.4%7Eef9e89-0.5%7Ed46b55&w=800&h=800&fm=png"
+    alt="Logout illustration"
+    className="w-72 h-90 object-contain"
+  />
+</div>
           </div>
 
           {/* Right side - Logout confirmation card */}
@@ -104,7 +103,7 @@ function Logout() {
                       <path
                         className="opacity-75"
                         fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        d="M4 12a8 8 0 018-8V0C5.824 3 7.938l3-2.647z"
                       ></path>
                     </svg>
                     <span>Logging out...</span>
