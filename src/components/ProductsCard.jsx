@@ -40,15 +40,26 @@ function ProductsCard({ product }) {
   const { addToCart } = useCart();
   const navigate = useNavigate();
 
-  // Destructure product fields (API returns name, imageUrl, etc.)
+  // Destructure API fields
   const { _id, name, imageUrl, description, category, price, rating } = product;
 
-  // Use imageUrl – fallback if missing
-  const imageSrc = imageUrl || "/placeholder.jpg";
+  // Normalize image: use a local placeholder if missing
+  const imageSrc = imageUrl || "/placeholder-cake.jpg";
+
+  // Normalize product to cart format
+  const cartProduct = {
+    id: _id,
+    title: name,
+    image: imageUrl,         // may be undefined, but cart will fallback
+    price: price,
+    description: description,
+    category: category,
+    quantity: 1
+  };
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
-    addToCart(product);
+    addToCart(cartProduct);   // ✅ now uses correct shape
   };
 
   const handleCardClick = () => {
@@ -65,7 +76,7 @@ function ProductsCard({ product }) {
             src={imageSrc}
             alt={name}
             onError={(e) => {
-              e.target.src = "https://www.lalschocolates.com/cdn/shop/products/triple-layer_grande.jpg?v=1686309534";
+              e.target.src = "/placeholder-cake.jpg";
             }}
           />
         </div>
@@ -98,7 +109,6 @@ function ProductsCard({ product }) {
               <h4 className="text-xl font-bold text-gray-900">
                 Rs.{price}
               </h4>
-              {/* originalPrice removed – not in your data */}
             </div>
             <button
               onClick={handleAddToCart}

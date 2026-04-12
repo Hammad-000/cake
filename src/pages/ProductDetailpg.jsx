@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useCart } from '../components/CartContext';
 
 function ProductDetailpg() {
-  const { id } = useParams();        // MongoDB _id as string
+  const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -12,7 +12,6 @@ function ProductDetailpg() {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const { addToCart } = useCart();
 
-  // Fetch product by ID
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
@@ -33,7 +32,6 @@ function ProductDetailpg() {
     fetchProduct();
   }, [id]);
 
-  // Fetch related products (same category, exclude current)
   useEffect(() => {
     if (!product) return;
     const fetchRelated = async () => {
@@ -54,32 +52,30 @@ function ProductDetailpg() {
 
   const handleAddToCart = () => {
     if (!product) return;
+    // Normalize to cart format
+    const cartProduct = {
+      id: product._id,
+      title: product.name,
+      image: product.imageUrl,
+      price: product.price,
+      description: product.description,
+      category: product.category,
+      quantity: 1
+    };
     for (let i = 0; i < quantity; i++) {
-      addToCart(product);
+      addToCart(cartProduct);
     }
     setQuantity(1);
   };
 
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 py-8 text-center">
-        <div className="text-2xl text-gray-600">Loading product...</div>
-      </div>
-    );
-  }
+  if (loading) return <div className="container mx-auto px-4 py-8 text-center">Loading product...</div>;
+  if (error || !product) return (
+    <div className="container mx-auto px-4 py-8 text-center">
+      <div className="text-2xl font-bold text-red-600">{error || 'Product not found'}</div>
+      <Link to="/menu" className="mt-4 inline-block text-pink-500 hover:underline">Back to Menu</Link>
+    </div>
+  );
 
-  if (error || !product) {
-    return (
-      <div className="container mx-auto px-4 py-8 text-center">
-        <div className="text-2xl font-bold text-red-600">{error || 'Product not found'}</div>
-        <Link to="/menu" className="mt-4 inline-block text-pink-500 hover:underline">
-          Back to Menu
-        </Link>
-      </div>
-    );
-  }
-
-  // Use correct field names from API
   const { _id, name, imageUrl, description, category, price, rating } = product;
 
   return (
@@ -98,12 +94,10 @@ function ProductDetailpg() {
           {/* Product Image */}
           <div className="lg:w-1/2">
             <img
-              src={imageUrl || '/placeholder.jpg'}
+              src={imageUrl || '/placeholder-cake.jpg'}
               alt={name}
               className="w-full h-96 object-cover rounded-lg shadow-md"
-              onError={(e) => {
-                e.target.src = 'https://via.placeholder.com/400x400?text=No+Image';
-              }}
+              onError={(e) => { e.target.src = 'https://via.placeholder.com/400x400?text=No+Image'; }}
             />
           </div>
 
@@ -111,20 +105,15 @@ function ProductDetailpg() {
           <div className="lg:w-1/2">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">{name}</h1>
             <p className="text-2xl font-bold text-pink-600 mb-6">Rs {price}</p>
-
             <div className="mb-6">
               <h3 className="text-lg font-semibold mb-2">Description</h3>
               <p className="text-gray-700 leading-relaxed">{description}</p>
             </div>
-
             {category && (
               <div className="mb-4">
-                <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm">
-                  {category}
-                </span>
+                <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm">{category}</span>
               </div>
             )}
-
             {rating && (
               <div className="mb-4 flex items-center gap-2">
                 <span className="text-yellow-500">★</span>
@@ -134,35 +123,19 @@ function ProductDetailpg() {
 
             {/* Quantity Selector */}
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Quantity
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
               <div className="flex items-center gap-3">
-                <button
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-10 h-10 rounded-full border border-gray-300 cursor-pointer hover:bg-pink-100 flex items-center justify-center"
-                >
-                  -
-                </button>
+                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-10 h-10 rounded-full border border-gray-300 cursor-pointer hover:bg-pink-100 flex items-center justify-center">-</button>
                 <span className="text-lg font-semibold w-8 text-center">{quantity}</span>
-                <button
-                  onClick={() => setQuantity(quantity + 1)}
-                  className="w-10 h-10 rounded-full border border-gray-300 cursor-pointer hover:bg-pink-100 flex items-center justify-center"
-                >
-                  +
-                </button>
+                <button onClick={() => setQuantity(quantity + 1)} className="w-10 h-10 rounded-full border border-gray-300 cursor-pointer hover:bg-pink-100 flex items-center justify-center">+</button>
               </div>
             </div>
 
             {/* Add to Cart Button */}
-            <button
-              onClick={handleAddToCart}
-              className="w-full py-4 bg-pink-500 hover:bg-pink-600 cursor-pointer text-white rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-105 shadow-lg mb-4"
-            >
+            <button onClick={handleAddToCart} className="w-full py-4 bg-pink-500 hover:bg-pink-600 cursor-pointer text-white rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-105 shadow-lg mb-4">
               Add to Cart - Rs {(price * quantity).toFixed(2)}
             </button>
 
-            {/* Additional Info */}
             <div className="border-t pt-4">
               <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
                 <span>✅ In Stock</span>
@@ -179,18 +152,12 @@ function ProductDetailpg() {
             <h2 className="text-2xl font-bold mb-6">You Might Also Like</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {relatedProducts.map(related => (
-                <Link
-                  key={related._id}
-                  to={`/product/${related._id}`}
-                  className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 block"
-                >
+                <Link key={related._id} to={`/product/${related._id}`} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 block">
                   <img
-                    src={related.imageUrl || '/placeholder.jpg'}
+                    src={related.imageUrl || '/placeholder-cake.jpg'}
                     alt={related.name}
                     className="w-full h-48 object-cover rounded-t-lg"
-                    onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/400x300?text=No+Image';
-                    }}
+                    onError={(e) => { e.target.src = 'https://via.placeholder.com/400x300?text=No+Image'; }}
                   />
                   <div className="p-4">
                     <h3 className="font-semibold mb-2">{related.name}</h3>

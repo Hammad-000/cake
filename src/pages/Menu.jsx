@@ -11,6 +11,7 @@ import { IoCloseCircleOutline } from "react-icons/io5";
 import { FaSortAmountDown } from "react-icons/fa";
 import FooterContent from "../components/FooterContent";
 import SortingFilter from "../components/SortingFilter";
+import { useCart } from "../components/CartContext";
 
 function Menu() {
   const [allProducts, setAllProducts] = useState([]);
@@ -23,6 +24,7 @@ function Menu() {
   const [sorting, setSorting] = useState("");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -98,7 +100,6 @@ function Menu() {
     );
   };
 
-  // ❌ REMOVED the erroneous block that caused "products is not defined"
 
   const onChangeRatingHandler = (rating) => {
     setSelectedRating(rating);
@@ -128,6 +129,20 @@ function Menu() {
   if (loading) return <div className="p-8 text-center">Loading products...</div>;
   if (error) return <div className="p-8 text-center text-red-500">{error}</div>;
 
+  const handleAddToCart = (product, e) => {
+  e.stopPropagation(); // Prevent event bubbling if needed
+  // Normalize to cart format
+  const cartProduct = {
+    id: product._id,
+    title: product.name,
+    image: product.imageUrl || product.image,
+    price: product.price,
+    description: product.description,
+    category: product.category,
+    quantity: 1
+  };
+  addToCart(cartProduct);
+};
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Mobile Header */}
@@ -425,9 +440,53 @@ function Menu() {
               </div>
             </div>
 
-            {/* Products */}
-            <Products products={filterProducts} />
+            
 
+            {/* Products */}
+<div className="space-y-4">
+  {filterProducts.length === 0 ? (
+    <div className="text-center py-8 text-gray-500">No products found.</div>
+  ) : (
+    filterProducts.map(product => {
+      const productId = product._id || product.id;
+      const displayName = product.title || product.name;
+      const imageSrc = product.imageUrl || product.image || "/placeholder-cake.jpg";
+      return (
+        <div
+          key={productId}
+          className="flex items-center justify-between p-4 bg-white rounded-xl shadow-sm border border-gray-100 gap-4 hover:shadow-md transition-shadow"
+        >
+          <img
+            src={imageSrc}
+            alt={displayName}
+            className="w-20 h-20 object-cover rounded-xl"
+            onError={(e) => { e.target.src = "/placeholder-cake.jpg"; }}
+          />
+          <div className="flex-1">
+            <h3 className="font-semibold text-gray-800">{displayName}</h3>
+            <p className="text-sm text-gray-500 line-clamp-1">{product.description}</p>
+            <div className="flex flex-wrap items-center gap-2 mt-1">
+              <span className="text-lg font-bold text-amber-600">
+                Rs {typeof product.price === 'number' ? product.price.toFixed(2) : product.price}
+              </span>
+              {product.category && (
+                <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+                  {product.category}
+                </span>
+              )}
+            </div>
+          </div>
+          <button
+            onClick={(e) => handleAddToCart(product, e)}
+            className="px-4 py-2 bg-amber-500 text-white rounded-lg text-sm font-medium hover:bg-amber-600"
+          >
+            Add to Cart
+          </button>
+        </div>
+      );
+    })
+  )}
+</div>
             {/* No Results Message */}
             {filterProducts.length === 0 && (
               <div className="text-center py-16">

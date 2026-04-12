@@ -349,7 +349,7 @@ function ProductsPage({ products, setProducts }) {
                   <div className="flex-1">
                     <h3 className="font-semibold text-gray-800">{displayName}</h3>
                     <p className="text-sm text-gray-600">
-                      ${typeof product.price === 'number' ? product.price.toFixed(2) : product.price} 
+                      Rs {typeof product.price === 'number' ? product.price.toFixed(2) : product.price} 
                       {product.category && ` - ${product.category}`}
                     </p>
                   </div>
