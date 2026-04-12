@@ -12,6 +12,8 @@ import { FaSortAmountDown } from "react-icons/fa";
 import FooterContent from "../components/FooterContent";
 import SortingFilter from "../components/SortingFilter";
 import { useCart } from "../components/CartContext";
+import ProductsCard from "../components/ProductsCard";
+
 
 function Menu() {
   const [allProducts, setAllProducts] = useState([]);
@@ -45,7 +47,6 @@ function Menu() {
     fetchProducts();
   }, []);
 
-  // Compute min/max price from actual products
   const initPriceFilter = useMemo(() => {
     if (!allProducts.length) return { min: 0, max: 0, isApplied: false };
     const prices = allProducts.map(p => p.price);
@@ -63,18 +64,17 @@ function Menu() {
     }
   }, [allProducts, initPriceFilter, priceRange.max]);
 
-  // Filter + Sort products
   const filterProducts = useMemo(() => {
     if (!allProducts.length) return [];
-    
+
     let visibleProducts = getVisibleProducts(
       selectedCategories,
       selectedRating,
       priceRange,
       searchTerm,
-      allProducts 
+      allProducts
     );
-    
+
     switch (sorting) {
       case "price-low":
         visibleProducts = [...visibleProducts].sort((a, b) => a.price - b.price);
@@ -99,7 +99,6 @@ function Menu() {
       isChecked ? [...prev, category] : prev.filter(c => c !== category)
     );
   };
-
 
   const onChangeRatingHandler = (rating) => {
     setSelectedRating(rating);
@@ -130,19 +129,18 @@ function Menu() {
   if (error) return <div className="p-8 text-center text-red-500">{error}</div>;
 
   const handleAddToCart = (product, e) => {
-  e.stopPropagation(); // Prevent event bubbling if needed
-  // Normalize to cart format
-  const cartProduct = {
-    id: product._id,
-    title: product.name,
-    image: product.imageUrl || product.image,
-    price: product.price,
-    description: product.description,
-    category: product.category,
-    quantity: 1
+    e.stopPropagation();
+    const cartProduct = {
+      id: product._id,
+      title: product.name,
+      image: product.imageUrl || product.image,
+      price: product.price,
+      description: product.description,
+      category: product.category,
+      quantity: 1
+    };
+    addToCart(cartProduct);
   };
-  addToCart(cartProduct);
-};
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       {/* Mobile Header */}
@@ -219,11 +217,10 @@ function Menu() {
                     <button
                       key={option.value}
                       onClick={() => handleSorting(option.value)}
-                      className={`w-full flex items-center gap-3 px-4 py-4 rounded-xl transition-all ${
-                        sorting === option.value
+                      className={`w-full flex items-center gap-3 px-4 py-4 rounded-xl transition-all ${sorting === option.value
                           ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg"
                           : "hover:bg-gray-100 text-gray-700 border border-gray-200"
-                      }`}
+                        }`}
                     >
                       <span className="text-xl">{option.icon}</span>
                       <span className="font-medium">{option.label}</span>
@@ -440,51 +437,16 @@ function Menu() {
               </div>
             </div>
 
-            
-
-            {/* Products */}
-<div className="space-y-4">
+{/* Products */}
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
   {filterProducts.length === 0 ? (
-    <div className="text-center py-8 text-gray-500">No products found.</div>
+    <div className="col-span-full text-center py-8 text-gray-500">
+      No products found.
+    </div>
   ) : (
-    filterProducts.map(product => {
-      const productId = product._id || product.id;
-      const displayName = product.title || product.name;
-      const imageSrc = product.imageUrl || product.image || "/placeholder-cake.jpg";
-      return (
-        <div
-          key={productId}
-          className="flex items-center justify-between p-4 bg-white rounded-xl shadow-sm border border-gray-100 gap-4 hover:shadow-md transition-shadow"
-        >
-          <img
-            src={imageSrc}
-            alt={displayName}
-            className="w-20 h-20 object-cover rounded-xl"
-            onError={(e) => { e.target.src = "/placeholder-cake.jpg"; }}
-          />
-          <div className="flex-1">
-            <h3 className="font-semibold text-gray-800">{displayName}</h3>
-            <p className="text-sm text-gray-500 line-clamp-1">{product.description}</p>
-            <div className="flex flex-wrap items-center gap-2 mt-1">
-              <span className="text-lg font-bold text-amber-600">
-                Rs {typeof product.price === 'number' ? product.price.toFixed(2) : product.price}
-              </span>
-              {product.category && (
-                <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
-                  {product.category}
-                </span>
-              )}
-            </div>
-          </div>
-          <button
-            onClick={(e) => handleAddToCart(product, e)}
-            className="px-4 py-2 bg-amber-500 text-white rounded-lg text-sm font-medium hover:bg-amber-600"
-          >
-            Add to Cart
-          </button>
-        </div>
-      );
-    })
+    filterProducts.map(product => (
+      <ProductsCard key={product._id || product.id} product={product} />
+    ))
   )}
 </div>
             {/* No Results Message */}
