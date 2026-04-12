@@ -6,19 +6,21 @@ function SearchBox({ onSearchChange }) {
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef(null);
 
+  // Notify parent whenever searchTerm changes
+  useEffect(() => {
+    onSearchChange(searchTerm);
+  }, [searchTerm, onSearchChange]);
+
   const handleInputChange = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    onSearchChange(value);
+    setSearchTerm(e.target.value);
   };
 
   const clearSearch = () => {
     setSearchTerm('');
-    onSearchChange('');
     inputRef.current?.focus();
   };
 
-  // Keyboard shortcut for focus
+  // Keyboard shortcut (Ctrl+K)
   useEffect(() => {
     const handleKeyPress = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
@@ -26,19 +28,16 @@ function SearchBox({ onSearchChange }) {
         inputRef.current?.focus();
       }
     };
-
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, []);
 
-  // Show search tips only if no search term
   const showSearchTips = searchTerm === '';
 
   return (
     <div className="w-full">
       <div className="relative group">
         <AiOutlineSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
-        
         <input
           ref={inputRef}
           type="text"
@@ -51,10 +50,7 @@ function SearchBox({ onSearchChange }) {
             ${isFocused ? 'border-pink-400 ring-2 ring-pink-200 shadow-lg' : 'border-gray-300'} 
             rounded-2xl focus:outline-none transition-all duration-300 placeholder:text-gray-400 text-gray-800 shadow-sm 
             hover:shadow-md hover:border-pink-300 lg:py-4 lg:pl-12 lg:pr-14 lg:text-lg lg:placeholder:text-base lg:hover:shadow-xl`}
-          style={{ maxWidth: '100%' }}
         />
-        
-        {/* Clear button for mobile */}
         {searchTerm && (
           <button
             onClick={clearSearch}
@@ -63,14 +59,9 @@ function SearchBox({ onSearchChange }) {
             <AiOutlineClose className="text-lg" />
           </button>
         )}
-        
-        {/* Keyboard shortcut hint for desktop */}
         <div className="hidden lg:flex absolute right-4 top-1/2 transform -translate-y-1/2 items-center gap-1">
           {searchTerm ? (
-            <button
-              onClick={clearSearch}
-              className="text-gray-400 hover:text-gray-600 transition-colors p-1"
-            >
+            <button onClick={clearSearch} className="text-gray-400 hover:text-gray-600 transition-colors p-1">
               <AiOutlineClose className="text-xl" />
             </button>
           ) : (
@@ -83,7 +74,6 @@ function SearchBox({ onSearchChange }) {
         </div>
       </div>
       
-      {/* Search tips - Desktop only with wider layout */}
       {showSearchTips && (
         <div className="hidden lg:flex items-center justify-between mt-4 px-2">
           <div className="flex items-center gap-3">
@@ -92,27 +82,14 @@ function SearchBox({ onSearchChange }) {
               {['Chocolate Cake', 'Ice Cake', 'Vanilla Cake', 'Hazelnut Cake', 'Birthday Cake'].map((term) => (
                 <button
                   key={term}
-                  onClick={() => {
-                    setSearchTerm(term);
-                    onSearchChange(term);
-                  }}
-                  className="px-4 py-2 bg-pink-500 text-white cursor-pointer  hover:from-pink-500 text-pink-700 rounded-xl transition-all duration-300 hover:scale-105 border border-amber-200"
+                  onClick={() => setSearchTerm(term)}
+                  className="px-4 py-2 bg-pink-500 text-white cursor-pointer hover:bg-pink-600 rounded-xl transition-all duration-300 hover:scale-105"
                 >
                   {term}
                 </button>
               ))}
             </div>
           </div>
-
-          {searchTerm && (
-            <button
-              onClick={clearSearch}
-              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
-            >
-              <AiOutlineClose />
-              Clear search
-            </button>
-          )}
         </div>
       )}
     </div>

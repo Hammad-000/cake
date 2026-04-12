@@ -406,51 +406,68 @@ function Home() {
             </div>
 
             {/* Products Grid */}
-            {loading ? (
-              <div className="text-center py-12">Loading specialties...</div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
-                {filteredSpecialties.map((item, index) => (
-                  <motion.div
-                    key={item._id || index}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3 }}
-                    viewport={{ once: true }}
-                    className="relative group"
-                  >
-                    <div className="relative aspect-square cursor-pointer overflow-hidden rounded-xl sm:rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
-                      <img
-                        src={item.imageUrl || "/placeholder.jpg"}
-                        alt={item.name}
-                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-                        onError={(e) => { e.target.src = "/placeholder.jpg"; }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <div className="absolute inset-0 p-2 sm:p-4 flex flex-col justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <h3 className="text-white font-bold text-xs sm:text-sm md:text-base lg:text-lg mb-1 sm:mb-2">{item.name}</h3>
-                        <div className="flex justify-between items-center">
-                          <span className="text-amber-300 font-bold text-xs sm:text-sm md:text-base">Rs.{item.price}</span>
-                          <div className="flex items-center gap-0.5 sm:gap-1">
-                            <AiOutlineStar className="text-yellow-400 text-xs sm:text-sm" />
-                            <span className="text-white text-xs sm:text-sm">{item.rating || 0}</span>
-                          </div>
-                        </div>
-                        <Link 
-                          to="/menu"
-                          className="mt-2 sm:mt-3 w-full p-1 text-center sm:py-2 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300 text-xs sm:text-sm"
-                        >
-                          Go To Menu
-                        </Link>
-                      </div>
-                      <div className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-black/70 backdrop-blur-sm text-white px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg text-xs">
-                        {item.category}
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
+   {/* Products Grid */}
+{loading ? (
+  <div className="text-center py-12">Loading specialties...</div>
+) : (
+  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
+    {filteredSpecialties.map((item, index) => {
+      // --- FIX: Get image URL from multiple possible fields ---
+      const rawImage = item.imageUrl || item.image || item.picture;
+      let imageSrc = "/placeholder.jpg"; // fallback
+      if (rawImage) {
+        if (rawImage.startsWith("http")) {
+          imageSrc = rawImage;
+        } else {
+          // If relative path, prepend backend URL
+          imageSrc = `https://cakes-backend-gamma.vercel.app${rawImage}`;
+        }
+      }
+
+      return (
+        <motion.div
+          key={item._id || index}
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+          viewport={{ once: true }}
+          className="relative group"
+        >
+          <div className="relative aspect-square cursor-pointer overflow-hidden rounded-xl sm:rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
+            <img
+              src={imageSrc}
+              alt={item.name}
+              className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+              onError={(e) => {
+                e.target.src = "/placeholder.jpg";
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="absolute inset-0 p-2 sm:p-4 flex flex-col justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <h3 className="text-white font-bold text-xs sm:text-sm md:text-base lg:text-lg mb-1 sm:mb-2">{item.name}</h3>
+              <div className="flex justify-between items-center">
+                <span className="text-amber-300 font-bold text-xs sm:text-sm md:text-base">Rs.{item.price}</span>
+                <div className="flex items-center gap-0.5 sm:gap-1">
+                  <AiOutlineStar className="text-yellow-400 text-xs sm:text-sm" />
+                  <span className="text-white text-xs sm:text-sm">{item.rating || 0}</span>
+                </div>
               </div>
-            )}
+              <Link
+                to="/menu"
+                className="mt-2 sm:mt-3 w-full p-1 text-center sm:py-2 bg-gradient-to-r from-pink-500 to-orange-500 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300 text-xs sm:text-sm"
+              >
+                Go To Menu
+              </Link>
+            </div>
+            <div className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-black/70 backdrop-blur-sm text-white px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg text-xs">
+              {item.category}
+            </div>
+          </div>
+        </motion.div>
+      );
+    })}
+  </div>
+)}
 
             {/* CTA Section */}
             <motion.div
