@@ -446,6 +446,7 @@ function Menu() {
   ) : (
     filterProducts.map(product => (
       <ProductsCard key={product._id || product.id} product={product} />
+      
     ))
   )}
 </div>
