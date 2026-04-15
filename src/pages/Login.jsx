@@ -63,6 +63,8 @@ function Login() {
 } catch (error) {
   setMessage(error.response ? error.response.data.message : "Error logging in");
 }
+
+console.log("Token stored:", localStorage.getItem("authToken"));
     
   };
 
