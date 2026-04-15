@@ -3,9 +3,11 @@ import axios from "axios";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import FooterContent from "../components/FooterContent";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -13,6 +15,8 @@ function Login() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+
+  
 
   const handleChange = (e) => {
     setFormData({
@@ -39,6 +43,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
 
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
@@ -57,7 +62,7 @@ function Login() {
 
   const { token } = response.data; 
   localStorage.setItem("authToken", token); 
-
+login(token);
   setMessage("Login successful!");
   navigate("/dashboard"); 
 } catch (error) {
