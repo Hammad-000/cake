@@ -13,39 +13,41 @@ import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
-import ProtectedRoute from './components/ProtectedRoute'; // Import ProtectedRoute
+import ProtectedRoute from './components/ProtectedRoute';
+import { AuthProvider } from './context/AuthContext'; 
 
 function App() {
   return (
-    <CartProvider>
-      <Router>
-        <Navbar />
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            {/* Use ProtectedRoute inside a <Route /> */}
-           <Route
-  path="/dashboard"
-  element={
-    <ProtectedRoute>
-      <Dashboard />
-    </ProtectedRoute>
-  }
-/>
-            <Route path="/about" element={<About />} />
-            <Route path="/product/:id" element={<ProductDetailpg />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/logout" element={<Logout />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/menu" element={<Menu />} />
-            <Route path="/profile" element={<div>Profile Page</div>} />  
-            <Route path="*" element={<Error />} />
-          </Routes>
-        </div>
-      </Router>
-    </CartProvider>
+    <AuthProvider>  
+      <CartProvider>
+        <Router>
+          <Navbar />
+          <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/about" element={<About />} />
+              <Route path="/product/:id" element={<ProductDetailpg />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/logout" element={<Logout />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/menu" element={<Menu />} />
+              <Route path="/profile" element={<div>Profile Page</div>} />  
+              <Route path="*" element={<Error />} />
+            </Routes>
+          </div>
+        </Router>
+      </CartProvider>
+    </AuthProvider>
   );
 }
 
