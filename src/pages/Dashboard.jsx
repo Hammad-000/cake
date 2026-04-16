@@ -528,11 +528,14 @@ const renderPage = () => {
   
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 flex">
-      {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 bg-white/90 backdrop-blur-sm shadow-2xl
-        transform transition-all duration-300 ease-in-out lg:static lg:translate-x-0
-        ${sidebarState.open ? 'translate-x-0' : '-translate-x-full'} 
-        ${sidebarState.minimized ? 'w-20' : 'w-64'}`}>
+<aside
+  className={`fixed left-0 z-40 bg-white/90 backdrop-blur-sm shadow-2xl
+    transform transition-all duration-300 ease-in-out lg:static lg:translate-x-0
+    ${sidebarState.open ? 'translate-x-0' : '-translate-x-full'} 
+    ${sidebarState.minimized ? 'w-20' : 'w-64'}
+    top-[72px] h-[calc(100vh-72px)]
+  `}
+>
         
         <div className="flex items-center justify-between p-6 border-b border-purple-100">
           <h1 className={`text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent transition-opacity duration-300 ${sidebarState.minimized ? 'lg:hidden' : ''}`}>
