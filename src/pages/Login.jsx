@@ -16,7 +16,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  
+
 
   const handleChange = (e) => {
     setFormData({
@@ -43,7 +43,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
 
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
@@ -52,25 +52,24 @@ function Login() {
     }
 
     setLoading(true);
-    setMessage(""); 
+    setMessage("");
 
     try {
-  const response = await axios.post(
-    "https://cakes-backend-gamma.vercel.app/api/auth/login",
-    formData
-  );
+      const response = await axios.post(
+        "https://cakes-backend-gamma.vercel.app/api/auth/login",
+        formData
+      );
 
-  const { token } = response.data; 
-  localStorage.setItem("authToken", token); 
-login(token);
-  setMessage("Login successful!");
-  navigate("/dashboard"); 
-} catch (error) {
-  setMessage(error.response ? error.response.data.message : "Error logging in");
-}
+      const { token } = response.data;
+      localStorage.setItem("authToken", token);
+      login(token);
+      setMessage("Login successful!");
+      navigate("/dashboard");
+    } catch (error) {
+      setMessage(error.response ? error.response.data.message : "Error logging in");
+    }
 
-console.log("Token stored:", localStorage.getItem("authToken"));
-    
+
   };
 
   return (
@@ -118,11 +117,10 @@ console.log("Token stored:", localStorage.getItem("authToken"));
                   Email Address
                 </label>
                 <div
-                  className={`flex items-center border rounded-xl px-4 transition-all duration-200 ${
-                    errors.email
+                  className={`flex items-center border rounded-xl px-4 transition-all duration-200 ${errors.email
                       ? "border-red-400 ring-2 ring-red-100"
                       : "border-gray-300 focus-within:border-purple-400 focus-within:ring-2 focus-within:ring-purple-100"
-                  }`}
+                    }`}
                 >
                   <FaEnvelope
                     className={`text-gray-400 mr-3 ${errors.email ? "text-red-400" : ""}`}
@@ -146,11 +144,10 @@ console.log("Token stored:", localStorage.getItem("authToken"));
                   Password
                 </label>
                 <div
-                  className={`flex items-center border rounded-xl px-4 transition-all duration-200 ${
-                    errors.password
+                  className={`flex items-center border rounded-xl px-4 transition-all duration-200 ${errors.password
                       ? "border-red-400 ring-2 ring-red-100"
                       : "border-gray-300 focus-within:border-purple-400 focus-within:ring-2 focus-within:ring-purple-100"
-                  }`}
+                    }`}
                 >
                   <FaLock
                     className={`text-gray-400 mr-3 ${errors.password ? "text-red-400" : ""}`}

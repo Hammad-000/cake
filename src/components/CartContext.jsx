@@ -12,7 +12,6 @@ export const CartProvider = ({ children }) => {
   const [notificationMessage, setNotificationMessage] = useState("");
   const [totalItems, setTotalItems] = useState(0);
 
-  // Calculate total items whenever cart changes
   useEffect(() => {
     const count = cart.reduce((total, item) => total + item.quantity, 0);
     setTotalItems(count);

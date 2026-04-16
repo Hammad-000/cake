@@ -20,21 +20,19 @@ function Logout() {
     setLoading(true);
     setMessage("");
 
-    // Simulate a short delay for better UX (optional)
     setTimeout(() => {
-      // Clear authentication token
       localStorage.removeItem("authToken");
       setMessage("Logout successful! Redirecting...");
       setLoading(false);
 
       setTimeout(() => {
-        navigate("/"); 
+        navigate("/");
       }, 1500);
     }, 500);
   };
 
   const handleCancel = () => {
-    navigate(-1); 
+    navigate(-1);
   };
 
   return (
@@ -49,13 +47,13 @@ function Logout() {
             <p className="text-gray-700 text-lg">
               You have been successfully logged out. Thank you for visiting Cake Villa. We hope to see you again soon!
             </p>
-        <div className="flex justify-center my-8">
-  <img
-    src="https://blush.design/api/download?shareUri=69wYJDyZa4pTHhdv&c=Hair_0%7E4d33a2-0.4%7E150656-0.5%7E150656_Skin_0%7Efeb1cd-0.4%7Eef9e89-0.5%7Ed46b55&w=800&h=800&fm=png"
-    alt="Logout illustration"
-    className="w-72 h-90 object-contain"
-  />
-</div>
+            <div className="flex justify-center my-8">
+              <img
+                src="https://blush.design/api/download?shareUri=69wYJDyZa4pTHhdv&c=Hair_0%7E4d33a2-0.4%7E150656-0.5%7E150656_Skin_0%7Efeb1cd-0.4%7Eef9e89-0.5%7Ed46b55&w=800&h=800&fm=png"
+                alt="Logout illustration"
+                className="w-72 h-90 object-contain"
+              />
+            </div>
           </div>
 
           {/* Right side - Logout confirmation card */}
@@ -69,9 +67,8 @@ function Logout() {
 
             {message && (
               <div
-                className={`text-center ${
-                  message.includes("successful") ? "text-green-500" : "text-red-500"
-                } mb-4`}
+                className={`text-center ${message.includes("successful") ? "text-green-500" : "text-red-500"
+                  } mb-4`}
               >
                 {message}
               </div>

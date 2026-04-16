@@ -13,9 +13,6 @@ const initialProducts = [
   { id: 3, title: 'Vanilla Bean', price: 24.99, description: 'Light vanilla sponge with buttercream', category: 'Cakes' },
 ];
 
-
-
-
 const initialOrders = [
   { id: '#1001', customer: 'John Doe', date: '2024-03-15', total: 59.98, status: 'Delivered' },
   { id: '#1002', customer: 'Jane Smith', date: '2024-03-16', total: 34.99, status: 'Processing' },
@@ -497,8 +494,6 @@ const renderPage = () => {
   }
 };
 
-
-
   useEffect(() => {
     const fetchProducts = async () => {
       setLoadingProducts(true);
@@ -530,8 +525,6 @@ const renderPage = () => {
 
   const toggleMinimize = () => toggleSidebarState('minimized');
   const toggleSidebar = () => toggleSidebarState('open');
-
-console.log("Dashboard token check:", localStorage.getItem("authToken"));
   
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 flex">

@@ -93,26 +93,25 @@ function About() {
     },
   ];
 
-  // Bakers data
   const bakers = [
     {
       name: "Chef Maria Chen",
       role: "Head Pastry Chef",
-      image: "./images/chef1.jpg", // Placeholder path; replace with actual
+      image: "https://www.unicesumar.edu.br/blog/wp-content/uploads/2017/03/confeitaria-profissional.jpg", 
       description:
         "With over 15 years of experience in Parisian patisseries, Maria brings elegance and artistry to every creation.",
     },
     {
-      name: "Chef David Kumar",
+      name: "Chef Zain Ahmed",
       role: "Bread & Cake Specialist",
-      image: "./images/chef2.jpg",
+      image: "https://media.istockphoto.com/id/874492906/photo/a-confectioner-with-a-cake-in-the-bakery.jpg?s=612x612&w=0&k=20&c=ExhrkrrP26f3aBLplxyruHxp2YWZPn_CDJ19YM7pSg4=",
       description:
         "David's passion for traditional baking methods and innovative flavors makes our cakes unforgettable.",
     },
     {
       name: "Chef Sofia Rodriguez",
       role: "Sugar Artist",
-      image: "./images/chef3.jpg",
+      image: "https://t4.ftcdn.net/jpg/04/00/73/47/360_F_400734737_CXuxJirdrY6zUrm4C9jxQ6JA1Kui03A2.jpg",
       description:
         "Sofia’s intricate sugar flowers and custom designs turn every cake into a masterpiece.",
     },

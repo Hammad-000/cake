@@ -1,19 +1,16 @@
 import { useState, useMemo, useEffect } from "react";
 import axios from "axios";
 import CategoryFilter from "../components/CategoryFilter";
-import Products from "../components/Products";
-import { getVisibleProducts } from "../../src/data/product-filter";
 import RatingFilter from "../components/RatingFilter";
 import PriceRange from "../components/PriceRange";
 import SearchBox from "../components/SearchBox";
+import SortingFilter from "../components/SortingFilter";
+import FooterContent from "../components/FooterContent";
+import { useCart } from "../components/CartContext";
+import ProductsCard from "../components/ProductsCard";
 import { AiOutlineFilter } from "react-icons/ai";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { FaSortAmountDown } from "react-icons/fa";
-import FooterContent from "../components/FooterContent";
-import SortingFilter from "../components/SortingFilter";
-import { useCart } from "../components/CartContext";
-import ProductsCard from "../components/ProductsCard";
-
 
 function Menu() {
   const [allProducts, setAllProducts] = useState([]);
@@ -28,18 +25,24 @@ function Menu() {
   const [isSortOpen, setIsSortOpen] = useState(false);
   const { addToCart } = useCart();
 
+  // Fetch products
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get("https://cakes-backend-gamma.vercel.app/api/products");
+        // Normalize response: if response.data.products exists, use it; else if response.data is array, use it
+        let products = [];
         if (response.data?.products && Array.isArray(response.data.products)) {
-          setAllProducts(response.data.products);
+          products = response.data.products;
+        } else if (Array.isArray(response.data)) {
+          products = response.data;
         } else {
-          setError("Invalid response format");
+          throw new Error("Invalid API response format");
         }
+        setAllProducts(products);
       } catch (err) {
-        console.error(err);
-        setError("Failed to fetch products");
+        console.error("Fetch error:", err);
+        setError("Failed to load products. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -47,9 +50,11 @@ function Menu() {
     fetchProducts();
   }, []);
 
+  // Compute min/max price from actual products
   const initPriceFilter = useMemo(() => {
     if (!allProducts.length) return { min: 0, max: 0, isApplied: false };
-    const prices = allProducts.map(p => p.price);
+    const prices = allProducts.map(p => p.price).filter(p => typeof p === 'number');
+    if (prices.length === 0) return { min: 0, max: 0, isApplied: false };
     return {
       min: Math.min(...prices),
       max: Math.max(...prices),
@@ -64,35 +69,53 @@ function Menu() {
     }
   }, [allProducts, initPriceFilter, priceRange.max]);
 
+  // Filtering logic (simple but effective)
   const filterProducts = useMemo(() => {
     if (!allProducts.length) return [];
 
-    let visibleProducts = getVisibleProducts(
-      selectedCategories,
-      selectedRating,
-      priceRange,
-      searchTerm,
-      allProducts
-    );
+    let filtered = [...allProducts];
 
+    // Category filter
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter(p => selectedCategories.includes(p.category));
+    }
+
+    // Rating filter (if product has rating field)
+    if (selectedRating) {
+      const minRating = parseFloat(selectedRating);
+      filtered = filtered.filter(p => (p.rating || 0) >= minRating);
+    }
+
+    // Price range filter
+    if (priceRange.isApplied) {
+      filtered = filtered.filter(p => p.price >= priceRange.min && p.price <= priceRange.max);
+    }
+
+    // Search term (case‑insensitive)
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(p =>
+        (p.name || p.title || "").toLowerCase().includes(term) ||
+        (p.description || "").toLowerCase().includes(term)
+      );
+    }
+
+    // Sorting
     switch (sorting) {
       case "price-low":
-        visibleProducts = [...visibleProducts].sort((a, b) => a.price - b.price);
+        filtered.sort((a, b) => a.price - b.price);
         break;
       case "price-high":
-        visibleProducts = [...visibleProducts].sort((a, b) => b.price - a.price);
+        filtered.sort((a, b) => b.price - a.price);
         break;
       case "rating":
-        visibleProducts = [...visibleProducts].sort((a, b) => b.rating - a.rating);
-        break;
-      case "popular":
-        visibleProducts = [...visibleProducts].sort((a, b) => b.popular - a.popular);
+        filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
         break;
       default:
         break;
     }
-    return visibleProducts;
-  }, [selectedCategories, selectedRating, priceRange, searchTerm, sorting, allProducts]);
+    return filtered;
+  }, [allProducts, selectedCategories, selectedRating, priceRange, searchTerm, sorting]);
 
   const onChangeCategoryHandler = (category, isChecked) => {
     setSelectedCategories(prev =>
@@ -125,25 +148,27 @@ function Menu() {
     setSorting("");
   };
 
-  if (loading) return <div className="p-8 text-center">Loading products...</div>;
+  if (loading) return <div className="p-8 text-center text-gray-600">Loading products...</div>;
   if (error) return <div className="p-8 text-center text-red-500">{error}</div>;
 
+  // Helper to add to cart (normalises product)
   const handleAddToCart = (product, e) => {
     e.stopPropagation();
     const cartProduct = {
       id: product._id,
-      title: product.name,
-      image: product.imageUrl || product.image,
+      title: product.name || product.title,
+      image: product.imageUrl || product.image || "/placeholder.jpg",
       price: product.price,
       description: product.description,
       category: product.category,
-      quantity: 1
+      quantity: 1,
     };
     addToCart(cartProduct);
   };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      {/* Mobile Header */}
+      {/* Mobile Header (same as before) */}
       <div className="sticky top-0 z-40 bg-white shadow-md lg:hidden">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
@@ -188,21 +213,15 @@ function Menu() {
           <SearchBox onSearchChange={handleSearchChange} />
         </div>
 
-        {/* Mobile Sorting Dropdown */}
+        {/* Mobile Sorting Dropdown (same as original) */}
         {isSortOpen && (
           <div className="fixed inset-0 z-50 lg:hidden">
-            <div
-              className="absolute inset-0 bg-black/50"
-              onClick={() => setIsSortOpen(false)}
-            />
+            <div className="absolute inset-0 bg-black/50" onClick={() => setIsSortOpen(false)} />
             <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-2xl max-h-[70vh] overflow-y-auto">
               <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
                   <h3 className="text-xl font-bold text-gray-800">Sort By</h3>
-                  <button
-                    onClick={() => setIsSortOpen(false)}
-                    className="text-gray-500 hover:text-gray-700"
-                  >
+                  <button onClick={() => setIsSortOpen(false)} className="text-gray-500 hover:text-gray-700">
                     <IoCloseCircleOutline size={24} />
                   </button>
                 </div>
@@ -212,15 +231,15 @@ function Menu() {
                     { value: "price-low", label: "Price: Low to High", icon: "💰" },
                     { value: "price-high", label: "Price: High to Low", icon: "💰" },
                     { value: "rating", label: "Highest Rated", icon: "⭐" },
-                    { value: "popular", label: "Most Popular", icon: "🔥" }
                   ].map((option) => (
                     <button
                       key={option.value}
                       onClick={() => handleSorting(option.value)}
-                      className={`w-full flex items-center gap-3 px-4 py-4 rounded-xl transition-all ${sorting === option.value
+                      className={`w-full flex items-center gap-3 px-4 py-4 rounded-xl transition-all ${
+                        sorting === option.value
                           ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg"
                           : "hover:bg-gray-100 text-gray-700 border border-gray-200"
-                        }`}
+                      }`}
                     >
                       <span className="text-xl">{option.icon}</span>
                       <span className="font-medium">{option.label}</span>
@@ -233,22 +252,16 @@ function Menu() {
           </div>
         )}
 
-        {/* Mobile Filter Overlay */}
+        {/* Mobile Filter Overlay (same as original) */}
         {isFilterOpen && (
           <div className="fixed inset-0 z-50 lg:hidden">
-            <div
-              className="absolute inset-0 bg-black/50"
-              onClick={() => setIsFilterOpen(false)}
-            />
+            <div className="absolute inset-0 bg-black/50" onClick={() => setIsFilterOpen(false)} />
             <div className="absolute top-0 left-0 right-0 bottom-0 bg-white overflow-y-auto">
               <div className="min-h-screen pb-20">
                 <div className="sticky top-0 bg-white border-b border-gray-200 z-10">
                   <div className="flex justify-between items-center p-4">
                     <h2 className="text-2xl font-bold text-gray-800">Filters</h2>
-                    <button
-                      onClick={() => setIsFilterOpen(false)}
-                      className="text-gray-500 hover:text-gray-700 p-2"
-                    >
+                    <button onClick={() => setIsFilterOpen(false)} className="text-gray-500 hover:text-gray-700 p-2">
                       <IoCloseCircleOutline size={28} />
                     </button>
                   </div>
@@ -280,42 +293,14 @@ function Menu() {
                       isMobile={true}
                     />
                   </div>
-                  {(selectedCategories.length > 0 || selectedRating || priceRange.isApplied) && (
-                    <div className="bg-gradient-to-r from-pink-500 to-pink-500 rounded-xl border border-pink-500 p-5">
-                      <h3 className="font-semibold text-gray-800 mb-3">Active Filters</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedCategories.map((cat) => (
-                          <span key={cat} className="px-3 py-1 bg-pink-500 text-white rounded-full text-sm">
-                            {cat}
-                          </span>
-                        ))}
-                        {selectedRating && (
-                          <span className="px-3 py-1 bg-blue-500 text-white rounded-full text-sm">
-                            {selectedRating}★ & up
-                          </span>
-                        )}
-                        {priceRange.isApplied && (
-                          <span className="px-3 py-1 bg-green-500 text-white rounded-full text-sm">
-                            Rs.{priceRange.min}-{priceRange.max}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
               <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-lg">
                 <div className="flex gap-3">
-                  <button
-                    onClick={clearAllFilters}
-                    className="flex-1 py-3 px-4 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors"
-                  >
+                  <button onClick={clearAllFilters} className="flex-1 py-3 px-4 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors">
                     Clear All
                   </button>
-                  <button
-                    onClick={() => setIsFilterOpen(false)}
-                    className="flex-1 py-3 px-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-medium rounded-xl hover:shadow-lg transition-all shadow-md"
-                  >
+                  <button onClick={() => setIsFilterOpen(false)} className="flex-1 py-3 px-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-medium rounded-xl hover:shadow-lg transition-all shadow-md">
                     Apply Filters
                   </button>
                 </div>
@@ -331,10 +316,7 @@ function Menu() {
               <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-lg font-bold text-gray-800">Filters</h2>
-                  <button
-                    onClick={clearAllFilters}
-                    className="text-sm text-pink-700 font-medium cursor-pointer"
-                  >
+                  <button onClick={clearAllFilters} className="text-sm text-pink-700 font-medium cursor-pointer">
                     Clear all
                   </button>
                 </div>
@@ -386,25 +368,16 @@ function Menu() {
             <div className="lg:hidden mb-6">
               <div className="flex flex-wrap gap-2 mb-4">
                 {selectedCategories.map((cat) => (
-                  <span key={cat} className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-sm">
-                    {cat}
-                  </span>
+                  <span key={cat} className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-sm">{cat}</span>
                 ))}
                 {selectedRating && (
-                  <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
-                    {selectedRating}★ & up
-                  </span>
+                  <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">{selectedRating}★ & up</span>
                 )}
                 {priceRange.isApplied && (
-                  <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">
-                    Rs.{priceRange.min}-{priceRange.max}
-                  </span>
+                  <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">Rs.{priceRange.min}-{priceRange.max}</span>
                 )}
                 {(selectedCategories.length > 0 || selectedRating || priceRange.isApplied) && (
-                  <button
-                    onClick={clearAllFilters}
-                    className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer"
-                  >
+                  <button onClick={clearAllFilters} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 cursor-pointer">
                     Clear all
                   </button>
                 )}
@@ -430,44 +403,24 @@ function Menu() {
                   {selectedCategories.length > 0 ? `${selectedCategories.length} categories` : "All categories"}
                 </span>
                 {selectedRating && (
-                  <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
-                    {selectedRating}★ +
-                  </span>
+                  <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">{selectedRating}★ +</span>
                 )}
               </div>
             </div>
 
-{/* Products */}
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-  {filterProducts.length === 0 ? (
-    <div className="col-span-full text-center py-8 text-gray-500">
-      No products found.
-    </div>
-  ) : (
-    filterProducts.map(product => (
-      <ProductsCard key={product._id || product.id} product={product} />
-      
-    ))
-  )}
-</div>
-            {/* No Results Message */}
-            {filterProducts.length === 0 && (
-              <div className="text-center py-16">
-                <div className="text-6xl mb-4">🍕</div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">No items found</h3>
-                <p className="text-gray-600 mb-6">Try adjusting your filters or search term</p>
-                <button
-                  onClick={clearAllFilters}
-                  className="px-6 py-2 bg-pink-500 text-white font-medium rounded-lg hover:shadow-lg transition-all"
-                >
-                  Clear All Filters
-                </button>
-              </div>
-            )}
+            {/* Product Grid using ProductsCard */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filterProducts.length === 0 ? (
+                <div className="col-span-full text-center py-8 text-gray-500">No products found.</div>
+              ) : (
+                filterProducts.map(product => (
+                  <ProductsCard key={product._id || product.id} product={product} />
+                ))
+              )}
+            </div>
           </div>
         </div>
       </div>
-
       <FooterContent />
     </div>
   );
