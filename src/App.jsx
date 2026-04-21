@@ -14,11 +14,11 @@ import Logout from "./pages/Logout";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from './components/ProtectedRoute';
-import { AuthProvider } from './context/AuthContext'; 
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   return (
-    <AuthProvider>  
+    <AuthProvider>
       <CartProvider>
         <Router>
           <Navbar />
@@ -28,7 +28,7 @@ function App() {
               <Route
                 path="/dashboard"
                 element={
-                  <ProtectedRoute>
+                  <ProtectedRoute allowedRoles={["admin"]}>
                     <Dashboard />
                   </ProtectedRoute>
                 }
@@ -41,7 +41,7 @@ function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/menu" element={<Menu />} />
-              <Route path="/profile" element={<div>Profile Page</div>} />  
+              <Route path="/profile" element={<div>Profile Page</div>} />
               <Route path="*" element={<Error />} />
             </Routes>
           </div>

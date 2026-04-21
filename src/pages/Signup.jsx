@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import axios from "axios"; // Import axios for API calls
+import axios from "axios"; 
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import FooterContent from "../components/FooterContent";
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ function Signup() {
     confirmPassword: "",
     agreeTerms: false, 
   });
+  const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -51,30 +53,46 @@ function Signup() {
     return newErrors;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    // Validate form inputs
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
+  const validationErrors = validateForm();
+  if (Object.keys(validationErrors).length > 0) {
+    setErrors(validationErrors);
+    return;
+  }
+
+  setLoading(true);
+  setMessage("");
+
+  try {
+    const response = await axios.post(
+      "https://cakes-backend-gamma.vercel.app/api/auth/register",
+      formData
+    );
+
+    // ✅ API returns: { message, token, role }
+    const { token, role } = response.data;
+
+    // Store authentication data (so user stays logged in)
+    localStorage.setItem("token", token);
+    localStorage.setItem("userRole", role);
+    // Optionally store user email/name if needed
+
+    setMessage("Account created successfully! Please check your email to verify.");
+
+    // Redirect based on role (should be "user" for normal signup)
+    if (role === "admin") {
+      navigate("/dashboard");
+    } else {
+      navigate("/"); // or "/login" or "/user-home"
     }
-
-    setLoading(true);
-
-    try {
-      const response = await axios.post(
-        "https://cakes-backend-gamma.vercel.app/api/auth/register",
-        formData
-      );
-      setMessage("Account created successfully! Please check your email to verify.");
-    } catch (error) {
-      setMessage(error.response ? error.response.data.message : "Error registering");
-    } finally {
-      setLoading(false);
-    }
-  };
+  } catch (error) {
+    setMessage(error.response?.data?.message || "Registration failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 px-4 py-8 relative overflow-hidden">
@@ -244,6 +262,13 @@ function Signup() {
               </div>
               {errors.terms && <p className="text-red-500 text-xs -mt-2">{errors.terms}</p>}
 
+ {message && (
+        <div className="max-w-6xl mx-auto mb-4">
+          <div className={`p-3 rounded-lg text-center ${message.includes("success") ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+            {message}
+          </div>
+        </div>
+      )}
               {/* Signup button */}
               <button
                 type="submit"
