@@ -7,17 +7,7 @@ import { BiLogOut } from "react-icons/bi";
 
 
 
-const initialProducts = [
-  { id: 1, title: 'Red Velvet Cake', price: 29.99, description: 'Classic red velvet with cream cheese frosting', category: 'Cakes' },
-  { id: 2, title: 'Chocolate Fudge', price: 34.99, description: 'Rich chocolate cake with fudge icing', category: 'Cakes' },
-  { id: 3, title: 'Vanilla Bean', price: 24.99, description: 'Light vanilla sponge with buttercream', category: 'Cakes' },
-];
 
-const initialOrders = [
-  { id: '#1001', customer: 'John Doe', date: '2024-03-15', total: 59.98, status: 'Delivered' },
-  { id: '#1002', customer: 'Jane Smith', date: '2024-03-16', total: 34.99, status: 'Processing' },
-  { id: '#1003', customer: 'Bob Johnson', date: '2024-03-17', total: 89.97, status: 'Shipped' },
-];
 
 const initialCustomers = [
   { id: 1, name: 'John Doe', email: 'john@example.com', orders: 5, spent: 249.95 },
@@ -484,7 +474,6 @@ function SettingsPage() {
 }
 
 // ---------- Main Dashboard Component ----------
-// ---------- Main Dashboard Component (FIXED) ----------
 function Dashboard() {
   const [sidebarState, setSidebarState] = useState({ open: false, minimized: false });
   const [currentPage, setCurrentPage] = useState('products');
@@ -494,7 +483,7 @@ function Dashboard() {
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [ordersError, setOrdersError] = useState(null);
-  const [customers] = useState(initialCustomers); // keep static for now
+  const [customers] = useState(initialCustomers); 
 
   // Fetch products (public)
   const fetchProducts = async () => {
