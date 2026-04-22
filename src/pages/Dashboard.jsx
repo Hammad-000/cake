@@ -368,7 +368,10 @@ function ProductsPage({ products, setProducts }) {
   );
 }
 
-function OrdersPage({ orders }) {
+function OrdersPage({ orders, loading, error }) {
+  if (loading) return <div className="bg-white rounded-3xl shadow-2xl p-6 md:p-8">Loading orders...</div>;
+  if (error) return <div className="bg-white rounded-3xl shadow-2xl p-6 md:p-8 text-red-600">Error: {error}</div>;
+
   return (
     <div className="bg-white rounded-3xl shadow-2xl p-6 md:p-8">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 pb-3 border-b-2 border-purple-100">
@@ -386,23 +389,38 @@ function OrdersPage({ orders }) {
             </tr>
           </thead>
           <tbody>
-            {orders.map(order => (
-              <tr key={order.id} className="border-b hover:bg-gray-50">
-                <td className="px-4 py-3 text-gray-800">{order.id}</td>
-                <td className="px-4 py-3 text-gray-800">{order.customer}</td>
-                <td className="px-4 py-3 text-gray-600">{order.date}</td>
-                <td className="px-4 py-3 text-gray-800">Rs {order.total.toFixed(2)}</td>
-                <td className="px-4 py-3">
-                  <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                    order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
-                    order.status === 'Processing' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-blue-100 text-blue-800'
-                  }`}>
-                    {order.status}
-                  </span>
-                </td>
+            {orders.length === 0 ? (
+              <tr>
+                <td colSpan="5" className="text-center py-8 text-gray-500">No orders found.</td>
               </tr>
-            ))}
+            ) : (
+              orders.map(order => {
+              
+                const orderId = order._id || order.id;
+                const customerName = order.customerName || order.customer?.fullName || order.customer?.name || 'N/A';
+                const orderDate = order.createdAt ? new Date(order.createdAt).toLocaleDateString() : order.date;
+                const totalAmount = order.totalAmount || order.total;
+                const orderStatus = order.orderStatus || order.status;
+
+                return (
+                  <tr key={orderId} className="border-b hover:bg-gray-50">
+                    <td className="px-4 py-3 text-gray-800">{orderId}</td>
+                    <td className="px-4 py-3 text-gray-800">{customerName}</td>
+                    <td className="px-4 py-3 text-gray-600">{orderDate}</td>
+                    <td className="px-4 py-3 text-gray-800">Rs {Number(totalAmount).toFixed(2)}</td>
+                    <td className="px-4 py-3">
+                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                        orderStatus === 'Delivered' ? 'bg-green-100 text-green-800' :
+                        orderStatus === 'Processing' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-blue-100 text-blue-800'
+                      }`}>
+                        {orderStatus || 'Pending'}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </table>
       </div>
@@ -466,55 +484,81 @@ function SettingsPage() {
 }
 
 // ---------- Main Dashboard Component ----------
+// ---------- Main Dashboard Component (FIXED) ----------
 function Dashboard() {
   const [sidebarState, setSidebarState] = useState({ open: false, minimized: false });
   const [currentPage, setCurrentPage] = useState('products');
-  // const [products, setProducts] = useState(initialProducts);
-  const [orders] = useState(initialOrders);
-  const [customers] = useState(initialCustomers);
   const [products, setProducts] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(false);
-const [productError, setProductError] = useState(null);
+  const [productError, setProductError] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [loadingOrders, setLoadingOrders] = useState(false);
+  const [ordersError, setOrdersError] = useState(null);
+  const [customers] = useState(initialCustomers); // keep static for now
 
-const renderPage = () => {
-  if (currentPage === 'products') {
-    if (loadingProducts) return <div>Loading products...</div>;
-    if (productError) return <div>{productError}</div>;
-    return <ProductsPage products={products} setProducts={setProducts} />;
-  }
-  switch (currentPage) {
-    case 'orders':
-      return <OrdersPage orders={orders} />;
-    case 'customers':
-      return <CustomersPage customers={customers} />;
-    case 'settings':
-      return <SettingsPage />;
-    default:
-      return <ProductsPage products={products} setProducts={setProducts} />;
-  }
-};
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setLoadingProducts(true);
-      try {
-        const response = await fetch('https://cakes-backend-gamma.vercel.app/api/products');
-        const data = await response.json();
-        if (data && Array.isArray(data.products)) {
-          setProducts(data.products);
-        } else {
-          setProductError('Invalid response format.');
-        }
-      } catch (error) {
-        console.error('Error fetching products:', error);
-        setProductError('Failed to fetch products.');
-      } finally {
-        setLoadingProducts(false);
+  // Fetch products (public)
+  const fetchProducts = async () => {
+    setLoadingProducts(true);
+    try {
+      const response = await fetch('https://cakes-backend-gamma.vercel.app/api/products');
+      const data = await response.json();
+      if (data && Array.isArray(data.products)) {
+        setProducts(data.products);
+      } else {
+        setProductError('Invalid response format.');
       }
-    };
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      setProductError('Failed to fetch products.');
+    } finally {
+      setLoadingProducts(false);
+    }
+  };
 
+  // Fetch orders (requires auth)
+  const fetchOrders = async () => {
+    setLoadingOrders(true);
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) throw new Error("No auth token found. Please log in.");
+      const response = await fetch("https://cakes-backend-gamma.vercel.app/api/orders", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!response.ok) throw new Error("Failed to fetch orders");
+      const data = await response.json();
+      // Adjust based on your API response structure
+      setOrders(data.orders || data);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      setOrdersError(error.message);
+    } finally {
+      setLoadingOrders(false);
+    }
+  };
+
+  // Fetch both on mount
+  useEffect(() => {
     fetchProducts();
+    fetchOrders();
   }, []);
+
+  const renderPage = () => {
+    if (currentPage === 'products') {
+      if (loadingProducts) return <div>Loading products...</div>;
+      if (productError) return <div>{productError}</div>;
+      return <ProductsPage products={products} setProducts={setProducts} />;
+    }
+    switch (currentPage) {
+      case 'orders':
+        return <OrdersPage orders={orders} loading={loadingOrders} error={ordersError} />;
+      case 'customers':
+        return <CustomersPage customers={customers} />;
+      case 'settings':
+        return <SettingsPage />;
+      default:
+        return <ProductsPage products={products} setProducts={setProducts} />;
+    }
+  };
 
   const toggleSidebarState = (type) => {
     setSidebarState(prevState => ({
