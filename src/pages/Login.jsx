@@ -16,8 +16,6 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-
-
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -44,7 +42,6 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -60,16 +57,23 @@ function Login() {
         formData
       );
 
-      const { token } = response.data;
-      localStorage.setItem("authToken", token);
-      login(token);
-      setMessage("Login successful!");
-      navigate("/dashboard");
+      // Destructure both token and role from response
+      const { token, role } = response.data;
+
+      // Store token & role via AuthContext (handles localStorage)
+      login(token, role);
+
+      // Redirect based on role
+      if (role === "admin") {
+        navigate("/dashboard");
+      } else {
+        navigate("/");
+      }
     } catch (error) {
-      setMessage(error.response ? error.response.data.message : "Error logging in");
+      setMessage(error.response?.data?.message || "Error logging in");
+    } finally {
+      setLoading(false);
     }
-
-
   };
 
   return (
@@ -95,7 +99,7 @@ function Login() {
 
           {/* Right side - Login Form */}
           <div className="bg-white rounded-3xl shadow-xl p-8 md:p-10 border border-gray-100">
-            <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center ">
+            <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
               Log In
             </h2>
             <p className="text-center text-gray-500 mb-8">
@@ -104,7 +108,9 @@ function Login() {
 
             {message && (
               <div
-                className={`text-center ${message.includes("Error") ? "text-red-500" : "text-green-500"} mb-4`}
+                className={`text-center ${
+                  message.includes("Error") ? "text-red-500" : "text-green-500"
+                } mb-4`}
               >
                 {message}
               </div>
@@ -117,13 +123,16 @@ function Login() {
                   Email Address
                 </label>
                 <div
-                  className={`flex items-center border rounded-xl px-4 transition-all duration-200 ${errors.email
+                  className={`flex items-center border rounded-xl px-4 transition-all duration-200 ${
+                    errors.email
                       ? "border-red-400 ring-2 ring-red-100"
                       : "border-gray-300 focus-within:border-purple-400 focus-within:ring-2 focus-within:ring-purple-100"
-                    }`}
+                  }`}
                 >
                   <FaEnvelope
-                    className={`text-gray-400 mr-3 ${errors.email ? "text-red-400" : ""}`}
+                    className={`text-gray-400 mr-3 ${
+                      errors.email ? "text-red-400" : ""
+                    }`}
                   />
                   <input
                     type="email"
@@ -135,7 +144,11 @@ function Login() {
                     disabled={loading}
                   />
                 </div>
-                {errors.email && <p className="text-red-500 text-xs mt-1.5 ml-1">{errors.email}</p>}
+                {errors.email && (
+                  <p className="text-red-500 text-xs mt-1.5 ml-1">
+                    {errors.email}
+                  </p>
+                )}
               </div>
 
               {/* Password */}
@@ -144,13 +157,16 @@ function Login() {
                   Password
                 </label>
                 <div
-                  className={`flex items-center border rounded-xl px-4 transition-all duration-200 ${errors.password
+                  className={`flex items-center border rounded-xl px-4 transition-all duration-200 ${
+                    errors.password
                       ? "border-red-400 ring-2 ring-red-100"
                       : "border-gray-300 focus-within:border-purple-400 focus-within:ring-2 focus-within:ring-purple-100"
-                    }`}
+                  }`}
                 >
                   <FaLock
-                    className={`text-gray-400 mr-3 ${errors.password ? "text-red-400" : ""}`}
+                    className={`text-gray-400 mr-3 ${
+                      errors.password ? "text-red-400" : ""
+                    }`}
                   />
                   <input
                     type="password"
@@ -162,14 +178,18 @@ function Login() {
                     disabled={loading}
                   />
                 </div>
-                {errors.password && <p className="text-red-500 text-xs mt-1.5 ml-1">{errors.password}</p>}
+                {errors.password && (
+                  <p className="text-red-500 text-xs mt-1.5 ml-1">
+                    {errors.password}
+                  </p>
+                )}
               </div>
 
               {/* Login button */}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r  cursor-pointer from-purple-600 to-pink-500 text-white py-3.5 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-pink-600 transform hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 mt-6"
+                className="w-full bg-gradient-to-r cursor-pointer from-purple-600 to-pink-500 text-white py-3.5 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-pink-600 transform hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 mt-6"
               >
                 {loading ? (
                   <>
@@ -179,7 +199,14 @@ function Login() {
                       fill="none"
                       viewBox="0 0 24 24"
                     >
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
                       <path
                         className="opacity-75"
                         fill="currentColor"
