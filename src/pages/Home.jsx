@@ -45,10 +45,8 @@ function Home() {
     fetchProducts();
   }, []);
 
-  // Specialties: first 12 products (or all if less)
   const specialties = allProducts.slice(0, 12);
 
-  // Build categories dynamically from products
   const categories = [
     { id: "all", name: "All", count: specialties.length },
     ...Array.from(new Set(specialties.map(p => p.category)))
@@ -64,7 +62,6 @@ function Home() {
     ? specialties 
     : specialties.filter(item => item.category === activeCategory);
 
-  // Hero slider functions (unchanged)
   const nextImage = () => {
     if (isTransitioning) return;
     setIsTransitioning(true);

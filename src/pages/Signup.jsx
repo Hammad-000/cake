@@ -4,8 +4,12 @@ import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import FooterContent from "../components/FooterContent";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext"; 
 
 function Signup() {
+  
+
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -61,34 +65,29 @@ const handleSubmit = async (e) => {
     setErrors(validationErrors);
     return;
   }
-
   setLoading(true);
   setMessage("");
 
   try {
     const response = await axios.post(
-      "https://cakes-backend-gamma.vercel.app/api/auth/register",
+      "https://cakes-backend-gamma.vercel.app/api/auth/login",
       formData
     );
 
-    // ✅ API returns: { message, token, role }
     const { token, role } = response.data;
-
-    // Store authentication data (so user stays logged in)
     localStorage.setItem("token", token);
     localStorage.setItem("userRole", role);
-    // Optionally store user email/name if needed
+    login(token, role);  
 
-    setMessage("Account created successfully! Please check your email to verify.");
+    setMessage("Login successful!");
 
-    // Redirect based on role (should be "user" for normal signup)
     if (role === "admin") {
       navigate("/dashboard");
     } else {
-      navigate("/"); // or "/login" or "/user-home"
+      navigate("/");  
     }
   } catch (error) {
-    setMessage(error.response?.data?.message || "Registration failed");
+    setMessage(error.response?.data?.message || "Error logging in");
   } finally {
     setLoading(false);
   }
