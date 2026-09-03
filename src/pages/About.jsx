@@ -11,6 +11,7 @@ import {
   FaGlobe,
   FaHandsHelping,
 } from "react-icons/fa";
+import { HiSparkles } from "react-icons/hi2";
 import { GiCakeSlice } from "react-icons/gi";
 import FooterContent from "../components/FooterContent";
 import { Link } from "react-router-dom";
@@ -32,14 +33,14 @@ function About() {
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.6 },
+      transition: { duration: 0.6, ease: "easeOut" },
     },
   };
 
   const floatingAnimation = {
-    y: [0, -15, 0],
+    y: [0, -12, 0],
     transition: {
-      duration: 3,
+      duration: 3.5,
       repeat: Infinity,
       ease: "easeInOut",
     },
@@ -48,7 +49,7 @@ function About() {
   const rotateAnimation = {
     rotate: [0, 360],
     transition: {
-      duration: 20,
+      duration: 25,
       repeat: Infinity,
       ease: "linear",
     },
@@ -61,35 +62,35 @@ function About() {
       title: "The Humble Beginning",
       description:
         "Started in a small home kitchen with a single oven, baking for friends and family.",
-      icon: <GiCakeSlice className="text-pink-500" />,
+      icon: <GiCakeSlice className="text-pink-500 text-xl" />,
     },
     {
       year: "2013",
       title: "First Storefront",
       description:
         "Opened our first bakery shop in downtown, quickly becoming a local favorite.",
-      icon: <FaBirthdayCake className="text-pink-500" />,
+      icon: <FaBirthdayCake className="text-pink-500 text-xl" />,
     },
     {
       year: "2016",
       title: "Award Winning",
       description:
         "Won 'Best Bakery' award at the National Dessert Competition.",
-      icon: <FaAward className="text-pink-500" />,
+      icon: <FaAward className="text-pink-500 text-xl" />,
     },
     {
       year: "2019",
       title: "Expansion & Innovation",
       description:
         "Launched our signature 'CakeVilla Collection' and expanded to two more locations.",
-      icon: <FaStar className="text-pink-500" />,
+      icon: <FaStar className="text-pink-500 text-xl" />,
     },
     {
       year: "2024",
       title: "Today",
       description:
         "Serving thousands of happy customers with over 50 dessert varieties and 24/7 online support.",
-      icon: <FaHeart className="text-pink-500" />,
+      icon: <FaHeart className="text-pink-500 text-xl" />,
     },
   ];
 
@@ -97,7 +98,7 @@ function About() {
     {
       name: "Chef Maria Chen",
       role: "Head Pastry Chef",
-      image: "https://www.unicesumar.edu.br/blog/wp-content/uploads/2017/03/confeitaria-profissional.jpg", 
+      image: "https://www.unicesumar.edu.br/blog/wp-content/uploads/2017/03/confeitaria-profissional.jpg",
       description:
         "With over 15 years of experience in Parisian patisseries, Maria brings elegance and artistry to every creation.",
     },
@@ -106,7 +107,7 @@ function About() {
       role: "Bread & Cake Specialist",
       image: "https://media.istockphoto.com/id/874492906/photo/a-confectioner-with-a-cake-in-the-bakery.jpg?s=612x612&w=0&k=20&c=ExhrkrrP26f3aBLplxyruHxp2YWZPn_CDJ19YM7pSg4=",
       description:
-        "David's passion for traditional baking methods and innovative flavors makes our cakes unforgettable.",
+        "Zain's passion for traditional baking methods and innovative flavors makes our cakes unforgettable.",
     },
     {
       name: "Chef Sofia Rodriguez",
@@ -117,7 +118,6 @@ function About() {
     },
   ];
 
-  // Testimonials data
   const testimonials = [
     {
       text: "The cake was not only beautiful but also the most delicious we've ever tasted. CakeVilla made our wedding day extra special!",
@@ -137,33 +137,39 @@ function About() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-rose-50 to-orange-50 px-4 sm:px-5 md:px-6 py-6">
+    <div className="min-h-screen bg-gradient-to-b from-rose-50/60 via-orange-50/40 to-white px-4 sm:px-6 py-10 overflow-hidden">
       <div className="container mx-auto max-w-6xl">
+        
         {/* Hero Section */}
         <motion.div
-          initial={{ opacity: 0, y: -30 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-10 md:mb-16 pt-4"
+          className="text-center mb-14 md:mb-20 pt-4"
         >
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pink-100/80 text-pink-600 text-sm font-medium mb-6 backdrop-blur-sm border border-pink-200">
+            <HiSparkles className="text-xs" />
+            <span>Discover Our Story</span>
+          </div>
+
           <div className="flex justify-center mb-4 md:mb-6">
             <motion.div animate={floatingAnimation} className="relative">
-              <GiCakeSlice className="text-5xl md:text-6xl text-pink-500" />
+              <GiCakeSlice className="text-5xl md:text-6xl text-pink-500 drop-shadow-md" />
               <motion.div
-                animate={{ scale: [1, 1.2, 1] }}
+                animate={{ scale: [1, 1.25, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
                 className="absolute -top-1 -right-1 md:-top-2 md:-right-2"
               >
-                <FaHeart className="text-lg md:text-xl text-red-500" />
+                <FaHeart className="text-lg md:text-xl text-red-500 drop-shadow" />
               </motion.div>
             </motion.div>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-3 md:mb-4 px-2">
-            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-orange-400">Sweet</span> Story
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 tracking-tight mb-4 px-2">
+            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-rose-500 to-orange-400">Sweet</span> Story
           </h1>
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl md:max-w-3xl mx-auto px-4">
-            Where every dessert is crafted with passion, quality ingredients, and a touch of magic.
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto px-4 leading-relaxed">
+            Where every dessert is crafted with passion, premium ingredients, and a touch of modern magic.
           </p>
         </motion.div>
 
@@ -172,64 +178,61 @@ function About() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid md:grid-cols-2 gap-8 md:gap-12 items-center mb-16 md:mb-20"
+          className="grid md:grid-cols-2 gap-10 md:gap-14 items-center mb-20 md:mb-28"
         >
-          <motion.div variants={itemVariants} className="space-y-4 md:space-y-6 px-2 md:px-0">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800">Baking Happiness Since 2010</h2>
-            <div className="space-y-4">
-              <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
-                At CakeVilla, we believe that desserts are more than just sweet treats - they're
-                moments of joy, celebrations of life, and expressions of love. Our journey began
-                in a small home kitchen with a single dream: to spread happiness through
-                extraordinary desserts.
+          <motion.div variants={itemVariants} className="space-y-5 px-2 md:px-0">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">
+              Baking Happiness Since 2010
+            </h2>
+            <div className="space-y-4 text-gray-600 text-base sm:text-lg leading-relaxed">
+              <p>
+                At CakeVilla, we believe that desserts are more than just sweet treats—they are
+                moments of pure joy, celebrations of life, and expressions of love. Our journey began
+                in a small home kitchen with a single dream: to spread happiness through extraordinary desserts.
               </p>
-              <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
-                Today, we continue to honor that dream by using only the finest ingredients,
-                traditional baking methods, and innovative recipes that delight both the eyes
-                and the taste buds. Every cake is made from scratch, using organic eggs,
-                European butter, and locally sourced fruits whenever possible.
-              </p>
-              <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
-                Our commitment to quality and creativity has earned us a loyal community of
-                dessert lovers who trust us to make their special moments even sweeter.
+              <p>
+                Today, we honor that dream using only the finest organic eggs, European butter, and 
+                locally sourced fruits. Every single creation is carefully handcrafted from scratch.
               </p>
             </div>
 
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="inline-block mt-4">
+            <div className="pt-2">
               <Link
                 to="/contact"
-                className="inline-block px-6 py-3 sm:px-8 sm:py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold rounded-full hover:shadow-lg transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
+                className="inline-flex items-center justify-center px-7 py-3.5 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-medium rounded-full shadow-lg shadow-pink-500/25 hover:shadow-xl hover:shadow-pink-500/45 transition-all duration-300 transform hover:-translate-y-0.5 text-sm sm:text-base"
               >
                 Visit Our Bakery
               </Link>
-            </motion.div>
+            </div>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="relative mt-8 md:mt-0">
+          <motion.div variants={itemVariants} className="relative">
             <motion.div
               animate={floatingAnimation}
-              className="w-full h-64 sm:h-72 md:h-96 rounded-2xl md:rounded-3xl overflow-hidden shadow-xl md:shadow-2xl"
+              className="w-full h-72 sm:h-80 md:h-[420px] rounded-3xl overflow-hidden shadow-2xl border-4 border-white"
             >
               <img
                 src="./images/cake20.jpg"
                 alt="Artisan Cake"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
               />
             </motion.div>
 
             <motion.div
               animate={rotateAnimation}
-              className="hidden sm:block absolute -top-4 -left-4 w-24 h-24 md:-top-6 md:-left-6 md:w-32 md:h-32 bg-pink-200 rounded-full opacity-20"
+              className="hidden sm:block absolute -top-6 -left-6 w-32 h-32 bg-pink-200/50 rounded-full blur-xl pointer-events-none"
             />
+            
             <motion.div
-              animate={{
-                y: [0, -10, 0],
-                rotate: [0, 180, 360],
-              }}
-              transition={{ duration: 4, repeat: Infinity }}
-              className="absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-4 bg-white p-2 sm:p-3 md:p-4 rounded-xl sm:rounded-2xl shadow-lg"
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 3, repeat: Infinity }}
+              className="absolute -bottom-4 -right-4 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-pink-100 flex items-center gap-3"
             >
-              <FaAward className="text-xl sm:text-2xl md:text-3xl text-yellow-500" />
+              <FaAward className="text-2xl md:text-3xl text-yellow-500" />
+              <div>
+                <p className="text-xs text-gray-500 font-medium">Awarded</p>
+                <p className="text-sm font-bold text-gray-800">Best Desserts</p>
+              </div>
             </motion.div>
           </motion.div>
         </motion.div>
@@ -240,39 +243,39 @@ function About() {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 1 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="mb-16 md:mb-20 px-2"
+          className="mb-20 md:mb-28 px-2"
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8 md:mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12 md:mb-16 tracking-tight">
             Our Sweet Journey
           </h2>
           <div className="relative">
-            {/* Vertical timeline line (hidden on mobile) */}
-            <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-pink-200"></div>
-            <div className="space-y-8 md:space-y-0">
+            <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-gradient-to-b from-pink-300 via-rose-300 to-transparent"></div>
+            <div className="space-y-8 md:space-y-12">
               {timelineEvents.map((event, idx) => (
                 <motion.div
                   key={idx}
-                  initial={{ opacity: 0, x: idx % 2 === 0 ? -50 : 50 }}
+                  initial={{ opacity: 0, x: idx % 2 === 0 ? -30 : 30 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: idx * 0.1 }}
+                  transition={{ duration: 0.5, delay: idx * 0.1 }}
                   viewport={{ once: true }}
                   className={`relative flex flex-col md:flex-row ${
                     idx % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-                  } items-center mb-8 md:mb-12`}
+                  } items-center`}
                 >
-                  <div className="md:w-1/2 flex justify-center md:justify-end px-4">
-                    <div className="bg-white p-6 rounded-2xl shadow-lg max-w-sm">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className="text-2xl font-bold text-pink-500">{event.year}</span>
-                        {event.icon}
+                  <div className={`md:w-1/2 flex justify-center ${idx % 2 === 0 ? "md:justify-end md:pr-12" : "md:justify-start md:pl-12"} w-full px-2`}>
+                    <div className="bg-white/80 backdrop-blur-md p-6 rounded-3xl shadow-xl border border-pink-100/60 max-w-sm w-full hover:shadow-2xl transition-shadow duration-300">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="px-3 py-1 bg-pink-100 text-pink-600 rounded-full text-xs font-bold tracking-wide">
+                          {event.year}
+                        </span>
+                        <div className="p-2 bg-pink-50 rounded-xl">{event.icon}</div>
                       </div>
-                      <h3 className="text-xl font-bold text-gray-800">{event.title}</h3>
-                      <p className="text-gray-600 mt-2">{event.description}</p>
+                      <h3 className="text-xl font-bold text-gray-900 mb-1">{event.title}</h3>
+                      <p className="text-gray-600 text-sm leading-relaxed">{event.description}</p>
                     </div>
                   </div>
                   <div className="md:w-1/2"></div>
-                  {/* Timeline dot */}
-                  <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-pink-500 rounded-full hidden md:block"></div>
+                  <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full ring-4 ring-pink-100 hidden md:block shadow-md"></div>
                 </motion.div>
               ))}
             </div>
@@ -285,77 +288,73 @@ function About() {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 1 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="mb-16 md:mb-20 px-2"
+          className="mb-20 md:mb-28 px-2"
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8 md:mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12 tracking-tight">
             Our Core Values
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 cursor-pointer ">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {[
               {
-                icon: <FaHeart className="text-3xl md:text-4xl" />,
+                icon: <FaHeart className="text-3xl" />,
                 title: "Passion",
-                description: "Every creation is infused with love and dedication",
-                color: "text-red-500",
-                bgColor: "bg-red-50",
+                description: "Every creation is infused with love and true dedication.",
+                color: "text-rose-500",
+                bgColor: "bg-rose-50/70 border-rose-100",
               },
               {
-                icon: <FaLeaf className="text-3xl md:text-4xl" />,
+                icon: <FaLeaf className="text-3xl" />,
                 title: "Quality",
-                description: "Only the finest natural ingredients",
-                color: "text-green-500",
-                bgColor: "bg-green-50",
+                description: "Sourcing only the finest, freshest natural ingredients.",
+                color: "text-emerald-500",
+                bgColor: "bg-emerald-50/70 border-emerald-100",
               },
               {
-                icon: <FaUsers className="text-3xl md:text-4xl" />,
+                icon: <FaUsers className="text-3xl" />,
                 title: "Community",
-                description: "Building sweet memories together",
-                color: "text-blue-500",
-                bgColor: "bg-blue-50",
+                description: "Building sweet, unforgettable memories together.",
+                color: "text-sky-500",
+                bgColor: "bg-sky-50/70 border-sky-100",
               },
               {
-                icon: <FaCrown className="text-3xl md:text-4xl" />,
+                icon: <FaCrown className="text-3xl" />,
                 title: "Excellence",
-                description: "Striving for perfection in every detail",
-                color: "text-yellow-500",
-                bgColor: "bg-yellow-50",
+                description: "Striving for absolute perfection in every intricate detail.",
+                color: "text-amber-500",
+                bgColor: "bg-amber-50/70 border-amber-100",
               },
               {
-                icon: <FaGlobe className="text-3xl md:text-4xl" />,
+                icon: <FaGlobe className="text-3xl" />,
                 title: "Sustainability",
-                description: "Eco-friendly packaging and sourcing",
-                color: "text-green-600",
-                bgColor: "bg-green-50",
+                description: "Eco-friendly packaging and responsible local sourcing.",
+                color: "text-teal-600",
+                bgColor: "bg-teal-50/70 border-teal-100",
               },
               {
-                icon: <FaHandsHelping className="text-3xl md:text-4xl" />,
+                icon: <FaHandsHelping className="text-3xl" />,
                 title: "Customer First",
-                description: "Your happiness is our priority",
+                description: "Your absolute happiness is always our top priority.",
                 color: "text-purple-500",
-                bgColor: "bg-purple-50",
+                bgColor: "bg-purple-50/70 border-purple-100",
               },
             ].map((value, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                whileHover={{ y: -10 }}
-                className={`${value.bgColor} p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-lg hover:shadow-xl transition-shadow duration-300`}
+                whileHover={{ y: -6 }}
+                className={`${value.bgColor} backdrop-blur-sm p-7 rounded-3xl border shadow-lg shadow-gray-100 hover:shadow-xl transition-all duration-300 cursor-pointer`}
               >
-                <motion.div
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className={`${value.color} mb-4 md:mb-6`}
-                >
+                <div className={`${value.color} mb-4 inline-block p-3 rounded-2xl bg-white shadow-sm`}>
                   {value.icon}
-                </motion.div>
-                <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-3 md:mb-4">
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
                   {value.title}
                 </h3>
-                <p className="text-gray-600 text-sm md:text-base">{value.description}</p>
+                <p className="text-gray-600 text-sm leading-relaxed">{value.description}</p>
               </motion.div>
             ))}
           </div>
@@ -367,33 +366,34 @@ function About() {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 1 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="mb-16 md:mb-20"
+          className="mb-20 md:mb-28"
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8 md:mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12 tracking-tight">
             Meet Our Master Bakers
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3   gap-8 px-2">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-2">
             {bakers.map((baker, idx) => (
               <motion.div
                 key={idx}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: idx * 0.2 }}
+                transition={{ duration: 0.5, delay: idx * 0.15 }}
                 viewport={{ once: true }}
-                whileHover={{ y: -10 }}
-                className="bg-white rounded-2xl  cursor-pointer overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
+                whileHover={{ y: -8 }}
+                className="bg-white/80 backdrop-blur-md rounded-3xl overflow-hidden shadow-xl border border-pink-100/60 hover:shadow-2xl transition-all duration-300"
               >
-                <div className="h-64 overflow-hidden">
+                <div className="h-72 overflow-hidden relative">
                   <img
                     src={baker.image}
                     alt={baker.name}
-                    className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
+                    className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-700"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60"></div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800">{baker.name}</h3>
-                  <p className="text-pink-500 font-medium mb-3">{baker.role}</p>
-                  <p className="text-gray-600">{baker.description}</p>
+                  <h3 className="text-xl font-bold text-gray-900">{baker.name}</h3>
+                  <p className="text-pink-500 font-semibold text-sm mb-3">{baker.role}</p>
+                  <p className="text-gray-600 text-sm leading-relaxed">{baker.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -406,26 +406,30 @@ function About() {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 1 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="mb-16 md:mb-20 px-2"
+          className="mb-20 md:mb-28 px-2"
         >
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-800 mb-8 md:mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12 tracking-tight">
             What Our Customers Say
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {testimonials.map((testimonial, idx) => (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: idx * 0.1 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -5 }}
-                className="bg-white p-6 rounded-2xl shadow-lg relative"
+                className="bg-white/80 backdrop-blur-md p-7 rounded-3xl shadow-xl border border-pink-100/60 relative flex flex-col justify-between"
               >
-                <FaQuoteLeft className="text-pink-200 text-3xl mb-4" />
-                <p className="text-gray-600 italic mb-4">"{testimonial.text}"</p>
-                <div className="font-semibold text-gray-800">{testimonial.name}</div>
-                <div className="text-sm text-gray-500">{testimonial.role}</div>
+                <div>
+                  <FaQuoteLeft className="text-pink-200 text-3xl mb-4" />
+                  <p className="text-gray-600 italic mb-6 text-sm sm:text-base leading-relaxed">"{testimonial.text}"</p>
+                </div>
+                <div>
+                  <div className="font-bold text-gray-900">{testimonial.name}</div>
+                  <div className="text-xs text-pink-500 font-medium">{testimonial.role}</div>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -437,30 +441,26 @@ function About() {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 1 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="bg-gradient-to-r from-pink-500 to-orange-400 rounded-2xl md:rounded-3xl p-6 md:p-8 lg:p-12 text-white mb-16 md:mb-20 mx-2 md:mx-0"
+          className="bg-gradient-to-r from-pink-500 via-rose-500 to-orange-400 rounded-3xl p-8 md:p-12 text-white mb-20 md:mb-28 shadow-xl shadow-pink-500/20 mx-2 md:mx-0"
         >
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 md:gap-8 text-center">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 text-center">
             {[
               { number: "10K+", label: "Happy Customers" },
               { number: "5K+", label: "Cakes Baked" },
               { number: "50+", label: "Dessert Varieties" },
               { number: "24/7", label: "Support" },
-              { number: "15+", label: "Years of Excellence" },
-              { number: "100%", label: "Natural Ingredients" },
+              { number: "15+", label: "Years Experience" },
+              { number: "100%", label: "Natural Quality" },
             ].map((stat, index) => (
               <motion.div
                 key={index}
-                initial={{ scale: 0 }}
-                whileInView={{ scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
                 whileHover={{ scale: 1.05 }}
-                className="space-y-1 md:space-y-2 p-2"
+                className="space-y-1 p-2"
               >
-                <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">
+                <div className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
                   {stat.number}
                 </div>
-                <div className="text-xs sm:text-sm md:text-base lg:text-lg opacity-90">
+                <div className="text-xs sm:text-sm opacity-90 font-medium">
                   {stat.label}
                 </div>
               </motion.div>
@@ -474,24 +474,24 @@ function About() {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 1 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="mb-16 md:mb-20 px-2"
+          className="mb-20 md:mb-28 px-2"
         >
-          <div className="bg-green-50 rounded-2xl p-8 md:p-10 flex flex-col md:flex-row items-center gap-8">
+          <div className="bg-emerald-50/70 backdrop-blur-md border border-emerald-100 rounded-3xl p-8 md:p-10 flex flex-col md:flex-row items-center gap-8 shadow-lg">
             <motion.div
-              animate={{ rotate: [0, 5, -5, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="text-green-600 text-6xl"
+              animate={{ rotate: [0, 8, -8, 0] }}
+              transition={{ duration: 3, repeat: Infinity }}
+              className="text-emerald-600 text-6xl p-4 bg-white rounded-2xl shadow-sm"
             >
               <FaLeaf />
             </motion.div>
             <div className="text-center md:text-left">
-              <h3 className="text-2xl md:text-3xl font-bold text-gray-800 mb-3">
+              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
                 Our Commitment to Sustainability
               </h3>
-              <p className="text-gray-600 text-base md:text-lg">
-                We believe in caring for our planet. That's why we use eco-friendly packaging,
-                source ingredients locally, and minimize food waste. Every cake we make
-                is a step toward a sweeter, greener future.
+              <p className="text-gray-600 text-base md:text-lg leading-relaxed">
+                We believe in caring for our planet just as much as we care for our baking. 
+                Using eco-friendly packaging, local ingredient sourcing, and minimizing food waste ensures 
+                every single cake contributes toward a greener, sweeter future.
               </p>
             </div>
           </div>
@@ -503,38 +503,39 @@ function About() {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 1 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="text-center px-2 pb-8"
+          className="text-center px-2 pb-12"
         >
-          <motion.div animate={floatingAnimation} className="mb-6 md:mb-8">
-            <FaBirthdayCake className="text-5xl md:text-6xl text-pink-500 mx-auto" />
+          <motion.div animate={floatingAnimation} className="mb-6">
+            <FaBirthdayCake className="text-5xl md:text-6xl text-pink-500 mx-auto drop-shadow-sm" />
           </motion.div>
 
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 md:mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">
             Ready to Taste the Magic?
           </h2>
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 md:mb-8 max-w-xl md:max-w-2xl mx-auto">
-            Visit us today or order online to experience our sweet creations.
+          <p className="text-base sm:text-lg text-gray-600 mb-8 max-w-xl mx-auto leading-relaxed">
+            Visit us today or place an order online to experience our fresh, handcrafted creations.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="w-full sm:w-auto">
               <Link
                 to="/contact"
-                className="inline-block w-full sm:w-auto bg-gradient-to-r from-pink-500 to-orange-400 text-white px-6 py-3 sm:px-8 sm:py-3 rounded-full font-semibold text-sm sm:text-base md:text-lg hover:shadow-xl transition-all duration-300 text-center"
+                className="inline-flex items-center justify-center w-full sm:w-auto bg-gradient-to-r from-pink-500 to-rose-500 text-white px-8 py-3.5 rounded-full font-semibold text-base shadow-lg shadow-pink-500/25 hover:shadow-xl hover:shadow-pink-500/40 transition-all duration-300"
               >
                 Order Online
               </Link>
             </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
+            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="w-full sm:w-auto">
               <Link
                 to="/contact"
-                className="inline-block w-full sm:w-auto border-2 border-pink-500 text-pink-600 px-6 py-3 sm:px-8 sm:py-3 rounded-full font-semibold text-sm sm:text-base md:text-lg hover:bg-pink-50 transition-all duration-300 text-center"
+                className="inline-flex items-center justify-center w-full sm:w-auto border-2 border-pink-400 text-pink-600 px-8 py-3.5 rounded-full font-semibold text-base hover:bg-pink-50 transition-all duration-300"
               >
                 Book a Consultation
               </Link>
             </motion.div>
           </div>
         </motion.div>
+
       </div>
       <FooterContent />
     </div>
