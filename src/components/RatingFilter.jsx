@@ -2,7 +2,6 @@ import Rating from "./Rating";
 
 const RatingFilter = ({ onChangeRating, selectedRating }) => {
   const handleRatingClick = (rating) => {
-    
     if (rating === selectedRating) {
       onChangeRating(null); 
     } else {
@@ -11,10 +10,10 @@ const RatingFilter = ({ onChangeRating, selectedRating }) => {
   };
 
   return (
-    <div className="h-48 p-5 cursor-pointer space-y-2 border border-gray-200 shadow-lg rounded-md">
+    <div className="h-48 p-5 cursor-pointer space-y-2 bg-white dark:bg-[#26120e] border border-gray-200 dark:border-zinc-800 shadow-lg rounded-md transition-colors duration-300">
       {[5, 4, 3, 2, 1].map((rating) => (
         <div
-          className="flex items-center gap-2 hover:opacity-70"
+          className="flex items-center gap-2 hover:opacity-70 transition-opacity"
           key={rating}
           onClick={() => handleRatingClick(rating)}
         >
@@ -24,7 +23,7 @@ const RatingFilter = ({ onChangeRating, selectedRating }) => {
               rating === selectedRating ? " !text-[#ff3d47]" : ""
             }`}
           />
-          <p className="text-gray-400">
+          <p className="text-gray-400 dark:text-gray-400 text-sm font-medium">
             {rating === 5 ? 5.0 : rating.toFixed(1) + " +"}
           </p>
         </div>

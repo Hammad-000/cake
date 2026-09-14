@@ -1,4 +1,3 @@
-// CategoryFilter.jsx
 import { useMemo } from 'react';
 import Checkbox from "./Cheakbox";
 
@@ -22,7 +21,7 @@ const CategoryFilter = ({ products, selectedCategories, onChangeCategory, isMobi
           checked={selectedCategories.includes(category)}
           onChange={(e) => handleCheckboxChange(category, e.target.checked)}
           className="mb-2"
-          labelClassName="text-gray-700"
+          labelClassName="text-gray-700 dark:text-gray-300 font-medium transition-colors"
         />
       ))}
     </div>
