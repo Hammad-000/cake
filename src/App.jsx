@@ -15,39 +15,43 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext'; // ThemeProvider import karein
 
 function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
-        <Router>
-          <Navbar />
-          <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute allowedRoles={["admin"]}>
-                    <Dashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/about" element={<About />} />
-              <Route path="/product/:id" element={<ProductDetailpg />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/logout" element={<Logout />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/menu" element={<Menu />} />
-              <Route path="/profile" element={<div>Profile Page</div>} />
-              <Route path="*" element={<Error />} />
-            </Routes>
-          </div>
-        </Router>
-      </CartProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <CartProvider>
+          <Router>
+            {/* Background container light me White/Pink-50 aur dark me Deep Chocolate (#1c0d0a) ban jayega */}
+            <div className="min-h-screen transition-colors duration-300 bg-pink-50/30 text-slate-800 dark:bg-[#1c0d0a] dark:text-[#f3e5d8]">
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute allowedRoles={["admin"]}>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/about" element={<About />} />
+                <Route path="/product/:id" element={<ProductDetailpg />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/logout" element={<Logout />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/menu" element={<Menu />} />
+                <Route path="/profile" element={<div>Profile Page</div>} />
+                <Route path="*" element={<Error />} />
+              </Routes>
+            </div>
+          </Router>
+        </CartProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

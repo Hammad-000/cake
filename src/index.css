@@ -1,2 +1,30 @@
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --bg-main: #fff5f7;
+    --text-main: #1f2937;
+  }
+
+  .dark {
+    --bg-main: #1c0d0a; 
+    --text-main: #f3e5d8; 
+  }
+
+  body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+/* Brand Logo Color Helpers */
+.text-brand-primary {
+  @apply text-slate-900 dark:text-white;
+}
+
+.text-brand-secondary {
+  @apply text-pink-600 dark:text-pink-300;
+}

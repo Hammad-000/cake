@@ -94,7 +94,7 @@ const handleSubmit = async (e) => {
 };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 px-4 py-8 relative overflow-hidden">
+    <div className="min-h-screen dark:bg-[#1c0d0a] dark:text-[#f3e5d8] bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 px-4 py-8 relative overflow-hidden">
       {/* Main content container with bottom margin */}
       <div className="relative w-full max-w-6xl mx-auto z-10 mb-8">
         <div className="grid md:grid-cols-2 gap-8 items-center bg-white/40 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-8 border border-white/50">
