@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import axios from "axios";
+import API from "../services/api";
 import { motion, AnimatePresence } from "framer-motion";
 import CategoryFilter from "../components/CategoryFilter";
 import RatingFilter from "../components/RatingFilter";
@@ -30,7 +30,7 @@ function Menu() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("https://cakes-backend-gamma.vercel.app/api/products");
+        const response = await API.get("/products");
         let products = [];
         if (response.data?.products && Array.isArray(response.data.products)) {
           products = response.data.products;
@@ -423,7 +423,7 @@ function Menu() {
               </span>
             </div>
 
-            {/* SKELETON LOADING GRID */}
+            {/* SKELETON LOADING GRID (Theme Matched) */}
             {loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[1, 2, 3, 4, 5, 6].map((n) => (

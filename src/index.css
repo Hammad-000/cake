@@ -28,3 +28,68 @@
 .text-brand-secondary {
   @apply text-pink-600 dark:text-pink-300;
 }
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 5rem;
+}
+
+/* Light Theme Variables */
+.navbar-light {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+.navbar-light .nav-link-hover:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+.navbar-light .nav-link-active {
+  background-color: #ec4899;
+  color: #ffffff;
+  box-shadow: 0 10px 15px -3px rgba(236, 72, 153, 0.2);
+}
+
+.navbar-light .logo-box {
+  background-color: #ec4899;
+  color: #ffffff;
+}
+
+.navbar-light .cart-badge {
+  background-color: #ec4899;
+  color: #ffffff;
+}
+
+/* Dark Theme Variables */
+.navbar-dark {
+  background-color: rgba(28, 13, 10, 0.95);
+  backdrop-filter: blur(12px);
+  border-color: #27272a;
+  color: #f3e5d8;
+}
+
+.navbar-dark .nav-link-hover:hover {
+  background-color: rgba(39, 39, 42, 0.8);
+  color: #ffffff;
+}
+
+.navbar-dark .nav-link-active {
+  background-color: #db2777;
+  color: #ffffff;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-dark .logo-box {
+  background-color: #db2777;
+  color: #ffffff;
+}
+
+.navbar-dark .cart-badge {
+  background-color: #fde047;
+  color: #831843;
+}

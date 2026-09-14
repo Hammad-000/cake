@@ -1,8 +1,6 @@
-// PriceRange.jsx
 function PriceRange({ priceRange, initPriceRange, setPriceRange, isMobile }) {
   const handleMinChange = (value) => {
     const newMin = parseInt(value);
-    // Prevent min from exceeding max
     const finalMin = Math.min(newMin, priceRange.max);
     setPriceRange({
       ...priceRange,
@@ -13,7 +11,6 @@ function PriceRange({ priceRange, initPriceRange, setPriceRange, isMobile }) {
 
   const handleMaxChange = (value) => {
     const newMax = parseInt(value);
-    // Prevent max from going below min
     const finalMax = Math.max(newMax, priceRange.min);
     setPriceRange({
       ...priceRange,
@@ -23,7 +20,11 @@ function PriceRange({ priceRange, initPriceRange, setPriceRange, isMobile }) {
   };
 
   const resetPrice = () => {
-    setPriceRange(initPriceFilter); // make sure initPriceFilter is passed correctly
+    setPriceRange({
+      min: initPriceRange.min,
+      max: initPriceRange.max,
+      isApplied: false
+    }); 
   };
 
   return (
@@ -52,7 +53,7 @@ function PriceRange({ priceRange, initPriceRange, setPriceRange, isMobile }) {
               max={initPriceRange.max}
               value={priceRange.min}
               onChange={(e) => handleMinChange(e.target.value)}
-              className={`w-full ${isMobile ? 'h-3' : 'h-2'} bg-gray-200 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-pink-500 [&::-webkit-slider-thumb]:shadow-lg`}
+              className={`w-full ${isMobile ? 'h-3' : 'h-2'} bg-gray-200 dark:bg-zinc-800 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-pink-500 [&::-webkit-slider-thumb]:shadow-lg`}
             />
           </div>
           {/* Max Slider */}
@@ -63,12 +64,12 @@ function PriceRange({ priceRange, initPriceRange, setPriceRange, isMobile }) {
               max={initPriceRange.max}
               value={priceRange.max}
               onChange={(e) => handleMaxChange(e.target.value)}
-              className={`w-full ${isMobile ? 'h-3' : 'h-2'} bg-gray-200 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-pink-500 [&::-webkit-slider-thumb]:shadow-lg`}
+              className={`w-full ${isMobile ? 'h-3' : 'h-2'} bg-gray-200 dark:bg-zinc-800 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-pink-500 [&::-webkit-slider-thumb]:shadow-lg`}
             />
           </div>
         </div>
 
-        <div className="flex justify-between text-gray-500 text-sm mt-2">
+        <div className="flex justify-between text-gray-500 dark:text-gray-400 text-sm mt-2">
           <span>Rs.{initPriceRange.min}</span>
           <span>Rs.{initPriceRange.max}</span>
         </div>
@@ -76,4 +77,5 @@ function PriceRange({ priceRange, initPriceRange, setPriceRange, isMobile }) {
     </div>
   );
 }
+
 export default PriceRange;
