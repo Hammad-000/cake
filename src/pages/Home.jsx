@@ -7,15 +7,15 @@ import { AiOutlineClockCircle, AiOutlineStar, AiFillStar, AiOutlineFire } from "
 import { FiHeadphones, FiChevronLeft, FiChevronRight, FiArrowRight } from "react-icons/fi";
 import FooterContent from "../components/FooterContent";
 
-/* Palette: blush #FFF5F6 / cocoa #2B1511 / raspberry #C2305F / caramel #E0A458 */
+/* Palette: ivory #F7F0E6 / espresso #140A07 / chocolate #2B1511 / gold #C9A66B (bronze #8A5A1E on light) */
 // Same base URL as the rest of the app (services/api.js), e.g. https://.../api
 // API_BASE is only used to build image URLs, so the trailing /api is removed.
 const API_BASE = (API.defaults.baseURL || "").replace(/\/api\/?$/, "");
 const serif = "font-[Fraunces,Georgia,serif]";
 const focus =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C2305F]";
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8A5A1E] dark:focus-visible:outline-[#D4B27A]";
 const muted = "text-[#2B1511]/65 dark:text-[#f3e5d8]/65";
-const line = "border-[#2B1511]/10 dark:border-white/10";
+const line = "border-[#2B1511]/10 dark:border-[#C9A66B]/20";
 const container = "mx-auto w-full max-w-6xl px-4 sm:px-6";
 
 const SLIDES = [
@@ -93,12 +93,12 @@ function Hero() {
   }, [next, paused, index]);
 
   const slide = SLIDES[index];
-  const arrow = `flex h-11 w-11 items-center justify-center rounded-full border ${line} transition hover:bg-[#C2305F] hover:text-white ${focus}`;
+  const arrow = `flex h-11 w-11 items-center justify-center rounded-full border ${line} transition hover:bg-[#2B1511] hover:text-[#F7F0E6] dark:hover:bg-[#C9A66B] dark:hover:text-[#1a0d09] ${focus}`;
 
   return (
     <section className="grid items-center gap-12 pb-16 pt-8 lg:grid-cols-2 lg:gap-16 lg:pt-14">
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-        <h1 className={`${serif} text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl xl:text-7xl`}>
+        <h1 className={`${serif} text-5xl font-medium leading-[1.05] tracking-tight sm:text-6xl xl:text-7xl`}>
           Cakes made for the moments worth celebrating.
         </h1>
         <p className={`mt-6 max-w-md text-lg leading-relaxed ${muted}`}>
@@ -107,13 +107,13 @@ function Hero() {
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
             to="/menu"
-            className={`inline-flex items-center gap-2 rounded-full bg-[#C2305F] px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-[#a52550] ${focus}`}
+            className={`inline-flex items-center gap-2 rounded-full bg-[#2B1511] text-[#F7F0E6] hover:bg-[#4a251b] dark:bg-[#C9A66B] dark:text-[#1a0d09] dark:hover:bg-[#d8b87d] px-7 py-3.5 text-sm font-semibold transition ${focus}`}
           >
             Order a cake <FiArrowRight />
           </Link>
           <Link
             to="/contact"
-            className={`inline-flex items-center rounded-full border-2 border-[#2B1511]/20 px-7 py-3.5 text-sm font-semibold transition hover:border-[#C2305F] hover:text-[#C2305F] dark:border-white/20 ${focus}`}
+            className={`inline-flex items-center rounded-full border-2 border-[#2B1511]/20 px-7 py-3.5 text-sm font-semibold transition hover:border-[#8A5A1E] hover:text-[#8A5A1E] dark:hover:border-[#D4B27A] dark:hover:text-[#D4B27A] dark:border-white/20 ${focus}`}
           >
             Custom order
           </Link>
@@ -159,7 +159,7 @@ function Hero() {
                 aria-label={`Go to slide ${i + 1}`}
                 aria-current={i === index}
                 className={`h-2 rounded-full transition-all duration-300 ${focus} ${
-                  i === index ? "w-7 bg-[#C2305F]" : "w-2 bg-[#2B1511]/25 hover:bg-[#2B1511]/50 dark:bg-white/30"
+                  i === index ? "w-7 bg-[#8A5A1E] dark:bg-[#D4B27A]" : "w-2 bg-[#2B1511]/25 hover:bg-[#2B1511]/50 dark:bg-white/30"
                 }`}
               />
             ))}
@@ -177,10 +177,10 @@ function Hero() {
 /* ---------- Perks ---------- */
 function Perks() {
   return (
-    <ul className={`grid gap-8 border-y py-8 md:grid-cols-3 md:gap-0 md:divide-x ${line} md:divide-[#2B1511]/10 dark:md:divide-white/10`}>
+    <ul className={`grid gap-8 border-y py-8 md:grid-cols-3 md:gap-0 md:divide-x ${line} md:divide-[#2B1511]/10 dark:md:divide-[#C9A66B]/20`}>
       {PERKS.map(({ Icon, title, text }) => (
         <li key={title} className="flex items-start gap-4 md:px-8 md:first:pl-0 md:last:pr-0">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#C2305F]/10 text-xl text-[#C2305F]">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#8A5A1E]/10 dark:bg-[#D4B27A]/15 text-xl text-[#8A5A1E] dark:text-[#D4B27A]">
             <Icon />
           </span>
           <div>
@@ -214,7 +214,7 @@ function FeaturedCard({ dish, large }) {
       />
       <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#2B1511]/90 via-[#2B1511]/25 to-transparent" />
       {dish.popular && (
-        <span className="absolute left-4 top-4 inline-flex items-center gap-1 rounded-full bg-[#E0A458] px-3 py-1 text-xs font-semibold text-[#2B1511]">
+        <span className="absolute left-4 top-4 inline-flex items-center gap-1 rounded-full bg-[#C9A66B] px-3 py-1 text-xs font-semibold text-[#2B1511]">
           <AiOutlineFire /> Popular
         </span>
       )}
@@ -225,7 +225,7 @@ function FeaturedCard({ dish, large }) {
           <span className="text-lg font-semibold">{formatPrice(dish.price)}</span>
           <Link
             to="/menu"
-            className={`rounded-full bg-white px-5 py-2 text-sm font-semibold text-[#2B1511] transition hover:bg-[#C2305F] hover:text-white ${focus}`}
+            className={`rounded-full bg-white px-5 py-2 text-sm font-semibold text-[#2B1511] transition hover:bg-[#2B1511] hover:text-[#F7F0E6] dark:hover:bg-[#C9A66B] dark:hover:text-[#1a0d09] ${focus}`}
           >
             Order now
           </Link>
@@ -269,11 +269,11 @@ function ProductCard({ item }) {
       </div>
       <div className="mt-3 flex items-start justify-between gap-3">
         <h3 className="line-clamp-1 font-medium">{item.name}</h3>
-        <span className="shrink-0 font-semibold text-[#C2305F]">{formatPrice(item.price)}</span>
+        <span className="shrink-0 font-semibold text-[#8A5A1E] dark:text-[#D4B27A]">{formatPrice(item.price)}</span>
       </div>
       {item.rating ? (
         <p className={`mt-1 flex items-center gap-1 text-sm ${muted}`}>
-          <AiFillStar className="text-[#E0A458]" /> {item.rating}
+          <AiFillStar className="text-[#C9A66B]" /> {item.rating}
         </p>
       ) : null}
     </Link>
@@ -336,8 +336,8 @@ function Specialties() {
               aria-pressed={active === id}
               className={`shrink-0 border-b-2 pb-2 text-sm font-medium capitalize transition ${focus} ${
                 active === id
-                  ? "border-[#C2305F] text-[#C2305F]"
-                  : `border-transparent ${muted} hover:text-[#C2305F]`
+                  ? "border-[#8A5A1E] text-[#8A5A1E] dark:border-[#D4B27A] dark:text-[#D4B27A]"
+                  : `border-transparent ${muted} hover:text-[#8A5A1E] dark:hover:text-[#D4B27A]`
               }`}
             >
               {id === "all" ? "All" : id} <span className="ml-1 text-xs opacity-70">{count}</span>
@@ -364,7 +364,7 @@ function Specialties() {
             <p className={`mt-1 text-sm ${muted}`}>Check your connection and try again.</p>
             <button
               onClick={retry}
-              className={`mt-5 rounded-full bg-[#C2305F] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#a52550] ${focus}`}
+              className={`mt-5 rounded-full bg-[#2B1511] text-[#F7F0E6] hover:bg-[#4a251b] dark:bg-[#C9A66B] dark:text-[#1a0d09] dark:hover:bg-[#d8b87d] px-6 py-2.5 text-sm font-semibold transition ${focus}`}
             >
               Try again
             </button>
@@ -393,7 +393,7 @@ function Specialties() {
       <div className="mt-12 text-center">
         <Link
           to="/menu"
-          className={`inline-flex items-center gap-2 rounded-full border-2 border-[#2B1511]/20 px-7 py-3 text-sm font-semibold transition hover:border-[#C2305F] hover:text-[#C2305F] dark:border-white/20 ${focus}`}
+          className={`inline-flex items-center gap-2 rounded-full border-2 border-[#2B1511]/20 px-7 py-3 text-sm font-semibold transition hover:border-[#8A5A1E] hover:text-[#8A5A1E] dark:hover:border-[#D4B27A] dark:hover:text-[#D4B27A] dark:border-white/20 ${focus}`}
         >
           See the full menu <FiArrowRight />
         </Link>
@@ -406,7 +406,7 @@ function Specialties() {
 function CustomOrder() {
   return (
     <section className="pb-20">
-      <div className="grid gap-12 rounded-3xl bg-[#2B1511] p-8 text-[#f3e5d8] sm:p-12 lg:grid-cols-2 lg:gap-16 dark:bg-white/5">
+      <div className="grid gap-12 rounded-3xl bg-[#2B1511] p-8 text-[#f3e5d8] sm:p-12 lg:grid-cols-2 lg:gap-16 dark:bg-[#2B1511]">
         <div>
           <h2 className={`${serif} text-3xl font-semibold leading-tight sm:text-4xl`}>
             Have a special cake in mind?
@@ -416,7 +416,7 @@ function CustomOrder() {
           </p>
           <Link
             to="/contact"
-            className={`mt-8 inline-flex items-center gap-2 rounded-full bg-[#C2305F] px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-[#d6396b] ${focus}`}
+            className={`mt-8 inline-flex items-center gap-2 rounded-full bg-[#C9A66B] px-7 py-3.5 text-sm font-semibold text-[#1a0d09] transition hover:bg-[#d8b87d] ${focus}`}
           >
             Start a custom order <FiArrowRight />
           </Link>
@@ -440,7 +440,7 @@ function CustomOrder() {
 function Home() {
   return (
     <MotionConfig reducedMotion="user">
-      <div className="flex min-h-screen flex-col overflow-x-hidden bg-[#FFF5F6] text-[#2B1511] dark:bg-[#1c0d0a] dark:text-[#f3e5d8]">
+      <div className="flex min-h-screen flex-col overflow-x-hidden bg-[#F7F0E6] text-[#2B1511] dark:bg-[#140A07] dark:text-[#f3e5d8]">
         <main className={`${container} grow`}>
           <Hero />
           <Perks />

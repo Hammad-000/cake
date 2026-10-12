@@ -35,12 +35,12 @@ function Navbar() {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // NOTE: abhi token localStorage se pada ja raha hai ("token" key).
+  // NOTE: abhi token localStorage se pada ja raha hai ("authToken" key).
   // Agar aap ke paas AuthContext hai to isay us se replace kar do,
   // warna login ke baad Navbar khud update nahi hoga.
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     try {
-      return Boolean(localStorage.getItem("token"));
+      return Boolean(localStorage.getItem("authToken"));
     } catch {
       return false;
     }
@@ -50,7 +50,7 @@ function Navbar() {
 
   const handleLogout = () => {
     try {
-      localStorage.removeItem("token");
+      localStorage.removeItem("authToken");
     } catch {
       /* ignore */
     }
