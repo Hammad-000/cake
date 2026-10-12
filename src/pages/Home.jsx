@@ -1,444 +1,456 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import axios from "axios";
-import { AiOutlineArrowRight, AiOutlineStar, AiOutlineFire, AiOutlineClockCircle } from "react-icons/ai";
-import { FiHeadphones, FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import { motion, AnimatePresence } from "framer-motion";
-import FooterContent from "../components/FooterContent";
+import API from "../services/api";
 import { Link } from "react-router-dom";
+import { motion, AnimatePresence, MotionConfig } from "motion/react";
+import { AiOutlineClockCircle, AiOutlineStar, AiFillStar, AiOutlineFire } from "react-icons/ai";
+import { FiHeadphones, FiChevronLeft, FiChevronRight, FiArrowRight } from "react-icons/fi";
+import FooterContent from "../components/FooterContent";
 
-const SLIDER_IMAGES = [
-  { src: "/images/slider 2.jfif", title: "Contact Us", subtitle: "Sweet, indulgent perfection" },
-  { src: "/images/slider 3.jfif", title: "Premium Quality Meats", subtitle: "Savor the rich, sweet flavor" },
-  { src: "/images/cake13.webp", title: "Artisanal Creations", subtitle: "Crafted with sweet love" },
-  { src: "/images/cake10.webp", title: "Family Feast", subtitle: "Sweet moments, shared with love" },
-  { src: "/images/cake4.webp", title: "Signature Recipes", subtitle: "Sweetened with tradition" },
-  { src: "/images/cake1.jpg", title: "Slow-Baked Delights", subtitle: "Sweetly tender, always irresistible" }
+/* Palette: blush #FFF5F6 / cocoa #2B1511 / raspberry #C2305F / caramel #E0A458 */
+// Same base URL as the rest of the app (services/api.js), e.g. https://.../api
+// API_BASE is only used to build image URLs, so the trailing /api is removed.
+const API_BASE = (API.defaults.baseURL || "").replace(/\/api\/?$/, "");
+const serif = "font-[Fraunces,Georgia,serif]";
+const focus =
+  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C2305F]";
+const muted = "text-[#2B1511]/65 dark:text-[#f3e5d8]/65";
+const line = "border-[#2B1511]/10 dark:border-white/10";
+const container = "mx-auto w-full max-w-6xl px-4 sm:px-6";
+
+const SLIDES = [
+  { src: "/images/slider 2.jfif", title: "Made for birthdays", subtitle: "Sweet, indulgent perfection" },
+  { src: "/images/slider 3.jfif", title: "Fresh from the oven", subtitle: "Rich, sweet flavour in every slice" },
+  { src: "/images/cake13.webp", title: "Artisanal creations", subtitle: "Crafted with sweet love" },
+  { src: "/images/cake10.webp", title: "Family celebrations", subtitle: "Sweet moments, shared with love" },
+  { src: "/images/cake4.webp", title: "Signature recipes", subtitle: "Sweetened with tradition" },
+  { src: "/images/cake1.jpg", title: "Slow-baked delights", subtitle: "Tender, soft and always irresistible" },
 ];
 
-const FEATURED_DISHES = [
+const FEATURED = [
   {
     img: "/images/cake2.jpg",
     name: "Quarter Sweet Cake",
-    description: "Crispy outer layer with a rich, velvety center - our ultimate signature item.",
+    description: "Crispy outer layer with a rich, velvety center. Our ultimate signature.",
     price: "2800",
-    popular: true
+    popular: true,
   },
   {
     img: "/images/cake8.jpg",
     name: "Classic Chocolate Cake",
-    description: "Slow-baked to perfection with premium Belgian cocoa and smooth ganache.",
+    description: "Slow-baked with premium Belgian cocoa and smooth ganache.",
     price: "3500",
-    popular: false
   },
   {
     img: "/images/cake20.jpg",
     name: "Hazelnut Supreme",
-    description: "Rich hazelnut layers topped with creamy frosting and roasted nuts crunch.",
+    description: "Rich hazelnut layers, creamy frosting and a roasted nut crunch.",
     price: "4000",
-    popular: true
-  }
+    popular: true,
+  },
 ];
 
-function Home() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [activeCategory, setActiveCategory] = useState("all");
-  const [allProducts, setAllProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+const PERKS = [
+  { Icon: AiOutlineClockCircle, title: "Fast delivery", text: "30-minute delivery, or 50% off your order." },
+  { Icon: AiOutlineStar, title: "Baked fresh daily", text: "High-grade, local ingredients in every cake." },
+  { Icon: FiHeadphones, title: "Friendly support", text: "Our team helps you with every order." },
+];
 
-  // Fetch products on mount
+const STEPS = [
+  "Pick a cake from the menu, or describe your idea.",
+  "We confirm the flavour, size and price with you.",
+  "Pick it up or get it delivered, fresh.",
+];
+
+const imageFor = (item) => {
+  const raw = item.imageUrl || item.image || item.picture;
+  if (!raw) return "/placeholder.jpg";
+  return raw.startsWith("http") ? raw : `${API_BASE}${raw}`;
+};
+
+const formatPrice = (p) => {
+  const n = Number(p);
+  return Number.isNaN(n) ? `Rs. ${p}` : `Rs. ${n.toLocaleString("en-PK")}`;
+};
+
+const showPlaceholder = (e) => {
+  e.currentTarget.onerror = null;
+  e.currentTarget.src = "/placeholder.jpg";
+};
+
+/* ---------- Hero ---------- */
+function Hero() {
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  const next = useCallback(() => setIndex((i) => (i + 1) % SLIDES.length), []);
+  const prev = useCallback(() => setIndex((i) => (i - 1 + SLIDES.length) % SLIDES.length), []);
+
   useEffect(() => {
-    let isMounted = true;
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get("https://cakes-backend-gamma.vercel.app/api/products");
-        if (isMounted && response.data?.products && Array.isArray(response.data.products)) {
-          setAllProducts(response.data.products);
-        }
-      } catch (err) {
-        console.error("Error fetching products:", err);
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
+    if (paused) return;
+    const timer = setInterval(next, 5000);
+    return () => clearInterval(timer);
+  }, [next, paused, index]);
 
-    fetchProducts();
-    return () => { isMounted = false; };
-  }, []);
-
-  // Slider Navigation Handlers
-  const nextImage = useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % SLIDER_IMAGES.length);
-  }, []);
-
-  const prevImage = useCallback(() => {
-    setCurrentIndex((prev) => (prev - 1 + SLIDER_IMAGES.length) % SLIDER_IMAGES.length);
-  }, []);
-
-  // Auto-play timer with clean reset on manual interaction
-  useEffect(() => {
-    const interval = setInterval(nextImage, 5000);
-    return () => clearInterval(interval);
-  }, [nextImage, currentIndex]);
-
-  // Derived Data Optimization
-  const specialties = useMemo(() => allProducts.slice(0, 12), [allProducts]);
-
-  const categories = useMemo(() => {
-    const uniqueCategories = Array.from(new Set(specialties.map((p) => p.category))).filter(Boolean);
-    return [
-      { id: "all", name: "All", count: specialties.length },
-      ...uniqueCategories.map((cat) => ({
-        id: cat,
-        name: cat,
-        count: specialties.filter((p) => p.category === cat).length
-      }))
-    ];
-  }, [specialties]);
-
-  const filteredSpecialties = useMemo(() => {
-    if (activeCategory === "all") return specialties;
-    return specialties.filter((item) => item.category === activeCategory);
-  }, [specialties, activeCategory]);
+  const slide = SLIDES[index];
+  const arrow = `flex h-11 w-11 items-center justify-center rounded-full border ${line} transition hover:bg-[#C2305F] hover:text-white ${focus}`;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b dark:bg-[#1c0d0a] dark:text-[#f3e5d8] from-gray-50 via-orange-50/10 to-white flex flex-col overflow-x-hidden text-gray-800">
-      <main className="container mx-auto px-4 sm:px-6 py-8 grow">
-        
-        {/* Hero Header Section */}
-        <header className="text-center mb-14 relative">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="relative inline-block"
+    <section className="grid items-center gap-12 pb-16 pt-8 lg:grid-cols-2 lg:gap-16 lg:pt-14">
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+        <h1 className={`${serif} text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl xl:text-7xl`}>
+          Cakes made for the moments worth celebrating.
+        </h1>
+        <p className={`mt-6 max-w-md text-lg leading-relaxed ${muted}`}>
+          Freshly baked cakes, pastries and custom orders, made with local ingredients and a lot of love.
+        </p>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link
+            to="/menu"
+            className={`inline-flex items-center gap-2 rounded-full bg-[#C2305F] px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-[#a52550] ${focus}`}
           >
-            <span className="text-xs sm:text-sm uppercase tracking-widest font-bold px-4 py-1.5 bg-pink-100 text-pink-600 rounded-full mb-4 inline-block shadow-sm">
-              ✨ Welcome to Bakery Paradise
-            </span>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mt-2 mb-4">
-              <span className="bg-gradient-to-r from-pink-500 via-orange-500 to-purple-600 bg-clip-text text-transparent">
-                CAKES VILLA
-              </span>
-            </h1>
-            <div className="w-24 h-1.5 bg-gradient-to-r from-pink-500 to-purple-500 mx-auto rounded-full mt-2" />
-          </motion.div>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            className="text-base sm:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mt-4 font-normal"
+            Order a cake <FiArrowRight />
+          </Link>
+          <Link
+            to="/contact"
+            className={`inline-flex items-center rounded-full border-2 border-[#2B1511]/20 px-7 py-3.5 text-sm font-semibold transition hover:border-[#C2305F] hover:text-[#C2305F] dark:border-white/20 ${focus}`}
           >
-            Indulge your senses with freshly baked artisanal cakes, pastries, and sweet moments crafted with love.
-          </motion.p>
-        </header>
+            Custom order
+          </Link>
+        </div>
+      </motion.div>
 
-        {/* Hero Image Slider */}
-        <section className="relative w-full max-w-6xl mx-auto mb-20" aria-label="Featured Creations Carousel">
-          <div className="relative w-full h-[380px] sm:h-[480px] md:h-[550px] overflow-hidden rounded-3xl shadow-2xl group border border-white/40">
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent z-10 pointer-events-none" />
-            
-            {/* Slide Details Overlay */}
-            <div className="absolute top-6 left-6 md:top-8 md:left-8 z-20">
-              <div className="bg-pink-600/90 backdrop-blur-md px-4 py-1.5 md:px-5 md:py-2.5 rounded-2xl shadow-lg inline-block">
-                <span className="font-bold text-white text-sm md:text-base tracking-wide">
-                  {SLIDER_IMAGES[currentIndex].title}
-                </span>
-              </div>
-              <div className="mt-2 block bg-black/40 backdrop-blur-md px-3 py-1 md:px-4 md:py-1.5 rounded-xl border border-white/10">
-                <span className="text-white/90 font-medium text-xs md:text-sm">
-                  {SLIDER_IMAGES[currentIndex].subtitle}
-                </span>
-              </div>
-            </div>
-
-            {/* Crossfade Slide Effect */}
-            <div className="relative w-full h-full">
-              <AnimatePresence mode="wait">
-                <motion.img
-                  key={currentIndex}
-                  src={SLIDER_IMAGES[currentIndex].src}
-                  alt={SLIDER_IMAGES[currentIndex].title}
-                  initial={{ opacity: 0, scale: 1.05 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.6, ease: "easeInOut" }}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-              </AnimatePresence>
-            </div>
-
-            {/* Navigation Controls */}
-            <button
-              onClick={prevImage}
-              aria-label="Previous Slide"
-              className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 text-white bg-black/40 hover:bg-black/70 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full transition-all duration-300 hover:scale-105 z-20 backdrop-blur-md border border-white/20 shadow-lg cursor-pointer"
-            >
-              <FiChevronLeft size={24} />
-            </button>
-            <button
-              onClick={nextImage}
-              aria-label="Next Slide"
-              className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 text-white bg-black/40 hover:bg-black/70 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full transition-all duration-300 hover:scale-105 z-20 backdrop-blur-md border border-white/20 shadow-lg cursor-pointer"
-            >
-              <FiChevronRight size={24} />
-            </button>
-
-            {/* Indicator Dots */}
-            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20">
-              <div className="flex gap-2 bg-black/30 backdrop-blur-md px-3 py-2 rounded-full border border-white/10">
-                {SLIDER_IMAGES.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentIndex(index)}
-                    aria-label={`Go to slide ${index + 1}`}
-                    className={`transition-all duration-300 rounded-full cursor-pointer ${
-                      index === currentIndex
-                        ? "w-6 h-2 bg-gradient-to-r from-pink-500 to-orange-400"
-                        : "w-2 h-2 bg-white/50 hover:bg-white"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Features Section */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-20">
-          {[
-            {
-              icon: <AiOutlineClockCircle className="text-2xl sm:text-3xl" />,
-              title: "Lightning Fast Delivery",
-              description: "30-minute delivery guaranteed or get 50% off your order.",
-              color: "from-emerald-400 to-green-600"
-            },
-            {
-              icon: <AiOutlineStar className="text-2xl sm:text-3xl" />,
-              title: "100% Premium Quality",
-              description: "Baked fresh daily using high-grade, local ingredients.",
-              color: "from-blue-400 to-indigo-600"
-            },
-            {
-              icon: <FiHeadphones className="text-2xl sm:text-3xl" />,
-              title: "Dedicated Support",
-              description: "Our friendly team is always here to assist your orders.",
-              color: "from-purple-400 to-pink-600"
-            }
-          ].map((feature, index) => (
-            <motion.div
+      <div
+        className="mx-auto w-full max-w-md lg:max-w-none"
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Featured cakes"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onFocus={() => setPaused(true)}
+        onBlur={() => setPaused(false)}
+      >
+        <div className="relative aspect-[4/5] overflow-hidden rounded-t-[999px] rounded-b-3xl bg-[#2B1511]/10 shadow-2xl shadow-[#2B1511]/20">
+          <AnimatePresence initial={false}>
+            <motion.img
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="bg-white/90 dark:bg-white/5 backdrop-blur-sm p-6 sm:p-8 rounded-3xl border border-gray-100 dark:border-white/10 shadow-xl hover:shadow-2xl transition-all duration-300 group hover:-translate-y-1"
-            >
-              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center text-white mb-5 shadow-md group-hover:scale-110 transition-transform duration-300`}>
-                {feature.icon}
-              </div>
-              <h3 className="text-lg sm:text-xl font-bold mb-2">{feature.title}</h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4">{feature.description}</p>
-              <div className="flex items-center text-pink-600 font-semibold text-sm group-hover:text-purple-600 transition-colors">
-                <span className="mr-1">Explore perks</span>
-                <AiOutlineArrowRight className="transform group-hover:translate-x-1 transition-transform" />
-              </div>
-            </motion.div>
-          ))}
-        </section>
-
-        {/* Featured Dishes Showcase */}
-        <section className="max-w-6xl mx-auto mb-20">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-extrabold">Featured Creations</h2>
-            <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base mt-2">Handcrafted favorites loved by our customers</p>
+              src={slide.src}
+              alt={slide.title}
+              initial={{ opacity: 0, scale: 1.06 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.7, ease: "easeInOut" }}
+              onError={showPlaceholder}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          </AnimatePresence>
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#2B1511]/85 to-transparent px-6 pb-6 pt-24 text-white">
+            <p aria-live="polite" className={`${serif} text-2xl font-semibold`}>{slide.title}</p>
+            <p className="mt-1 text-sm text-white/80">{slide.subtitle}</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-            {FEATURED_DISHES.map((dish, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="bg-white dark:bg-white/5 rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-white/10 flex flex-col group"
-              >
-                <div className="relative h-56 sm:h-64 overflow-hidden">
-                  <img
-                    src={dish.img}
-                    alt={dish.name}
-                    loading="lazy"
-                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-                  />
-                  {dish.popular && (
-                    <div className="absolute top-4 left-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-md">
-                      <AiOutlineFire /> Popular
-                    </div>
-                  )}
-                </div>
-                <div className="p-5 sm:p-6 flex flex-col grow">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-lg font-bold">{dish.name}</h3>
-                    <span className="text-lg font-bold text-pink-600">Rs.{dish.price}</span>
-                  </div>
-                  <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm mb-6 grow leading-relaxed">{dish.description}</p>
-                  
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-white/10">
-                    <div className="flex items-center text-amber-400 gap-0.5">
-                      {[...Array(5)].map((_, i) => (
-                        <AiOutlineStar key={i} className="fill-current text-sm" />
-                      ))}
-                      <span className="text-gray-500 dark:text-gray-400 ml-1.5 text-xs font-medium">(4.8)</span>
-                    </div>
-                    <Link
-                      to="/menu"
-                      className="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs sm:text-sm font-semibold rounded-xl hover:opacity-90 shadow-md transition-all"
-                    >
-                      Order Now
-                    </Link>
-                  </div>
-                </div>
-              </motion.div>
+        </div>
+
+        <div className="mt-5 flex items-center justify-between">
+          <div className="flex gap-2">
+            {SLIDES.map((s, i) => (
+              <button
+                key={s.title}
+                onClick={() => setIndex(i)}
+                aria-label={`Go to slide ${i + 1}`}
+                aria-current={i === index}
+                className={`h-2 rounded-full transition-all duration-300 ${focus} ${
+                  i === index ? "w-7 bg-[#C2305F]" : "w-2 bg-[#2B1511]/25 hover:bg-[#2B1511]/50 dark:bg-white/30"
+                }`}
+              />
             ))}
           </div>
-        </section>
-
-        {/* Specialties Gallery with Dynamic Categories */}
-        <section className="py-12 sm:py-16 px-4 bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-white/5 dark:to-transparent rounded-3xl mb-20 border border-gray-100 dark:border-white/10 shadow-sm">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-10">
-              <h2 className="text-3xl sm:text-4xl font-extrabold mb-3">
-                <span className="bg-gradient-to-r from-pink-500 via-orange-500 to-purple-600 bg-clip-text text-transparent">
-                  OUR SPECIALTIES
-                </span>
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400 max-w-xl mx-auto text-sm sm:text-base">
-                Browse through our wide assortment of freshly prepared baked goods tailored for your celebrations.
-              </p>
-            </div>
-
-            {/* Category Filter Pills */}
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10">
-              {categories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => setActiveCategory(category.id)}
-                  className={`px-4 sm:px-5 py-2 rounded-2xl transition-all duration-300 flex items-center gap-2 cursor-pointer font-medium text-xs sm:text-sm ${
-                    activeCategory === category.id
-                      ? "bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-lg scale-105"
-                      : "bg-white dark:bg-white/10 text-gray-600 dark:text-gray-300 hover:bg-gray-100 border border-gray-200 dark:border-white/10"
-                  }`}
-                >
-                  <span>{category.name}</span>
-                  {category.count !== undefined && (
-                    <span className={`text-[10px] sm:text-xs px-2 py-0.5 rounded-full ${
-                      activeCategory === category.id ? "bg-white/20 text-white" : "bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300"
-                    }`}>
-                      {category.count}
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
-
-            {/* Products Grid */}
-            {loading ? (
-              <div className="flex justify-center items-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500" />
-              </div>
-            ) : filteredSpecialties.length === 0 ? (
-              <div className="text-center py-16 text-gray-500">No specialties found in this category.</div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                {filteredSpecialties.map((item, index) => {
-                  const rawImage = item.imageUrl || item.image || item.picture;
-                  const imageSrc = rawImage
-                    ? (rawImage.startsWith("http") ? rawImage : `https://cakes-backend-gamma.vercel.app${rawImage}`)
-                    : "/placeholder.jpg";
-
-                  return (
-                    <motion.div
-                      key={item._id || index}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.3 }}
-                      viewport={{ once: true }}
-                      className="group relative bg-white dark:bg-white/5 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-white/10 flex flex-col"
-                    >
-                      <div className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-black/20">
-                        <img
-                          src={imageSrc}
-                          alt={item.name}
-                          loading="lazy"
-                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-                          onError={(e) => { e.currentTarget.src = "/placeholder.jpg"; }}
-                        />
-                        {item.category && (
-                          <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm text-white px-2 py-0.5 rounded-lg text-[10px] font-medium">
-                            {item.category}
-                          </div>
-                        )}
-                      </div>
-                      
-                      <div className="p-3 flex flex-col grow justify-between">
-                        <div>
-                          <h3 className="font-bold text-xs sm:text-sm line-clamp-1 mb-1">{item.name}</h3>
-                          <div className="flex justify-between items-center mb-2">
-                            <span className="text-pink-600 font-extrabold text-xs sm:text-sm">Rs.{item.price}</span>
-                            <div className="flex items-center gap-1 text-amber-500 text-xs">
-                              <AiOutlineStar className="fill-current" />
-                              <span className="text-gray-600 dark:text-gray-400 font-semibold">{item.rating || "4.5"}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <Link
-                          to="/menu"
-                          className="w-full py-1.5 bg-gray-900 hover:bg-pink-600 text-white rounded-xl font-medium text-center text-xs transition-colors shadow-sm inline-block"
-                        >
-                          View Item
-                        </Link>
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            )}
-
-            {/* Bottom Call to Action */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              viewport={{ once: true }}
-              className="text-center mt-16 pt-10 border-t border-gray-200 dark:border-white/10"
-            >
-              <h3 className="text-2xl sm:text-3xl font-extrabold mb-3">
-                Ready to Taste the Magic?
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 max-w-xl mx-auto mb-6 text-sm sm:text-base">
-                Join thousands of sweet-tooth lovers who make Cakes Villa their go-to destination.
-              </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <Link
-                  to="/menu"
-                  className="px-8 py-3.5 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all transform hover:scale-105 text-sm"
-                >
-                  Explore Full Menu
-                </Link>
-                <Link
-                  to="/contact"
-                  className="px-8 py-3.5 bg-white dark:bg-transparent text-gray-800 dark:text-white font-bold rounded-full border-2 border-pink-400 hover:border-purple-600 shadow-md hover:shadow-xl transition-all transform hover:scale-105 text-sm"
-                >
-                  Book a Table ✨
-                </Link>
-              </div>
-            </motion.div>
-
+          <div className="flex gap-2">
+            <button onClick={prev} aria-label="Previous slide" className={arrow}><FiChevronLeft size={20} /></button>
+            <button onClick={next} aria-label="Next slide" className={arrow}><FiChevronRight size={20} /></button>
           </div>
-        </section>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-      </main>
-      <FooterContent />
-    </div>
+/* ---------- Perks ---------- */
+function Perks() {
+  return (
+    <ul className={`grid gap-8 border-y py-8 md:grid-cols-3 md:gap-0 md:divide-x ${line} md:divide-[#2B1511]/10 dark:md:divide-white/10`}>
+      {PERKS.map(({ Icon, title, text }) => (
+        <li key={title} className="flex items-start gap-4 md:px-8 md:first:pl-0 md:last:pr-0">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#C2305F]/10 text-xl text-[#C2305F]">
+            <Icon />
+          </span>
+          <div>
+            <h3 className="font-semibold">{title}</h3>
+            <p className={`mt-1 text-sm leading-relaxed ${muted}`}>{text}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/* ---------- Featured ---------- */
+function FeaturedCard({ dish, large }) {
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.5 }}
+      className={`group relative isolate flex flex-col justify-end overflow-hidden rounded-3xl text-white ${
+        large ? "min-h-[420px] md:col-span-3 md:row-span-2" : "min-h-[240px] md:col-span-2"
+      }`}
+    >
+      <img
+        src={dish.img}
+        alt={dish.name}
+        loading="lazy"
+        onError={showPlaceholder}
+        className="absolute inset-0 -z-10 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+      />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#2B1511]/90 via-[#2B1511]/25 to-transparent" />
+      {dish.popular && (
+        <span className="absolute left-4 top-4 inline-flex items-center gap-1 rounded-full bg-[#E0A458] px-3 py-1 text-xs font-semibold text-[#2B1511]">
+          <AiOutlineFire /> Popular
+        </span>
+      )}
+      <div className="p-6">
+        <h3 className={`${serif} font-semibold ${large ? "text-3xl" : "text-xl"}`}>{dish.name}</h3>
+        <p className="mt-2 line-clamp-2 max-w-md text-sm text-white/80">{dish.description}</p>
+        <div className="mt-4 flex items-center justify-between gap-4">
+          <span className="text-lg font-semibold">{formatPrice(dish.price)}</span>
+          <Link
+            to="/menu"
+            className={`rounded-full bg-white px-5 py-2 text-sm font-semibold text-[#2B1511] transition hover:bg-[#C2305F] hover:text-white ${focus}`}
+          >
+            Order now
+          </Link>
+        </div>
+      </div>
+    </motion.article>
+  );
+}
+
+function Featured() {
+  return (
+    <section className="py-16 sm:py-20">
+      <h2 className={`${serif} text-3xl font-semibold sm:text-4xl`}>Signature cakes</h2>
+      <p className={`mt-2 max-w-md ${muted}`}>Handcrafted favourites our customers keep coming back for.</p>
+      <div className="mt-10 grid gap-5 md:grid-cols-5">
+        {FEATURED.map((dish, i) => (
+          <FeaturedCard key={dish.name} dish={dish} large={i === 0} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Specialties (API) ---------- */
+function ProductCard({ item }) {
+  return (
+    <Link to="/menu" className={`group block rounded-2xl ${focus}`}>
+      <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-[#2B1511]/5 dark:bg-white/5">
+        <img
+          src={imageFor(item)}
+          alt={item.name}
+          loading="lazy"
+          onError={showPlaceholder}
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        {item.category && (
+          <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-medium text-[#2B1511]">
+            {item.category}
+          </span>
+        )}
+      </div>
+      <div className="mt-3 flex items-start justify-between gap-3">
+        <h3 className="line-clamp-1 font-medium">{item.name}</h3>
+        <span className="shrink-0 font-semibold text-[#C2305F]">{formatPrice(item.price)}</span>
+      </div>
+      {item.rating ? (
+        <p className={`mt-1 flex items-center gap-1 text-sm ${muted}`}>
+          <AiFillStar className="text-[#E0A458]" /> {item.rating}
+        </p>
+      ) : null}
+    </Link>
+  );
+}
+
+function Specialties() {
+  const [products, setProducts] = useState([]);
+  const [status, setStatus] = useState("loading"); // loading | ready | error
+  const [active, setActive] = useState("all");
+
+  const load = useCallback(
+    (signal) =>
+      API.get("/products", { signal })
+        .then(({ data }) => {
+          setProducts(Array.isArray(data?.products) ? data.products.slice(0, 12) : []);
+          setStatus("ready");
+        })
+        .catch((err) => {
+          if (!axios.isCancel(err)) setStatus("error");
+        }),
+    []
+  );
+
+  useEffect(() => {
+    const controller = new AbortController();
+    load(controller.signal);
+    return () => controller.abort();
+  }, [load]);
+
+  const retry = () => {
+    setStatus("loading");
+    load();
+  };
+
+  const categories = useMemo(() => {
+    const names = [...new Set(products.map((p) => p.category).filter(Boolean))];
+    return [
+      { id: "all", count: products.length },
+      ...names.map((n) => ({ id: n, count: products.filter((p) => p.category === n).length })),
+    ];
+  }, [products]);
+
+  const visible = useMemo(
+    () => (active === "all" ? products : products.filter((p) => p.category === active)),
+    [products, active]
+  );
+
+  return (
+    <section className={`border-t py-16 sm:py-20 ${line}`}>
+      <h2 className={`${serif} text-3xl font-semibold sm:text-4xl`}>Our specialties</h2>
+      <p className={`mt-2 max-w-md ${muted}`}>Freshly prepared bakes for every celebration, big or small.</p>
+
+      {categories.length > 1 && (
+        <div className="-mx-4 mt-8 flex gap-6 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+          {categories.map(({ id, count }) => (
+            <button
+              key={id}
+              onClick={() => setActive(id)}
+              aria-pressed={active === id}
+              className={`shrink-0 border-b-2 pb-2 text-sm font-medium capitalize transition ${focus} ${
+                active === id
+                  ? "border-[#C2305F] text-[#C2305F]"
+                  : `border-transparent ${muted} hover:text-[#C2305F]`
+              }`}
+            >
+              {id === "all" ? "All" : id} <span className="ml-1 text-xs opacity-70">{count}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="mt-8">
+        {status === "loading" && (
+          <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4" aria-busy="true">
+            {Array.from({ length: 8 }, (_, i) => (
+              <div key={i}>
+                <div className="aspect-[4/5] animate-pulse rounded-2xl bg-[#2B1511]/10 dark:bg-white/10" />
+                <div className="mt-3 h-4 w-2/3 animate-pulse rounded bg-[#2B1511]/10 dark:bg-white/10" />
+              </div>
+            ))}
+          </div>
+        )}
+
+        {status === "error" && (
+          <div className={`rounded-2xl border px-6 py-14 text-center ${line}`} role="alert">
+            <p className="font-medium">We couldn't load the cakes right now.</p>
+            <p className={`mt-1 text-sm ${muted}`}>Check your connection and try again.</p>
+            <button
+              onClick={retry}
+              className={`mt-5 rounded-full bg-[#C2305F] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#a52550] ${focus}`}
+            >
+              Try again
+            </button>
+          </div>
+        )}
+
+        {status === "ready" && visible.length === 0 && (
+          <p className={`py-16 text-center ${muted}`}>No cakes in this category yet.</p>
+        )}
+
+        {status === "ready" && visible.length > 0 && (
+          <motion.div
+            key={active}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.35 }}
+            className="grid grid-cols-2 gap-x-5 gap-y-8 md:grid-cols-3 lg:grid-cols-4"
+          >
+            {visible.map((item, i) => (
+              <ProductCard key={item._id || i} item={item} />
+            ))}
+          </motion.div>
+        )}
+      </div>
+
+      <div className="mt-12 text-center">
+        <Link
+          to="/menu"
+          className={`inline-flex items-center gap-2 rounded-full border-2 border-[#2B1511]/20 px-7 py-3 text-sm font-semibold transition hover:border-[#C2305F] hover:text-[#C2305F] dark:border-white/20 ${focus}`}
+        >
+          See the full menu <FiArrowRight />
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Custom order ---------- */
+function CustomOrder() {
+  return (
+    <section className="pb-20">
+      <div className="grid gap-12 rounded-3xl bg-[#2B1511] p-8 text-[#f3e5d8] sm:p-12 lg:grid-cols-2 lg:gap-16 dark:bg-white/5">
+        <div>
+          <h2 className={`${serif} text-3xl font-semibold leading-tight sm:text-4xl`}>
+            Have a special cake in mind?
+          </h2>
+          <p className="mt-4 max-w-md text-[#f3e5d8]/70">
+            Tell us about the occasion and we'll bake something made just for it.
+          </p>
+          <Link
+            to="/contact"
+            className={`mt-8 inline-flex items-center gap-2 rounded-full bg-[#C2305F] px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-[#d6396b] ${focus}`}
+          >
+            Start a custom order <FiArrowRight />
+          </Link>
+        </div>
+        <ol className="space-y-6 self-center">
+          {STEPS.map((step, i) => (
+            <li key={step} className="flex items-start gap-4">
+              <span className={`${serif} flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#f3e5d8]/30 text-lg`}>
+                {i + 1}
+              </span>
+              <p className="pt-2 text-[#f3e5d8]/85">{step}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Page ---------- */
+function Home() {
+  return (
+    <MotionConfig reducedMotion="user">
+      <div className="flex min-h-screen flex-col overflow-x-hidden bg-[#FFF5F6] text-[#2B1511] dark:bg-[#1c0d0a] dark:text-[#f3e5d8]">
+        <main className={`${container} grow`}>
+          <Hero />
+          <Perks />
+          <Featured />
+          <Specialties />
+          <CustomOrder />
+        </main>
+        <FooterContent />
+      </div>
+    </MotionConfig>
   );
 }
 
