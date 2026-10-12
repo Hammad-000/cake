@@ -15,7 +15,7 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
-import { ThemeProvider } from './context/ThemeContext'; // ThemeProvider import karein
+import { ThemeProvider } from './context/ThemeContext'; 
 
 function App() {
   return (

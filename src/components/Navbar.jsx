@@ -1,145 +1,188 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { 
-  FaHome, 
-  FaUtensils, 
-  FaInfoCircle, 
-  FaEnvelope, 
-  FaShoppingCart, 
-  FaSun, 
-  FaMoon 
+import React, { useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "motion/react";
+import {
+  FaHome,
+  FaUtensils,
+  FaInfoCircle,
+  FaEnvelope,
+  FaShoppingCart,
+  FaSun,
+  FaMoon,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 import { GiCakeSlice } from "react-icons/gi";
 import { IoLogInOutline, IoLogOut } from "react-icons/io5";
 import { BiSolidDashboard } from "react-icons/bi";
 import { useCart } from "./CartContext";
 import { useTheme } from "../context/ThemeContext";
-import "./Navbar.css"; // <- CSS file imported here
+
+const baseDesktop =
+  "relative flex items-center space-x-2 px-4 py-2.5 rounded-2xl font-medium text-sm transition-all duration-200 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
+const baseMobile =
+  "w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium text-sm transition-all duration-200 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
+
+const desktopClass = ({ isActive }) =>
+  `${baseDesktop} ${isActive ? "nav-link-active" : "nav-link-hover"}`;
+const mobileClass = ({ isActive }) =>
+  `${baseMobile} ${isActive ? "nav-link-active" : "nav-link-hover"}`;
 
 function Navbar() {
-  const location = useLocation();
   const navigate = useNavigate();
   const { totalItems } = useCart();
   const { theme: currentTheme, toggleTheme } = useTheme();
 
-  const [activePath, setActivePath] = useState(location.pathname);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); 
 
-  useEffect(() => {
-    setActivePath(location.pathname);
-    setIsMobileMenuOpen(false); 
-  }, [location]);
+  // NOTE: abhi token localStorage se pada ja raha hai ("token" key).
+  // Agar aap ke paas AuthContext hai to isay us se replace kar do,
+  // warna login ke baad Navbar khud update nahi hoga.
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    try {
+      return Boolean(localStorage.getItem("token"));
+    } catch {
+      return false;
+    }
+  });
 
-  const themeClass = currentTheme === "dark" ? "navbar-dark" : "navbar-light";
+  const closeMenu = () => setIsMobileMenuOpen(false);
+
+  const handleLogout = () => {
+    try {
+      localStorage.removeItem("token");
+    } catch {
+      /* ignore */
+    }
+    setIsLoggedIn(false);
+    closeMenu();
+    navigate("/login");
+  };
 
   const navItems = [
-    { path: "/", label: "Home", icon: FaHome },
-    { path: "/menu", label: "Menu", icon: FaUtensils },
-    { path: "/about", label: "About", icon: FaInfoCircle },
-    { path: "/contact", label: "Contact", icon: FaEnvelope },
+    { to: "/", label: "Home", icon: FaHome },
+    { to: "/menu", label: "Menu", icon: FaUtensils },
+    { to: "/about", label: "About", icon: FaInfoCircle },
+    { to: "/contact", label: "Contact", icon: FaEnvelope },
     ...(isLoggedIn
-      ? [
-          { path: "/dashboard", label: "Dashboard", icon: BiSolidDashboard },
-          { path: "/logout", label: "Logout", icon: IoLogOut },
-        ]
-      : [{ path: "/login", label: "Login", icon: IoLogInOutline }]),
+      ? [{ to: "/dashboard", label: "Dashboard", icon: BiSolidDashboard }]
+      : [{ to: "/login", label: "Login", icon: IoLogInOutline }]),
   ];
+
+  const themeClass = currentTheme === "dark" ? "navbar-dark" : "navbar-light";
+  const themeLabel =
+    currentTheme === "dark" ? "Switch to light mode" : "Switch to dark mode";
+
+  const ThemeIcon = ({ className }) =>
+    currentTheme === "dark" ? (
+      <FaSun className={`${className} text-amber-400`} />
+    ) : (
+      <FaMoon className={`${className} text-slate-700`} />
+    );
+
+  const CartBadge = ({ extra = "" }) =>
+    totalItems > 0 ? (
+      <span
+        aria-label={`${totalItems} items in cart`}
+        className={`text-xs font-bold rounded-full h-5 min-w-[20px] px-1 flex items-center justify-center cart-badge ${extra}`}
+      >
+        {totalItems > 99 ? "99+" : totalItems}
+      </span>
+    ) : null;
 
   return (
     <nav className={`sticky top-0 z-50 border-b transition-colors duration-300 ${themeClass}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="navbar-container">
-          
           {/* Brand Logo */}
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="flex items-center space-x-3 cursor-pointer group"
-            onClick={() => navigate("/")}
-          >
-            <div className={`p-2.5 rounded-2xl shadow-md transition-all duration-300 group-hover:rotate-12 logo-box`}>
-              <GiCakeSlice className="text-2xl" />
-            </div>
-            <h1 className="text-2xl font-extrabold tracking-tight drop-shadow-sm">
-              <span className="text-brand-primary">Cakes</span>
-              <span className="text-brand-secondary">Villa</span>
-            </h1>
+          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+            <Link
+              to="/"
+              onClick={closeMenu}
+              aria-label="Cakes Villa home"
+              className="flex items-center space-x-3 group"
+            >
+              <div className="p-2.5 rounded-2xl shadow-md transition-all duration-300 group-hover:rotate-12 logo-box">
+                <GiCakeSlice className="text-2xl" />
+              </div>
+              <h1 className="text-2xl font-extrabold tracking-tight drop-shadow-sm">
+                <span className="text-brand-primary">Cakes</span>
+                <span className="text-brand-secondary">Villa</span>
+              </h1>
+            </Link>
           </motion.div>
 
           {/* Desktop Links */}
           <div className="hidden lg:flex items-center space-x-1.5">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activePath === item.path;
-              return (
-                <button
-                  key={item.path}
-                  onClick={() => navigate(item.path)}
-                  className={`relative flex items-center space-x-2 px-4 py-2.5 rounded-2xl font-medium text-sm transition-all duration-200 cursor-pointer ${
-                    isActive ? "nav-link-active" : `nav-link-hover`
-                  }`}
-                >
-                  <Icon className="text-base" />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
+            {navItems.map(({ to, label, icon: Icon }) => (
+              <NavLink key={to} to={to} end={to === "/"} className={desktopClass}>
+                <Icon className="text-base" />
+                <span>{label}</span>
+              </NavLink>
+            ))}
+
+            {isLoggedIn && (
+              <button
+                type="button"
+                onClick={handleLogout}
+                className={`${baseDesktop} nav-link-hover`}
+              >
+                <IoLogOut className="text-base" />
+                <span>Logout</span>
+              </button>
+            )}
           </div>
 
           {/* Action Buttons (Cart & Theme Toggle) */}
           <div className="hidden lg:flex items-center space-x-3">
-            {/* Cart Button */}
-            <button
-              onClick={() => navigate("/cart")}
-              className={`relative flex items-center space-x-2 px-4 py-2.5 rounded-2xl font-medium text-sm transition-all duration-200 cursor-pointer ${
-                activePath === "/cart" ? "nav-link-active" : `nav-link-hover`
-              }`}
-            >
+            <NavLink to="/cart" className={desktopClass}>
               <FaShoppingCart className="text-base" />
               <span>Cart</span>
-              {totalItems > 0 && (
-                <span className={`absolute -top-1.5 -right-1.5 text-xs font-bold rounded-full h-5 min-w-[20px] px-1 flex items-center justify-center shadow-md animate-bounce cart-badge`}>
-                  {totalItems > 99 ? "99+" : totalItems}
-                </span>
-              )}
-            </button>
+              <CartBadge extra="absolute -top-1.5 -right-1.5 shadow-md" />
+            </NavLink>
 
-            {/* Theme Toggle Button */}
             <motion.button
+              type="button"
               whileTap={{ rotate: 180 }}
               transition={{ duration: 0.3 }}
               onClick={toggleTheme}
-              title={`Switch Theme (Current: ${currentTheme})`}
-              className={`p-3 rounded-2xl transition-all duration-200 border border-white/10 dark:border-zinc-800 nav-link-hover cursor-pointer`}
+              aria-label={themeLabel}
+              title={themeLabel}
+              className="p-3 rounded-2xl transition-all duration-200 border border-white/10 dark:border-zinc-800 nav-link-hover cursor-pointer"
             >
-              {currentTheme === "dark" ? <FaSun className="text-base text-amber-400" /> : <FaMoon className="text-base text-slate-700" />}
+              <ThemeIcon className="text-base" />
             </motion.button>
           </div>
 
           {/* Mobile Right Controls */}
           <div className="flex lg:hidden items-center space-x-2">
             <button
+              type="button"
               onClick={toggleTheme}
+              aria-label={themeLabel}
               className="p-2.5 rounded-xl cursor-pointer"
             >
-              {currentTheme === "dark" ? <FaSun className="text-lg text-amber-400" /> : <FaMoon className="text-lg text-slate-700" />}
+              <ThemeIcon className="text-lg" />
             </button>
 
             <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2.5 rounded-xl hover:bg-white/10 text-2xl focus:outline-none cursor-pointer"
+              type="button"
+              onClick={() => setIsMobileMenuOpen((open) => !open)}
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
+              className="p-2.5 rounded-xl hover:bg-white/10 text-2xl cursor-pointer focus-visible:outline focus-visible:outline-2"
             >
-              {isMobileMenuOpen ? "✕" : "☰"}
+              {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Dropdown Menu with Framer Motion */}
+        {/* Mobile Dropdown Menu */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
+              id="mobile-menu"
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
@@ -147,42 +190,41 @@ function Navbar() {
               className="lg:hidden overflow-hidden"
             >
               <div className="pt-2 pb-6 space-y-2">
-                {navItems.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = activePath === item.path;
-                  return (
-                    <button
-                      key={item.path}
-                      onClick={() => navigate(item.path)}
-                      className={`w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium text-sm transition-all duration-200 ${
-                        isActive ? "nav-link-active" : `nav-link-hover`
-                      }`}
-                    >
-                      <div className="flex items-center space-x-3">
-                        <Icon className="text-base" />
-                        <span>{item.label}</span>
-                      </div>
-                    </button>
-                  );
-                })}
+                {navItems.map(({ to, label, icon: Icon }) => (
+                  <NavLink
+                    key={to}
+                    to={to}
+                    end={to === "/"}
+                    onClick={closeMenu}
+                    className={mobileClass}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <Icon className="text-base" />
+                      <span>{label}</span>
+                    </div>
+                  </NavLink>
+                ))}
 
-                {/* Mobile Cart Button */}
-                <button
-                  onClick={() => navigate("/cart")}
-                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl font-medium text-sm transition-all duration-200 ${
-                    activePath === "/cart" ? "nav-link-active" : `nav-link-hover`
-                  }`}
-                >
+                <NavLink to="/cart" onClick={closeMenu} className={mobileClass}>
                   <div className="flex items-center space-x-3">
                     <FaShoppingCart className="text-base" />
                     <span>Cart</span>
                   </div>
-                  {totalItems > 0 && (
-                    <span className={`text-xs font-bold rounded-full h-5 min-w-[20px] px-1 flex items-center justify-center cart-badge`}>
-                      {totalItems > 99 ? "99+" : totalItems}
-                    </span>
-                  )}
-                </button>
+                  <CartBadge />
+                </NavLink>
+
+                {isLoggedIn && (
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className={`${baseMobile} nav-link-hover`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <IoLogOut className="text-base" />
+                      <span>Logout</span>
+                    </div>
+                  </button>
+                )}
               </div>
             </motion.div>
           )}
