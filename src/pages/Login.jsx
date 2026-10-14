@@ -1,40 +1,48 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { FaEnvelope, FaLock } from "react-icons/fa";
+import { motion, MotionConfig } from "framer-motion";
+import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import FooterContent from "../components/FooterContent";
 import { useAuth } from "../context/AuthContext";
 
+const fieldWrap = (hasError) =>
+  `flex items-center rounded-xl border bg-gray-50 dark:bg-zinc-900/60 px-4 transition-all duration-200 ${
+    hasError
+      ? "border-red-400 ring-2 ring-red-100 dark:ring-red-900/40"
+      : "border-gray-200 dark:border-zinc-700 focus-within:border-pink-500 focus-within:ring-2 focus-within:ring-pink-200 dark:focus-within:ring-pink-900/50"
+  }`;
+
+const inputClass =
+  "w-full bg-transparent py-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 outline-none disabled:opacity-60";
+
 function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [serverError, setServerError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-    if (errors[e.target.name]) {
-      setErrors({ ...errors, [e.target.name]: "" });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
+    if (serverError) setServerError("");
   };
 
   const validateForm = () => {
     const newErrors = {};
     if (!formData.email) {
-      newErrors.email = "Email is required";
+      newErrors.email = "Enter your email address.";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email is invalid";
+      newErrors.email = "Enter a valid email address.";
     }
     if (!formData.password) {
-      newErrors.password = "Password is required";
+      newErrors.password = "Enter your password.";
     }
     return newErrors;
   };
@@ -49,7 +57,7 @@ function Login() {
     }
 
     setLoading(true);
-    setMessage("");
+    setServerError("");
 
     try {
       const response = await axios.post(
@@ -70,173 +78,197 @@ function Login() {
         navigate("/");
       }
     } catch (error) {
-      setMessage(error.response?.data?.message || "Error logging in");
+      setServerError(
+        error.response?.data?.message ||
+          "We could not log you in. Check your details and try again."
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 px-4 py-8 relative overflow-hidden">
-      <div className="relative w-full max-w-6xl mx-auto z-10 mb-8">
-        <div className="grid md:grid-cols-2 gap-8 items-center bg-white/40 backdrop-blur-lg rounded-3xl shadow-2xl p-6 md:p-8 border border-white/50">
-          {/* Left side */}
-          <div className="hidden md:block space-y-6">
-            <h1 className="text-5xl font-extrabold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent leading-tight">
-              Welcome Back to Cake Villa!
-            </h1>
-            <p className="text-gray-700 text-lg">
-              Login to continue your sweet journey. Enjoy personalized offers and easy access to your orders.
-            </p>
-            <div className="flex justify-center my-8">
-              <img
-                src="./images/Login-bro.png"
-                alt="Celebration illustration"
-                className="w-72 h-90 object-contain"
-              />
+    <MotionConfig reducedMotion="user">
+      <div className="min-h-screen bg-gradient-to-b from-rose-50/60 via-orange-50/30 to-white dark:bg-[#1c0d0a] dark:bg-none dark:text-[#f3e5d8] px-4 py-8 relative overflow-hidden">
+        {/* soft background glows, same as the Projects/Menu pages */}
+        <div className="pointer-events-none absolute inset-0 opacity-40" aria-hidden="true">
+          <div className="absolute left-1/4 top-0 h-64 w-64 rounded-full bg-pink-500/10 blur-[80px] md:h-96 md:w-96 md:blur-[128px]" />
+          <div className="absolute bottom-0 right-1/4 h-64 w-64 rounded-full bg-orange-400/10 blur-[80px] md:h-96 md:w-96 md:blur-[128px]" />
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="relative z-10 mx-auto mb-8 w-full max-w-6xl"
+        >
+          <div className="grid items-center gap-8 rounded-3xl border border-gray-100 dark:border-zinc-800 bg-white/60 dark:bg-[#26120e]/60 p-6 shadow-xl shadow-gray-100/60 dark:shadow-none backdrop-blur-lg md:grid-cols-2 md:p-8">
+            {/* Left side */}
+            <div className="hidden space-y-6 md:block">
+              <h1 className="text-5xl font-extrabold leading-tight tracking-tight text-gray-900 dark:text-white">
+                Welcome back to{" "}
+                <span className="bg-gradient-to-r from-pink-500 via-rose-500 to-orange-400 bg-clip-text text-transparent">
+                  Cakes Villa
+                </span>
+              </h1>
+              <p className="max-w-md text-lg text-gray-600 dark:text-gray-400">
+                Log in to track your orders and check out faster.
+              </p>
+              <div className="my-8 flex justify-center">
+                <img
+                  src="/images/Login-bro.png"
+                  alt=""
+                  className="h-72 w-72 object-contain"
+                />
+              </div>
+            </div>
+
+            {/* Right side: form */}
+            <div className="rounded-3xl border border-gray-100 dark:border-zinc-800 bg-white dark:bg-[#1c0d0a] p-8 shadow-lg md:p-10">
+              <h2 className="mb-2 text-center text-3xl font-bold text-gray-900 dark:text-white">
+                Log in
+              </h2>
+              <p className="mb-8 text-center text-gray-500 dark:text-gray-400">
+                Enter your details to access your account.
+              </p>
+
+              <div role="alert" aria-live="assertive">
+                {serverError && (
+                  <p className="mb-5 rounded-xl bg-red-50 dark:bg-red-950/30 px-4 py-3 text-sm font-medium text-red-600 dark:text-red-300">
+                    {serverError}
+                  </p>
+                )}
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+                {/* Email */}
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="mb-1.5 block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                  >
+                    Email address
+                  </label>
+                  <div className={fieldWrap(errors.email)}>
+                    <FaEnvelope
+                      className={`mr-3 shrink-0 ${errors.email ? "text-red-400" : "text-gray-400"}`}
+                      aria-hidden="true"
+                    />
+                    <input
+                      id="email"
+                      type="email"
+                      name="email"
+                      autoComplete="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="you@example.com"
+                      className={inputClass}
+                      disabled={loading}
+                      aria-invalid={Boolean(errors.email)}
+                      aria-describedby={errors.email ? "email-error" : undefined}
+                    />
+                  </div>
+                  {errors.email && (
+                    <p id="email-error" className="ml-1 mt-1.5 text-xs text-red-500">
+                      {errors.email}
+                    </p>
+                  )}
+                </div>
+
+                {/* Password */}
+                <div>
+                  <label
+                    htmlFor="password"
+                    className="mb-1.5 block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                  >
+                    Password
+                  </label>
+                  <div className={fieldWrap(errors.password)}>
+                    <FaLock
+                      className={`mr-3 shrink-0 ${errors.password ? "text-red-400" : "text-gray-400"}`}
+                      aria-hidden="true"
+                    />
+                    <input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      autoComplete="current-password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      placeholder="Your password"
+                      className={inputClass}
+                      disabled={loading}
+                      aria-invalid={Boolean(errors.password)}
+                      aria-describedby={errors.password ? "password-error" : undefined}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((s) => !s)}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      className="ml-2 shrink-0 rounded-md p-1 text-gray-400 transition-colors hover:text-pink-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-pink-500"
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
+                  {errors.password && (
+                    <p id="password-error" className="ml-1 mt-1.5 text-xs text-red-500">
+                      {errors.password}
+                    </p>
+                  )}
+                </div>
+
+                {/* Submit */}
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="mt-6 flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 py-3.5 text-lg font-semibold text-white shadow-lg shadow-pink-500/25 transition-shadow hover:shadow-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-500 disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {loading ? (
+                    <>
+                      <svg
+                        className="h-5 w-5 animate-spin text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
+                      </svg>
+                      <span>Logging in...</span>
+                    </>
+                  ) : (
+                    <span>Log in</span>
+                  )}
+                </button>
+
+                <p className="pt-2 text-center text-gray-600 dark:text-gray-400">
+                  Don't have an account?{" "}
+                  <Link
+                    to="/signup"
+                    className="font-semibold text-pink-600 dark:text-pink-400 transition-colors hover:underline"
+                  >
+                    Sign up
+                  </Link>
+                </p>
+              </form>
             </div>
           </div>
+        </motion.div>
 
-          {/* Right side - Login Form */}
-          <div className="bg-white rounded-3xl shadow-xl p-8 md:p-10 border border-gray-100">
-            <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
-              Log In
-            </h2>
-            <p className="text-center text-gray-500 mb-8">
-              Welcome back! Please log in to your account.
-            </p>
-
-            {message && (
-              <div
-                className={`text-center ${
-                  message.includes("Error") ? "text-red-500" : "text-green-500"
-                } mb-4`}
-              >
-                {message}
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Email */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                  Email Address
-                </label>
-                <div
-                  className={`flex items-center border rounded-xl px-4 transition-all duration-200 ${
-                    errors.email
-                      ? "border-red-400 ring-2 ring-red-100"
-                      : "border-gray-300 focus-within:border-purple-400 focus-within:ring-2 focus-within:ring-purple-100"
-                  }`}
-                >
-                  <FaEnvelope
-                    className={`text-gray-400 mr-3 ${
-                      errors.email ? "text-red-400" : ""
-                    }`}
-                  />
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="your@email.com"
-                    className="w-full py-3 outline-none bg-transparent text-gray-700 placeholder-gray-400"
-                    disabled={loading}
-                  />
-                </div>
-                {errors.email && (
-                  <p className="text-red-500 text-xs mt-1.5 ml-1">
-                    {errors.email}
-                  </p>
-                )}
-              </div>
-
-              {/* Password */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                  Password
-                </label>
-                <div
-                  className={`flex items-center border rounded-xl px-4 transition-all duration-200 ${
-                    errors.password
-                      ? "border-red-400 ring-2 ring-red-100"
-                      : "border-gray-300 focus-within:border-purple-400 focus-within:ring-2 focus-within:ring-purple-100"
-                  }`}
-                >
-                  <FaLock
-                    className={`text-gray-400 mr-3 ${
-                      errors.password ? "text-red-400" : ""
-                    }`}
-                  />
-                  <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    placeholder="••••••••"
-                    className="w-full py-3 outline-none bg-transparent text-gray-700 placeholder-gray-400"
-                    disabled={loading}
-                  />
-                </div>
-                {errors.password && (
-                  <p className="text-red-500 text-xs mt-1.5 ml-1">
-                    {errors.password}
-                  </p>
-                )}
-              </div>
-
-              {/* Login button */}
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-gradient-to-r cursor-pointer from-purple-600 to-pink-500 text-white py-3.5 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-pink-600 transform hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 mt-6"
-              >
-                {loading ? (
-                  <>
-                    <svg
-                      className="animate-spin h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    <span>Logging in...</span>
-                  </>
-                ) : (
-                  <span className="cursor-pointer">Log In</span>
-                )}
-              </button>
-
-              {/* Signup link */}
-              <p className="text-center text-gray-600 pt-2">
-                Don't have an account?{" "}
-                <Link
-                  to="/signup"
-                  className="text-purple-600 font-semibold hover:text-purple-700 hover:underline transition-colors"
-                >
-                  Sign up
-                </Link>
-              </p>
-            </form>
-          </div>
-        </div>
       </div>
-
-      <FooterContent />
-    </div>
+    </MotionConfig>
   );
 }
 

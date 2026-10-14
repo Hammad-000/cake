@@ -1,218 +1,322 @@
-import React, { useState } from 'react';
-import { FaInstagram, FaEnvelope, FaPhone, FaMapMarkerAlt, FaPaperPlane, FaClock } from 'react-icons/fa';
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, MotionConfig } from 'framer-motion';
+import {
+  FaInstagram,
+  FaEnvelope,
+  FaPhone,
+  FaMapMarkerAlt,
+  FaPaperPlane,
+  FaClock,
+  FaBirthdayCake,
+  FaMagic,
+  FaTruck,
+} from 'react-icons/fa';
+import { FiCheckCircle } from 'react-icons/fi';
 import FooterContent from '../components/FooterContent';
 
+const inputClass =
+  'w-full rounded-xl border border-gray-200 dark:border-zinc-700 bg-gray-50 dark:bg-zinc-900/60 px-4 py-3 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition focus:border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-200 dark:focus:ring-pink-900/50';
+
+const cardClass =
+  'rounded-3xl border border-gray-100 dark:border-zinc-800 bg-white dark:bg-[#26120e] shadow-xl shadow-gray-100/60 dark:shadow-none';
+
+const contactItems = [
+  {
+    icon: FaEnvelope,
+    title: 'Email',
+    value: 'info@cakesvilla.com',
+    note: "We'll reply within 24 hours",
+    href: 'mailto:info@cakesvilla.com',
+  },
+  {
+    icon: FaPhone,
+    title: 'Phone',
+    value: '+1 (555) 123-4567',
+    note: 'Mon to Fri, 8am to 8pm',
+    href: 'tel:+15551234567',
+  },
+  {
+    icon: FaMapMarkerAlt,
+    title: 'Location',
+    value: '123 Bakery Street, Sweet City',
+    note: 'Visit our bakery',
+  },
+  {
+    icon: FaInstagram,
+    title: 'Instagram',
+    value: '@cakes_villa002',
+    note: 'See our latest cake creations',
+    href: 'https://www.instagram.com/cakes_villa002',
+    external: true,
+  },
+];
+
+const hours = [
+  { day: 'Monday to Friday', time: '10:00 AM - 10:00 PM' },
+  { day: 'Saturday', time: '10:00 AM - 12:00 PM' },
+  { day: 'Sunday', time: '3:00 PM - 11:00 PM' },
+];
+
+const reasons = [
+  {
+    icon: FaBirthdayCake,
+    title: 'Baked fresh daily',
+    text: 'Every cake is baked the same day with premium ingredients.',
+  },
+  {
+    icon: FaMagic,
+    title: 'Custom designs',
+    text: 'Tell us your idea and we will design the cake around it.',
+  },
+  {
+    icon: FaTruck,
+    title: 'Free delivery',
+    text: 'Free delivery within city limits.',
+  },
+];
+
 function Contact() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [sent, setSent] = useState(false);
+  const timerRef = useRef(null);
+
+  useEffect(() => () => clearTimeout(timerRef.current), []);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission here
+    // TODO: send formData to your backend (e.g. API.post('/contact', formData))
     console.log('Form submitted:', formData);
-    alert('Thank you for your message! We will get back to you soon.');
     setFormData({ name: '', email: '', message: '' });
+    setSent(true);
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setSent(false), 5000);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50">
-      {/* Hero Section */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent mb-4">
-            Contact Us
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            If you have any questions or inquiries, feel free to reach out to us! We'd love to hear from you.
-          </p>
-        </div>
+    <MotionConfig reducedMotion="user">
+      <div className="min-h-screen bg-gradient-to-b from-rose-50/60 via-orange-50/30 to-white dark:bg-[#1c0d0a] dark:bg-none dark:text-[#f3e5d8]">
+        <div className="container mx-auto px-4 py-12 sm:py-16">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mx-auto mb-12 max-w-2xl text-center"
+          >
+            <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-5xl md:text-6xl">
+              Contact{' '}
+              <span className="bg-gradient-to-r from-pink-500 via-rose-500 to-orange-400 bg-clip-text text-transparent">
+                Cakes Villa
+              </span>
+            </h1>
+            <p className="mt-4 text-base text-gray-600 dark:text-gray-400 sm:text-lg">
+              Have a question or a custom cake in mind? Send us a message and we will get back to you.
+            </p>
+          </motion.div>
 
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-8">
-            {/* Contact Form */}
-            <div className="bg-white rounded-3xl shadow-2xl p-8 transform transition-all duration-300 hover:shadow-3xl">
-              <h2 className="text-3xl font-bold text-gray-800 mb-6 pb-3 border-b-2 border-purple-100">
-                Send us a Message
-              </h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition duration-300"
-                    placeholder="Your name"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition duration-300"
-                    placeholder="your@email.com"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Your Message
-                  </label>
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    rows="5"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition duration-300"
-                    placeholder="Tell us about your inquiry..."
-                    required
-                  ></textarea>
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:from-purple-700 hover:to-pink-600 transform hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
+          <div className="mx-auto max-w-6xl">
+            <div className="grid gap-8 lg:grid-cols-2">
+              {/* Form */}
+              <motion.section
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.05 }}
+                className={`${cardClass} p-6 sm:p-8`}
+                aria-labelledby="form-heading"
+              >
+                <h2
+                  id="form-heading"
+                  className="mb-6 border-b border-gray-100 dark:border-zinc-800 pb-4 text-2xl font-bold text-gray-900 dark:text-white"
                 >
-                  <FaPaperPlane />
-                  Send Message
-                </button>
-              </form>
-            </div>
-
-            {/* Contact Information */}
-            <div className="space-y-8">
-              <div className="bg-white rounded-3xl shadow-2xl p-8 transform transition-all duration-300 hover:shadow-3xl">
-                <h2 className="text-3xl font-bold text-gray-800 mb-8 pb-3 border-b-2 border-purple-100">
-                  Get in Touch
+                  Send us a message
                 </h2>
-                
-                <div className="space-y-6">
-                  <div className="flex items-start space-x-4 group">
-                    <div className="bg-purple-100 p-4 rounded-2xl group-hover:bg-purple-200 transition duration-300">
-                      <FaEnvelope className="text-2xl text-purple-600" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-800">Email</h3>
-                      <p className="text-gray-600">info@cakesvilla.com</p>
-                      <p className="text-sm text-gray-500 mt-1">We'll respond within 24 hours</p>
-                    </div>
+
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                    >
+                      Full name
+                    </label>
+                    <input
+                      id="name"
+                      type="text"
+                      name="name"
+                      autoComplete="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className={inputClass}
+                      placeholder="Your name"
+                      required
+                    />
                   </div>
 
-                  <div className="flex items-start space-x-4 group">
-                    <div className="bg-pink-100 p-4 rounded-2xl group-hover:bg-pink-200 transition duration-300">
-                      <FaPhone className="text-2xl text-pink-600" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-800">Phone</h3>
-                      <p className="text-gray-600">+1 (555) 123-4567</p>
-                      <p className="text-sm text-gray-500 mt-1">Mon-Fri from 8am to 8pm</p>
-                    </div>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                    >
+                      Email address
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      name="email"
+                      autoComplete="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className={inputClass}
+                      placeholder="you@example.com"
+                      required
+                    />
                   </div>
 
-                  <div className="flex items-start space-x-4 group">
-                    <div className="bg-blue-100 p-4 rounded-2xl group-hover:bg-blue-200 transition duration-300">
-                      <FaMapMarkerAlt className="text-2xl text-blue-600" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-800">Location</h3>
-                      <p className="text-gray-600">123 Bakery Street, Sweet City</p>
-                      <p className="text-sm text-gray-500 mt-1">Visit our bakery</p>
-                    </div>
+                  <div>
+                    <label
+                      htmlFor="message"
+                      className="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300"
+                    >
+                      Your message
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      rows="5"
+                      className={`${inputClass} resize-y`}
+                      placeholder="Tell us about your order or question"
+                      required
+                    />
                   </div>
 
-                  {/* Instagram Link */}
-                  <div className="flex items-start space-x-4 group">
-                    <div className="bg-gradient-to-br from-purple-600 via-pink-600 to-orange-400 p-4 rounded-2xl group-hover:shadow-lg transition duration-300">
-                      <FaInstagram className="text-2xl text-white" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-800">Follow Us</h3>
-                      <a 
-                        href="https://www.instagram.com/cakes_villa002" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-lg font-medium bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent hover:from-purple-700 hover:to-pink-600 transition duration-300 block"
+                  <button
+                    type="submit"
+                    className="flex w-full items-center justify-center gap-3 rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 px-6 py-4 text-lg font-semibold text-white shadow-lg shadow-pink-500/25 transition-shadow hover:shadow-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-500 active:scale-[0.99]"
+                  >
+                    <FaPaperPlane aria-hidden="true" />
+                    Send message
+                  </button>
+
+                  <div role="status" aria-live="polite">
+                    {sent && (
+                      <p className="flex items-center gap-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 px-4 py-3 text-sm font-medium text-emerald-700 dark:text-emerald-300">
+                        <FiCheckCircle className="shrink-0" aria-hidden="true" />
+                        Message sent. We will reply within 24 hours.
+                      </p>
+                    )}
+                  </div>
+                </form>
+              </motion.section>
+
+              {/* Info column */}
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.12 }}
+                className="space-y-8"
+              >
+                <section className={`${cardClass} p-6 sm:p-8`} aria-labelledby="touch-heading">
+                  <h2
+                    id="touch-heading"
+                    className="mb-6 border-b border-gray-100 dark:border-zinc-800 pb-4 text-2xl font-bold text-gray-900 dark:text-white"
+                  >
+                    Get in touch
+                  </h2>
+
+                  <ul className="space-y-5">
+                    {contactItems.map(({ icon: Icon, title, value, note, href, external }) => (
+                      <li key={title} className="flex items-start gap-4">
+                        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-pink-100 dark:bg-pink-950/50 text-pink-600 dark:text-pink-400">
+                          <Icon className="text-xl" aria-hidden="true" />
+                        </span>
+                        <div className="min-w-0">
+                          <h3 className="font-semibold text-gray-900 dark:text-white">{title}</h3>
+                          {href ? (
+                            <a
+                              href={href}
+                              {...(external
+                                ? { target: '_blank', rel: 'noopener noreferrer' }
+                                : {})}
+                              className="break-words text-gray-700 dark:text-gray-300 underline-offset-2 transition-colors hover:text-pink-600 dark:hover:text-pink-400 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-pink-500"
+                            >
+                              {value}
+                            </a>
+                          ) : (
+                            <p className="text-gray-700 dark:text-gray-300">{value}</p>
+                          )}
+                          <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400">{note}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+
+                <section
+                  className="rounded-3xl bg-gradient-to-br from-pink-500 to-rose-500 p-6 text-white shadow-xl shadow-pink-500/20 sm:p-8"
+                  aria-labelledby="hours-heading"
+                >
+                  <div className="mb-6 flex items-center gap-3">
+                    <FaClock className="text-xl" aria-hidden="true" />
+                    <h2 id="hours-heading" className="text-2xl font-bold">
+                      Business hours
+                    </h2>
+                  </div>
+                  <dl className="space-y-3">
+                    {hours.map(({ day, time }, i) => (
+                      <div
+                        key={day}
+                        className={`flex items-center justify-between gap-4 ${
+                          i < hours.length - 1 ? 'border-b border-white/25 pb-3' : ''
+                        }`}
                       >
-                        @cakes_villa002
-                      </a>
-                      <p className="text-sm text-gray-500 mt-1">See our latest cake creations!</p>
+                        <dt className="font-medium">{day}</dt>
+                        <dd className="text-right font-semibold">{time}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                  <p className="mt-6 border-t border-white/25 pt-5 text-center text-sm text-white/90">
+                    Walk-ins welcome. Pre-orders are recommended for custom cakes.
+                  </p>
+                </section>
+              </motion.div>
+            </div>
+
+            {/* Why choose us */}
+            <section
+              className={`${cardClass} mt-12 p-6 sm:p-8`}
+              aria-labelledby="why-heading"
+            >
+              <h2
+                id="why-heading"
+                className="mb-6 text-center text-2xl font-bold text-gray-900 dark:text-white"
+              >
+                Why choose Cakes Villa
+              </h2>
+              <ul className="grid gap-6 md:grid-cols-3">
+                {reasons.map(({ icon: Icon, title, text }) => (
+                  <li key={title} className="flex items-start gap-4 md:flex-col md:items-center md:text-center">
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-pink-100 dark:bg-pink-950/50 text-pink-600 dark:text-pink-400">
+                      <Icon className="text-xl" aria-hidden="true" />
+                    </span>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 dark:text-white">{title}</h3>
+                      <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">{text}</p>
                     </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Business Hours */}
-              <div className="bg-gradient-to-br from-purple-600 to-pink-500 rounded-3xl shadow-2xl p-8 text-white">
-                <div className="flex items-center gap-3 mb-6">
-                  <FaClock className="text-2xl" />
-                  <h3 className="text-2xl font-bold">Business Hours</h3>
-                </div>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center pb-3 border-b border-white/20">
-                    <span className="font-medium">Monday - Friday</span>
-                    <span className="font-semibold">10:00 AM - 10:00 PM</span>
-                  </div>
-                  <div className="flex justify-between items-center pb-3 border-b border-white/20">
-                    <span className="font-medium">Saturday</span>
-                    <span className="font-semibold">10:00 AM - 12:00 PM</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium">Sunday</span>
-                    <span className="font-semibold">3:00 PM - 11:00 PM</span>
-                  </div>
-                </div>
-                <div className="mt-6 pt-6 border-t border-white/20">
-                  <p className="text-center text-white/80">Walk-ins welcome! Pre-orders recommended for custom cakes.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Additional Info */}
-          <div className="mt-12 text-center">
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg">
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">Why Choose Cake Villa?</h3>
-              <div className="grid md:grid-cols-3 gap-6">
-                <div className="p-4">
-                  <div className="text-purple-600 font-bold text-lg mb-2">🎂 Fresh Daily</div>
-                  <p className="text-gray-600">All our cakes are baked fresh every day with premium ingredients</p>
-                </div>
-                <div className="p-4">
-                  <div className="text-purple-600 font-bold text-lg mb-2">✨ Custom Designs</div>
-                  <p className="text-gray-600">Customize your cake exactly how you want it</p>
-                </div>
-                <div className="p-4">
-                  <div className="text-purple-600 font-bold text-lg mb-2">🚚 Free Delivery</div>
-                  <p className="text-gray-600">Free delivery on orders over $50 within city limits</p>
-                </div>
-              </div>
-            </div>
+                  </li>
+                ))}
+              </ul>
+            </section>
           </div>
         </div>
+        <FooterContent />
       </div>
-      <FooterContent/>
-    </div>
+    </MotionConfig>
   );
 }
 

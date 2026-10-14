@@ -15,7 +15,6 @@ import {
 import API from '../services/api';
 import { useCart } from '../components/CartContext';
 
-// Backend base URL, used only for building image links
 const API_BASE_URL =
   import.meta.env.VITE_API_URL || 'https://cakes-backend-gamma.vercel.app';
 
@@ -25,18 +24,15 @@ const getImageUrl = (imagePath) => {
   return `${API_BASE_URL}${imagePath.startsWith('/') ? imagePath : `/${imagePath}`}`;
 };
 
-// Handles { product }, { data }, or a plain product object
 const extractProduct = (data) =>
   data?.product || data?.data || (data?._id ? data : null);
 
-// Handles { products: [] } or a plain array
 const extractProducts = (data) => {
   if (Array.isArray(data?.products)) return data.products;
   if (Array.isArray(data)) return data;
   return [];
 };
 
-// Collects every image the product has: images[] if present, else the single image
 const getGallery = (product) => {
   if (!product) return [];
   const list = Array.isArray(product.images)
@@ -96,7 +92,6 @@ function ProductDetailpg() {
     window.scrollTo(0, 0);
   }, [id]);
 
-  // Fetch related products (same category, excluding current product)
   useEffect(() => {
     if (!product) return;
     const fetchRelated = async () => {
