@@ -1,73 +1,81 @@
-import React from 'react';
-// import {  FaTiktok, FaTwitter, FaClock, FaPhone, FaEnvelope, FaMapMarkerAlt, FaYoutube, FaLinkedin, FaPinterest, FaUtensils, FaTruck, FaStar, FaCreditCard } from 'react-icons/fa';
-
+import React from "react";
 import { FaXTwitter } from "react-icons/fa6";
-import { FaInstagram } from "react-icons/fa";
+import { FaInstagram, FaFacebook } from "react-icons/fa";
 import { ImWhatsapp } from "react-icons/im";
-import { FaFacebook } from "react-icons/fa";
-const FooterContent = () => {
-  
+import { FiPhone, FiMail, FiMapPin } from "react-icons/fi";
 
+const PHONE = "+923110250787";
+const EMAIL = "cakesvilla@gmail.com";
+const ADDRESS = "11/56 Block B, Area 51";
 
+// Jis social link ka href khali ("") hoga, wo footer me nahi dikhega.
+// Facebook aur X ka apna link yahan daal do.
+const SOCIALS = [
+  { name: "Instagram", href: "https://www.instagram.com/cakes_villa002", Icon: FaInstagram },
+  { name: "WhatsApp", href: `https://wa.me/${PHONE.replace(/\D/g, "")}`, Icon: ImWhatsapp },
+  { name: "Facebook", href: "", Icon: FaFacebook },
+  { name: "X", href: "", Icon: FaXTwitter },
+].filter((s) => s.href);
 
+const serif = "font-[Fraunces,Georgia,serif]";
+const link =
+  "transition-colors hover:text-[#D4B27A] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4B27A]";
 
+const FooterContent = () => (
+  <footer className="border-t border-[#C9A66B]/20 bg-[#2B1511] text-[#f3e5d8] dark:bg-[#0E0705]">
+    <div className="mx-auto grid max-w-6xl gap-10 px-6 py-12 md:grid-cols-3">
+      {/* Brand */}
+      <div>
+        <p className={`${serif} text-2xl font-medium`}>Cakes Villa</p>
+        <p className="mt-3 max-w-xs text-sm leading-relaxed text-[#f3e5d8]/70">
+          Freshly baked cakes and sweet moments, made with love.
+        </p>
+      </div>
 
-  
+      {/* Contact */}
+      <div>
+        <h3 className={`${serif} text-lg font-medium text-[#D4B27A]`}>Contact</h3>
+        <address className="mt-4 space-y-3 text-sm not-italic">
+          <a href={`tel:${PHONE}`} className={`flex items-center gap-3 ${link}`}>
+            <FiPhone aria-hidden="true" /> {PHONE}
+          </a>
+          <a href={`mailto:${EMAIL}`} className={`flex items-center gap-3 ${link}`}>
+            <FiMail aria-hidden="true" /> {EMAIL}
+          </a>
+          <p className="flex items-center gap-3">
+            <FiMapPin aria-hidden="true" /> {ADDRESS}
+          </p>
+        </address>
+      </div>
 
-  return (
-     <div className=" ">
-            <div className="container mx-auto px-6 py-4">
-                <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-                    
-                    {/* Contact Section */}
-                    <div className="text-center">
-                        <h3 className="text-xl font-bold mb-3 text-fuchsia-600 hover:cursor-pointer">Contact</h3>
-                        <div className="space-y-2">
-                            <p className="hover:text-gray-300 transition-colors cursor-pointer">
-                                +923110250787
-                            </p>
-                            <p className="hover:text-gray-300 transition-colors cursor-pointer">
-                                cakesvilla@gmail.com
-                            </p>
-                            <p className="hover:text-gray-300 transition-colors cursor-pointer">
-                                11/56 block b area51
-                            </p>
-                        </div>
-                    </div>
+      {/* Social */}
+      <div>
+        <h3 className={`${serif} text-lg font-medium text-[#D4B27A]`}>Follow us</h3>
+        <ul className="mt-4 flex flex-wrap gap-3">
+          {SOCIALS.map(({ name, href, Icon }) => (
+            <li key={name}>
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={name}
+                title={name}
+                className={`flex h-11 w-11 items-center justify-center rounded-full border border-[#C9A66B]/30 text-lg hover:border-[#D4B27A] ${link}`}
+              >
+                <Icon aria-hidden="true" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
 
-                    {/* Social Media Section */}
-                    <div className="text-center">
-                        <h3 className="text-xl font-bold mb-3 text-pink-400">Contact Us</h3>
-                        <div className="flex flex-wrap justify-center gap-6">
-                            <div className="flex flex-col items-center space-y-1 hover:text-gray-300 transition-colors cursor-pointer">
-                                <FaFacebook className="w-8 h-8 text-blue-500" />
-                                <span className="text-sm">Facebook</span>
-                            </div>
-                            <div className="flex flex-col items-center space-y-1 hover:text-gray-300 transition-colors cursor-pointer">
-                                <FaInstagram className="w-8 h-8 text-pink-500" />
-                              <a href="https://www.instagram.com/cakes_villa002" className="text-sm"> Instagram </a>
-                            </div>
-                            <div className="flex flex-col items-center space-y-1 hover:text-gray-300 transition-colors cursor-pointer">
-                                <FaXTwitter className="w-8 h-8 text-gray-300" />
-                                <span  className="text-sm">Twitter</span>
-                            </div>
-                            <div className="flex flex-col items-center space-y-1 hover:text-gray-300 transition-colors cursor-pointer">
-                                <ImWhatsapp className="w-8 h-8 text-green-500" />
-                                <span className="text-sm">WhatsApp</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Footer Bottom */}
-                <div className="mt-8 pt-4 border-t border-gray-700">
-                    <p className="text-center text-sm text-gray-300">
-                        &copy; 2025 Cakes Villa. All rights reserved.
-                    </p>
-                </div>
-            </div>
-        </div>
-  );
-};
+    <div className="border-t border-[#C9A66B]/20 py-5">
+      <p className="text-center text-sm text-[#f3e5d8]/60">
+        &copy; {new Date().getFullYear()} Cakes Villa. All rights reserved.
+      </p>
+    </div>
+  </footer>
+);
 
 export default FooterContent;
