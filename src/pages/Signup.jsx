@@ -402,7 +402,6 @@ function Signup() {
           </div>
         </motion.div>
 
-        <FooterContent />
       </div>
     </MotionConfig>
   );
