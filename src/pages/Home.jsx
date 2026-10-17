@@ -6,10 +6,6 @@ import { motion, AnimatePresence, MotionConfig } from "motion/react";
 import { AiOutlineClockCircle, AiOutlineStar, AiFillStar, AiOutlineFire } from "react-icons/ai";
 import { FiHeadphones, FiChevronLeft, FiChevronRight, FiArrowRight } from "react-icons/fi";
 import FooterContent from "../components/FooterContent";
-
-/* Palette: ivory #F7F0E6 / espresso #140A07 / chocolate #2B1511 / gold #C9A66B (bronze #8A5A1E on light) */
-// Same base URL as the rest of the app (services/api.js), e.g. https://.../api
-// API_BASE is only used to build image URLs, so the trailing /api is removed.
 const API_BASE = (API.defaults.baseURL || "").replace(/\/api\/?$/, "");
 const serif = "font-[Fraunces,Georgia,serif]";
 const focus =
@@ -282,7 +278,7 @@ function ProductCard({ item }) {
 
 function Specialties() {
   const [products, setProducts] = useState([]);
-  const [status, setStatus] = useState("loading"); // loading | ready | error
+  const [status, setStatus] = useState("loading"); 
   const [active, setActive] = useState("all");
 
   const load = useCallback(

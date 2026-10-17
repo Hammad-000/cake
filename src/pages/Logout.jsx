@@ -165,7 +165,6 @@ function Logout() {
           </div>
         </motion.div>
 
-        <FooterContent />
       </div>
     </MotionConfig>
   );

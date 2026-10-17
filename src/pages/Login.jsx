@@ -3,7 +3,6 @@ import axios from "axios";
 import { motion, MotionConfig } from "framer-motion";
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import FooterContent from "../components/FooterContent";
 import { useAuth } from "../context/AuthContext";
 
 const fieldWrap = (hasError) =>
@@ -65,13 +64,10 @@ function Login() {
         formData
       );
 
-      // Destructure both token and role from response
       const { token, role } = response.data;
 
-      // Store token & role via AuthContext (handles localStorage)
       login(token, role);
 
-      // Redirect based on role
       if (role === "admin") {
         navigate("/dashboard");
       } else {
