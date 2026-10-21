@@ -4,6 +4,7 @@ import { motion, MotionConfig } from "framer-motion";
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import API from "../services/api";
 
 const fieldWrap = (hasError) =>
   `flex items-center rounded-xl border bg-gray-50 dark:bg-zinc-900/60 px-4 transition-all duration-200 ${
@@ -59,10 +60,8 @@ function Login() {
     setServerError("");
 
     try {
-      const response = await axios.post(
-        "https://cakes-backend-gamma.vercel.app/api/auth/login",
-        formData
-      );
+  const response = await API.post("/auth/login", formData);
+
 
       const { token, role } = response.data;
 

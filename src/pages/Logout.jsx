@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion, MotionConfig } from "framer-motion";
 import { FiLogOut, FiCheckCircle } from "react-icons/fi";
-import FooterContent from "../components/FooterContent";
 import { useAuth } from "../context/AuthContext";
 
 function Logout() {

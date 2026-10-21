@@ -8,11 +8,10 @@ import {
   FaEyeSlash,
 } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import FooterContent from "../components/FooterContent";
 import { useAuth } from "../context/AuthContext";
 import API from "../services/api";
 
-const SIGNUP_PATH = "/auth/signup";
+const SIGNUP_PATH = "/auth/register";
 
 const fieldWrap = (hasError) =>
   `flex items-center rounded-xl border bg-gray-50 dark:bg-zinc-900/60 px-4 transition-all duration-200 ${
@@ -105,7 +104,6 @@ function Signup() {
       const { token, role } = response.data || {};
 
       if (token) {
-        // Backend logs the user in right after signup
         login(token, role);
         navigate(role === "admin" ? "/dashboard" : "/");
       } else {

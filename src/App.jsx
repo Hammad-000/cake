@@ -6,6 +6,7 @@ import Error from "./pages/Error";
 import Contact from "./pages/Contact";
 import ProductDetailpg from "./pages/ProductDetailpg";
 import Cart from "./pages/Cart";
+import ChatBot from "./components/ChatBot";
 import { CartProvider } from "./components/CartContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
@@ -47,6 +48,7 @@ function App() {
                 <Route path="/profile" element={<div>Profile Page</div>} />
                 <Route path="*" element={<Error />} />
               </Routes>
+              <ChatBot />
             </div>
           </Router>
         </CartProvider>
